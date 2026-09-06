@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>首页 —— 屋顶上的共富路</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+.hero{position:relative; min-height:100vh; display:flex; flex-direction:column; justify-content:center; overflow:hidden}
+#cvParticles,#cvVillage{position:absolute; inset:0; width:100%; height:100%}
+#cvVillage{z-index:1; opacity:.62}
+.hero-inner{position:relative; z-index:2; text-align:center; padding-top:60px; text-shadow:0 2px 18px rgba(10,22,40,.9), 0 0 4px rgba(10,22,40,.8)}
+.hero-inner .display{font-size:clamp(48px,7vw,92px); color:var(--paper); line-height:1.15}
+.hero-sub{display:block; width:fit-content; margin-left:auto; margin-right:auto; font-size:24px; color:var(--paper); margin-top:18px; padding:8px 26px; border-radius:999px; background:rgba(10,22,40,.62); backdrop-filter:blur(8px)}
+.hero-val{display:block; width:fit-content; margin-left:auto; margin-right:auto; font-size:18px; color:var(--gold2); margin-top:16px; letter-spacing:.06em; padding:6px 22px; border-radius:999px; background:rgba(10,22,40,.55); backdrop-filter:blur(6px)}
+.hero-cta{margin-top:34px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap}
+.hero-data{position:relative; z-index:2; margin:64px auto 40px; max-width:1100px; display:grid; grid-template-columns:repeat(4,1fr); padding:26px 10px}
+.hero-data .cell{text-align:center; padding:6px 12px; border-right:1px solid rgba(255,255,255,.08)}
+.hero-data .cell:last-child{border-right:none}
+.hero-data .din{font-size:48px}
+.hero-data .lab{font-size:14px; color:#a9bccf; margin-top:2px}
+@media(max-width:760px){.hero-data{grid-template-columns:1fr 1fr} .hero-data .cell{border:none} .hero-sub{font-size:18px}}
+.role-card{min-height:250px; display:flex; flex-direction:column; gap:10px}
+.role-card .ic{width:56px; height:56px; color:var(--gold)}
+.role-card .nm{font-family:var(--serif); font-size:24px; color:var(--paper)}
+.role-card .ds{font-size:14px; color:#9fb0c0; flex:1}
+.role-card .go{color:var(--gold2); font-size:14.5px; font-weight:600}
+.role-card{position:relative; overflow:hidden}
+.role-card::after{content:""; position:absolute; top:-60%; left:-80%; width:60%; height:220%; transform:rotate(20deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),rgba(240,215,140,.3),transparent); transition:left .6s}
+.role-card:hover::after{left:130%}
+.databelt{display:flex; gap:0; overflow-x:auto; padding:20px 0 28px; scrollbar-width:thin}
+.databelt .it{min-width:220px; padding:18px 26px; border-right:1px solid #ddd6c2}
+.databelt .din{font-size:56px; color:#22303f}
+.databelt .din b{color:#a5832f; font-weight:700}
+.databelt .lb{font-size:14px; color:#5a6b7c; margin-top:4px}
+.databelt .src{font-size:12px; color:#8a95a1; margin-top:2px}
+.beltline{height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.pension-band{min-height:60vh; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center}
+@media(max-width:900px){.pension-band{grid-template-columns:1fr}}
+.pdata{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:30px 0}
+.pdata .din{font-size:44px}
+.pdata .lb{font-size:13.5px; color:#9fb0c0}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero grain">
+  <canvas id="cvParticles"></canvas>
+  <canvas id="cvVillage"></canvas>
+  <div class="hero-inner wrap">
+    <div class="kicker">首个标杆案例 · 东高垣村</div>
+    <h1 class="display">屋顶上的共富路</h1>
+    <div class="hero-sub">整村光伏建设全周期操作方案与数智治理平台</div>
+    <div class="hero-val">输入村庄参数 → 生成投资方案 → 匹配实施主体</div>
+    <div class="hero-cta">
+      <a class="btn btn-gold magnet" href="tools.html#t-calc">免费生成村庄方案</a>
+      <a class="btn btn-line magnet" href="cases.html">查看东高垣标杆案例</a>
+    </div>
+  </div>
+  <div class="hero-data glass">
+    <div class="cell"><div class="din num-glow"><span data-count="185">0</span></div><div class="lab">户 · 签约装机农户</div></div>
+    <div class="cell"><div class="din num-glow"><span data-count="5.963">0</span></div><div class="lab">MW · 整村装机规模</div></div>
+    <div class="cell"><div class="din num-glow">7—8</div><div class="lab">年 · 投资回收期（约）</div></div>
+    <div class="cell"><div class="din num-glow"><span data-count="25">0</span></div><div class="lab">年 · 农户零成本租期</div></div>
+  </div>
+</header>
+
+<!-- 产品价值区 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">产品价值</div>
+    <h2 class="rv">3 分钟，把一座村庄的光伏账算明白</h2>
+    <p class="lead rv">测算在本机完成，政策与项目数据实时来自云端数据库，断网自动切换本地缓存。</p>
+    <div class="grid3" style="margin-top:44px">
+      <a class="card hover-line rv" href="tools.html#t-calc" style="color:inherit">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#a5832f" stroke-width="1.6"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><circle cx="8.5" cy="11" r="1"/><circle cx="12" cy="11" r="1"/><circle cx="15.5" cy="11" r="1"/><circle cx="8.5" cy="15" r="1"/><circle cx="12" cy="15" r="1"/><circle cx="15.5" cy="15" r="1"/><line x1="8" y1="19" x2="16" y2="19"/></svg>
+        <h3 style="margin-top:14px">收益测算引擎</h3>
+        <p style="color:#5a6b7c; font-size:15px">输入屋顶面积、朝向与类型，即刻得出板块数、年租金与 25 年累计收益，对标东高垣村实测口径。</p>
+      </a>
+      <a class="card hover-line rv" href="tools.html#t-match" style="color:inherit">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#a5832f" stroke-width="1.6"><path d="M9 3h4v3a2 2 0 1 0 4 0h4v4h-3a2 2 0 1 0 0 4h3v4h-4v-3a2 2 0 1 0-4 0v3H9v-3a2 2 0 1 0-4 0H2v-4h3a2 2 0 1 0 0-4H2V6h4V3z" transform="scale(.9) translate(1.3 1.3)"/></svg>
+        <h3 style="margin-top:14px">项目匹配系统</h3>
+        <p style="color:#5a6b7c; font-size:15px">62 项可申报项目真实入库，按主体、领域与资金规模智能排序，附材料清单与申报日历。</p>
+      </a>
+      <a class="card hover-line rv" href="village.html" style="color:inherit">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#a5832f" stroke-width="1.6"><circle cx="5" cy="19" r="2.4"/><circle cx="19" cy="5" r="2.4"/><path d="M7 17.5 C 12 16, 9 9, 14 7.5" stroke-dasharray="3 3"/><path d="M14 7.5 L 16.6 5.4"/></svg>
+        <h3 style="margin-top:14px">实施路径生成</h3>
+        <p style="color:#5a6b7c; font-size:15px">7 步建设法逐步拆解：目标、动作清单、常见坑与东高垣实例，每一步可直接照做。</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 四方角色入口 -->
+<section class="section grain">
+  <div class="wrap">
+    <div class="kicker rv">四方角色 · 各取所需</div>
+    <h2 class="rv">你是哪一方？</h2>
+    <p class="lead rv">整村光伏不是一家之事。方案按「政府引导、企业投资、村集体组织、农户参与」的四方协同结构设计，每个角色都有专属工作台。</p>
+    <div class="grid4" style="margin-top:44px">
+      <a class="card role-card tilt rv" href="gov.html">
+        <div class="tilt-inner" style="display:contents">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M4 21V10m4 11V10m4 11V10m4 11V10m4 11V10M2 10l10-6 10 6H2z"/></svg>
+        <div class="nm">政府</div>
+        <div class="ds">政策依据 · 试点申报 · 跨部门协调 · 准入审查 · 考核台账 · 「531 新政」应对</div>
+        <div class="go">进入工作台 →</div>
+        </div>
+      </a>
+      <a class="card role-card tilt rv" href="ent.html">
+        <div class="tilt-inner" style="display:contents">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 21h20M4 21V9l5 3V9l5 3V4h6v17"/><line x1="17" y1="8" x2="19" y2="8"/><line x1="17" y1="12" x2="19" y2="12"/></svg>
+        <div class="nm">企业</div>
+        <div class="ds">经济账测算 · 投前尽调 · 建设向导 · 运维模拟 · 25 年生命周期</div>
+        <div class="go">进入工作台 →</div>
+        </div>
+      </a>
+      <a class="card role-card tilt rv" href="village.html">
+        <div class="tilt-inner" style="display:contents">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11l9-7 9 7M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+        <div class="nm">村干部</div>
+        <div class="ds">7 步流程清单 · 明白纸生成 · 容量检测 · 纠纷调解 · 20 张模板下载</div>
+        <div class="go">进入工作台 →</div>
+        </div>
+      </a>
+      <a class="card role-card tilt rv" href="farmer.html">
+        <div class="tilt-inner" style="display:contents">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        <div class="nm">农户</div>
+        <div class="ds">大白话讲清「装不装、拿多少、怕什么」：自查 · 租金速查 · 合同审查 · 骗局识别</div>
+        <div class="go">进入工作台 →</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 光伏养老专题横幅 -->
+<section class="section grain" style="padding:90px 0">
+  <div class="wrap pension-band">
+    <div>
+      <div class="kicker rv">新发现 · 新机制</div>
+      <h2 class="display rv" style="font-size:48px">光伏养老</h2>
+      <p class="lead rv" style="margin-top:10px">屋顶租金作为农村补充养老现金流的制度安排——课题组 2026 年 2 月驻点调研发现并命名的机制。</p>
+      <div class="pdata rv">
+        <div><div class="din num-glow">≈250</div><div class="lb">元/月 · 户均租金折算</div></div>
+        <div><div class="din num-glow">25</div><div class="lb">年 · 合同固定租期</div></div>
+        <div><div class="din num-glow">零</div><div class="lb">劳动投入 · 准时到账</div></div>
+      </div>
+      <a class="btn btn-gold magnet rv" href="pension.html">了解光伏养老机制 →</a>
+    </div>
+    <div class="rv">
+      <svg viewBox="0 0 460 300" style="width:100%">
+        <defs><linearGradient id="pgold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D4A84B"/><stop offset="1" stop-color="#F0D78C"/></linearGradient></defs>
+        <!-- 屋顶 -->
+        <path d="M30 110 L130 45 L230 110" fill="none" stroke="url(#pgold)" stroke-width="4" stroke-linecap="round"/>
+        <rect x="52" y="110" width="156" height="70" fill="rgba(18,35,58,.8)" stroke="#3D5A75"/>
+        <!-- 光伏板 -->
+        <g stroke="#F0D78C" stroke-width="2" fill="rgba(212,168,75,.25)">
+          <rect x="70" y="70" width="34" height="22" transform="rotate(-33 70 70)"/>
+          <rect x="112" y="52" width="34" height="22" transform="rotate(-33 112 52)"/>
+          <rect x="150" y="70" width="34" height="22" transform="rotate(33 150 70)"/>
+        </g>
+        <!-- 电表 -->
+        <rect x="245" y="120" width="52" height="62" rx="8" fill="rgba(18,35,58,.8)" stroke="#3D5A75"/>
+        <circle cx="271" cy="143" r="12" fill="none" stroke="#F0D78C" stroke-width="2"/>
+        <line x1="271" y1="143" x2="278" y2="136" stroke="#F0D78C" stroke-width="2"/>
+        <text x="271" y="172" text-anchor="middle" fill="#a9bccf" font-size="11">电表</text>
+        <!-- 现金流 -->
+        <path d="M297 151 C 330 151, 330 90, 365 90" fill="none" stroke="url(#pgold)" stroke-width="3" stroke-dasharray="7 6">
+          <animate attributeName="stroke-dashoffset" values="52;0" dur="1.4s" repeatCount="indefinite"/>
+        </path>
+        <!-- 老人 -->
+        <circle cx="392" cy="70" r="15" fill="none" stroke="#F0D78C" stroke-width="3"/>
+        <path d="M392 85 v38 m-14 -22 h28 m-24 38 l10 -20 10 20" fill="none" stroke="#F0D78C" stroke-width="3" stroke-linecap="round"/>
+        <text x="392" y="165" text-anchor="middle" fill="#a9bccf" font-size="12.5">租金直达老人账户</text>
+        <!-- 阳光 -->
+        <g stroke="#F0D78C" stroke-width="2.4" stroke-linecap="round">
+          <line x1="330" y1="30" x2="344" y2="40"/><line x1="318" y1="52" x2="330" y2="58"/><line x1="345" y1="16" x2="352" y2="28"/>
+        </g>
+        <circle cx="352" cy="22" r="10" fill="url(#pgold)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- 数据信任区 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">数据信任区</div>
+    <h2 class="rv">数说东高垣 · 金融终端速览</h2>
+    <div class="databelt rv" style="margin-top:30px">
+      <div class="it"><div class="din"><b>185</b></div><div class="lb">户 · 签约装机农户</div><div class="src">2026 年 2 月企业访谈</div></div>
+      <div class="it"><div class="din"><b>5.963</b></div><div class="lb">MW · 装机规模</div><div class="src">2026 年 2 月企业访谈</div></div>
+      <div class="it"><div class="din"><b>2100</b></div><div class="lb">万元 · 企业全额投资（约）</div><div class="src">2026 年 2 月企业访谈</div></div>
+      <div class="it"><div class="din"><b>805</b></div><div class="lb">万 kWh · 年发电量（约）</div><div class="src">2026 年 2 月企业访谈</div></div>
+      <div class="it"><div class="din"><b>286</b></div><div class="lb">万元 · 年发电收益（约）</div><div class="src">805 万 kWh × 0.3545 元/kWh 测算</div></div>
+      <div class="it"><div class="din"><b>0.3545</b></div><div class="lb">元/kWh · 上网电价</div><div class="src">脱硫煤标杆电价</div></div>
+      <div class="it"><div class="din"><b>30</b></div><div class="lb">元/块/年 · 租金（人字坡 15 元）</div><div class="src">2026 年 2 月入户访谈</div></div>
+      <div class="it"><div class="din"><b>1500—2000</b></div><div class="lb">元 · 户均年租金（约）</div><div class="src">2026 年 2 月入户访谈</div></div>
+    </div>
+    <div class="beltline"></div>
+    <p class="caption" style="margin-top:14px">以上为东高垣村口径；全县口径数据详见各角色页，引用时均单独标注「大荔县全县（含东高垣村），截至 2025 年 7—8 月企业台账」。</p>
+  </div>
+</section>
+
+<!-- 转化区 -->
+<section class="section grain" style="text-align:center; padding:130px 0">
+  <div class="wrap">
+    <h2 class="display rv" style="font-size:40px">你的村庄适合装光伏吗？</h2>
+    <p class="lead rv" style="margin:14px auto 0">3 分钟输入参数，获取定制化整村光伏建设方案</p>
+    <div class="rv" style="margin-top:36px">
+      <a class="btn btn-gold big magnet" href="tools.html#t-calc">免费开始测算</a>
+    </div>
+    <p class="caption rv" style="margin-top:22px">已有 <span class="din num-glow" id="useCount" data-count="1">1</span> 个标杆村庄完成实证调研；您已测算 <span class="din num-glow" id="calcCount">0</span> 次（本机）</p>
+  </div>
+</section>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  FX.particles(document.getElementById("cvParticles"));
+  FX.village(document.getElementById("cvVillage"));
+  var n = parseInt(localStorage.getItem("pv_calc_runs") || "0", 10);
+  document.getElementById("calcCount").textContent = n;
+});
+</script>
+</body>
+</html>
