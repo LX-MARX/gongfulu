@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>农户工作台 —— 屋顶上的共富路</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+.big-font{font-size:19px}
+.timeline-h{display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin-top:30px}
+@media(max-width:900px){.timeline-h{grid-template-columns:1fr 1fr}}
+.tl-node{background:var(--ink2); border:1px solid rgba(61,90,117,.5); border-radius:12px; padding:16px 12px; text-align:center; cursor:pointer; transition:.3s}
+.tl-node:hover{border-color:var(--gold); transform:translateY(-4px)}
+.tl-node.sel{border-color:var(--gold); box-shadow:0 0 20px rgba(212,168,75,.3)}
+.tl-node .no{font-family:var(--mono); color:var(--gold2); font-size:22px; font-weight:700}
+.clause{border:1px solid rgba(61,90,117,.45); border-radius:12px; padding:18px 22px; margin-bottom:12px; transition:.3s}
+.clause.miss{border-color:var(--red); background:rgba(200,75,63,.08)}
+.scam-opt{display:block; width:100%; text-align:left; background:#fff; border:2px solid #ddd6c2; border-radius:12px; padding:15px 20px; margin-bottom:10px; font-size:16px; transition:.25s; color:#22303f}
+.scam-opt:hover{border-color:#a5832f}
+.scam-opt.hit{border-color:var(--red); background:rgba(200,75,63,.07)}
+#scamAlert{position:fixed; inset:0; z-index:300; background:rgba(10,10,14,.92); display:none; align-items:center; justify-content:center; padding:24px}
+#scamAlert .box{max-width:560px; background:#1a0f10; border:2px solid var(--red); border-radius:16px; padding:40px; text-align:center}
+.sign-step{display:none}
+.sign-step.cur{display:block}
+.elder{font-size:22px; line-height:2}
+@media(max-width:640px){.elder{font-size:19px}}
+</style>
+</head>
+<body>
+<div data-crumb></div>
+
+<section class="section grain" style="padding-top:56px">
+  <div class="wrap">
+    <div class="kicker rv">角色指南 · 农户</div>
+    <h1 class="rv">农户工作台：大白话，一页一个明白</h1>
+    <p class="lead rv big-font" style="margin-top:14px">这一页不讲术语。装不装、拿多少、怕什么、怎么办，每一块只告诉你一个结论。东高垣村 185 户都是「零成本纯租赁」：企业掏全部的钱，你只出租屋顶收租金。</p>
+  </div>
+</section>
+
+<!-- 4 项自查 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">结论 1 · 装不装？</div>
+    <h2 class="rv">填 5 项客观情况，系统自动判定</h2>
+    <p class="lead rv" style="margin-top:14px">不用自己打分、不用打勾。如实选填下面 5 项，系统按统一规则逐项判定，不同情况给出不同结论。</p>
+    <div class="card rv" style="margin-top:28px">
+      <div class="grid2">
+        <div>
+          <label>1. 屋顶朝向（主要坡面）</label>
+          <select id="zcOri">
+            <option value="south">正南</option>
+            <option value="se-sw">东南或西南</option>
+            <option value="e-w">东西向</option>
+            <option value="north">北向</option>
+            <option value="unknown">不清楚</option>
+          </select>
+        </div>
+        <div>
+          <label>2. 屋顶类型与房屋结构</label>
+          <select id="zcStruct">
+            <option value="flat-brick">一字坡砖混或框架</option>
+            <option value="gable-brick">人字坡砖混或框架</option>
+            <option value="flat-top">平顶砖混或框架</option>
+            <option value="civil-old">土木结构或年久失修</option>
+            <option value="mud-danger">土房危房</option>
+          </select>
+        </div>
+        <div>
+          <label>3. 可利用面积（㎡，一块板约 2.6 ㎡）</label>
+          <input type="number" id="zcArea" min="0" value="60" placeholder="如：60">
+        </div>
+        <div>
+          <label>4. 遮挡情况（大树、高楼等）</label>
+          <select id="zcShade">
+            <option value="none">全天无遮挡</option>
+            <option value="slight">早晚轻微遮挡</option>
+            <option value="heavy">白天有明显遮挡</option>
+          </select>
+        </div>
+        <div>
+          <label>5. 产权情况</label>
+          <select id="zcOwn">
+            <option value="clear">自家宅基地，权属清楚</option>
+            <option value="dispute">权属有争议</option>
+            <option value="rented">租来的房子</option>
+            <option value="unknown">不清楚</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:20px; display:flex; gap:14px; flex-wrap:wrap">
+        <button class="btn btn-gold" id="zcBtn">生成自查结论</button>
+        <button class="btn btn-line" id="zcPrint" style="display:none">打印自查结论</button>
+      </div>
+      <div id="zcOut" style="margin-top:16px; display:none"></div>
+      <p class="caption" style="margin-top:12px">系统判定只是初筛：最终能不能装以企业上门勘测为准；变压器容量不够的暂时装不了，请到村两委登记排队。（手册第 121—123 条）</p>
+    </div>
+  </div>
+</section>
+
+<!-- 登记到拿钱时间轴 -->
+<section class="section grain">
+  <div class="wrap">
+    <div class="kicker rv">一张时间轴看明白</div>
+    <h2 class="rv">从登记到拿钱：6 个环节</h2>
+    <p class="lead rv">记住：从登记到并网，农户除了配合和签字，不花一分钱；任何环节有人向你收钱，都是违规的。</p>
+    <div class="timeline-h" id="tl6"></div>
+    <div class="card rv" id="tl6Detail" style="margin-top:22px; display:none"></div>
+  </div>
+</section>
+
+<!-- 租金速查 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">结论 2 · 拿多少？</div>
+    <h2 class="rv">租金速查表 2.0</h2>
+    <p class="lead rv">一块板一年 30 元，人字坡 15 元；户均一年约 1500—2000 元。输入板块数，立刻算清。</p>
+    <div class="grid2" style="margin-top:28px">
+      <div class="card rv">
+        <label>我家能装的板块数（块）</label><input type="number" id="rentN" value="50" min="0">
+        <label>屋顶类型</label>
+        <select id="rentT"><option value="30">一字坡（30 元/块/年）</option><option value="15">人字坡（15 元/块/年）</option></select>
+        <label>我家全年电费（元，用于算结余）</label><input type="number" id="rentE" value="500" min="0">
+        <div class="grid2" style="margin-top:18px">
+          <div><div class="din" style="font-size:34px; color:#a5832f" id="rentYear">—</div><div class="caption">年租金（元）</div></div>
+          <div><div class="din" style="font-size:34px; color:#a5832f" id="rent25">—</div><div class="caption">25 年累计（元）</div></div>
+          <div><div class="din" style="font-size:34px; color:#a5832f" id="rentM">—</div><div class="caption">月均（元）</div></div>
+          <div><div class="din" style="font-size:34px; color:#a5832f" id="rentLeft">—</div><div class="caption">覆盖电费后年结余（元）</div></div>
+        </div>
+      </div>
+      <div class="card rv">
+        <b>与农村基础养老金对比（月均，元）</b>
+        <svg id="rentCmp" viewBox="0 0 520 150" style="width:100%; margin-top:12px"></svg>
+        <p class="caption" style="margin-top:8px">样板户村民 W 某家年租金约 1800 元，大致相当于 60 块板的水平；25 年下来是一笔 4 万多元的稳定收入。（手册第 126 条）</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 合同审查清单 -->
+<section class="section grain">
+  <div class="wrap">
+    <div class="kicker rv">结论 3 · 合同避坑</div>
+    <h2 class="rv">合同审查清单：签字之前，盯死 5 条</h2>
+    <p class="lead rv">逐条在合同里找到对应文字再勾。看合同记住 4 个动作：一翻、二找、三对、四留——合同原件自家留 1 份，拍照再存 1 份。</p>
+    <div class="rv" style="margin-top:26px" id="clauseBox">
+      <div class="clause"><label style="margin:0; color:var(--paper); font-size:16px"><input type="checkbox" class="cl" style="width:20px; height:20px; margin-right:10px; accent-color:var(--gold)"><b>1. 租金与支付：</b>单价、年租金、支付周期、收款账户写进正文——只认书面数字，口头承诺不算数。</label></div>
+      <div class="clause"><label style="margin:0; color:var(--paper); font-size:16px"><input type="checkbox" class="cl" style="width:20px; height:20px; margin-right:10px; accent-color:var(--gold)"><b>2. 租期与到期处置：</b>租期 25 年；到期后续租、移交还是拆除，拆除谁出钱、屋顶谁恢复——到期处置不能留空白。</label></div>
+      <div class="clause"><label style="margin:0; color:var(--paper); font-size:16px"><input type="checkbox" class="cl" style="width:20px; height:20px; margin-right:10px; accent-color:var(--gold)"><b>3. 农户「三不」：</b>不出资、不贷款、不担保——合同里出现贷款、融资租赁、担保字样的，一律不签并举报。</label></div>
+      <div class="clause"><label style="margin:0; color:var(--paper); font-size:16px"><input type="checkbox" class="cl" style="width:20px; height:20px; margin-right:10px; accent-color:var(--gold)"><b>4. 损失分担：</b>限发、灾损、发电波动由企业承担；房屋因安装受损由企业修复赔偿——凡把损失算到农户头上的条款都是坑。</label></div>
+      <div class="clause"><label style="margin:0; color:var(--paper); font-size:16px"><input type="checkbox" class="cl" style="width:20px; height:20px; margin-right:10px; accent-color:var(--gold)"><b>5. 违约与解除：</b>双方违约责任对等——只写农户违约、不写企业违约的合同不能签。</label></div>
+    </div>
+    <div id="clauseOut" class="warn-box rv" style="display:none; margin-top:14px"></div>
+  </div>
+</section>
+
+<!-- 骗局识别器 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">核心工具</div>
+    <h2 class="rv">★ 骗局识别器：4 个信号，一个不沾才能谈</h2>
+    <p class="lead rv">东高垣村早年的教训：一家小公司进村，一块板一年只给 15—20 元，只装了六七户，还骗取村民身份证信息、以村民名义办贷款。骗局的本质是「借你的屋顶、套你的信用」。</p>
+    <div class="card rv" id="scamCard" style="margin-top:26px">
+      <p style="font-size:16px; color:#44525f; margin-bottom:14px">回想一下来找你的人，有没有下面这些情况？有的就点一下（再点一次可取消）：</p>
+      <button class="scam-opt">催得急：不让商量、不让细看合同，催着马上签字按手印</button>
+      <button class="scam-opt">要得多：以任何理由要身份证原件、银行卡、手机验证码、人脸识别</button>
+      <button class="scam-opt">说得高：承诺的收益高得离谱，明显高于村里统一项目标准（30 元/块/年）</button>
+      <button class="scam-opt">查无据：说不出中标单位、拿不出政府备案，镇政府、村两委都表示不知情</button>
+      <button class="scam-opt scam-none" id="scamNone" style="border-style:dashed">以上 4 种情况都没有</button>
+      <div id="scamOk" class="note-box" style="display:none; margin-top:14px"><b style="color:#2e7d4f">4 个信号均未命中。</b>仍建议签约前打一个电话给村两委或镇政府核实备案信息，并索要备案合同范本比对。</div>
+    </div>
+  </div>
+</section>
+<div id="scamAlert">
+  <div class="box">
+    <div style="font-size:52px">⚠</div>
+    <h2 style="color:#e8a49c; margin:10px 0">警惕！这可能是骗局</h2>
+    <p style="color:#eec5bf; font-size:16.5px">你勾选的情形命中了东高垣村早期骗贷事件的典型信号。<b>先不签。</b>请立即通过以下渠道核实：</p>
+    <p style="color:#eec5bf; font-size:16.5px; margin-top:12px">① 找村两委当面问；② 打镇政府电话核实备案；③ 发现已受骗的，立即报告镇政府与公安机关。</p>
+    <button class="btn btn-red" style="margin-top:22px" onclick="document.getElementById('scamAlert').style.display='none'">我知道了，先不签</button>
+  </div>
+</div>
+
+<!-- 签约当天 8 步 -->
+<section class="section grain">
+  <div class="wrap">
+    <div class="kicker rv">落笔之前</div>
+    <h2 class="rv">签约当天 8 步向导</h2>
+    <p class="lead rv">一步不省，逐项确认后才能进入下一步；8 步走完自动生成《签约确认单》。</p>
+    <div class="card rv" style="margin-top:26px; max-width:760px">
+      <div id="signBox"></div>
+      <div style="margin-top:18px; display:flex; gap:14px">
+        <button class="btn btn-gold" id="signNext">确认本步，继续 →</button>
+        <button class="btn btn-line" id="signPrint" style="display:none" onclick="PV.print()">打印《签约确认单》</button>
+      </div>
+      <div class="caption" style="margin-top:12px" id="signProg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 办事指引 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">遇到事情别慌</div>
+    <h2 class="rv">办事指引：7 类情形，找对人、走对路</h2>
+    <div class="grid2" style="margin-top:28px">
+      <div class="rv" id="guideList"></div>
+      <div class="card rv" id="guideDetail"><p style="color:#5a6b7c">点击左侧情形，查看「第一步找谁、怎么办、时限参考」。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 老年农户特别提示 -->
+<section class="section grain">
+  <div class="wrap" style="max-width:860px">
+    <div class="kicker rv">大字版 · 高对比</div>
+    <h2 class="rv">老年农户特别提示</h2>
+    <div class="card rv elder" style="margin-top:26px; line-height:2.1">
+      <p><b style="color:var(--gold2)">3 个电话习惯：</b>① 电站异常先打电话报修，不自己上房拆装；② 租金异议先问村联系人，不憋着生闷气；③ 陌生人进村推销光伏先报告村两委，不单独接触。</p>
+      <p style="margin-top:14px"><b style="color:var(--gold2)">3 件注意事项：</b>① 把报修电话和村联系人电话写在纸上，贴在电表箱旁；② 租金到账短信让子女帮忙核对，数目不对让子女代问；③ 任何上门让签字、按手印、拍身份证的，先给子女或村联系人打电话，不着急办。</p>
+      <p class="caption" style="margin-top:14px">手册第 137—138 条。老年农户是租金收益最需要、也最该被服务好的群体——服务多做一步，风险就少一分。</p>
+    </div>
+  </div>
+</section>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  /* 自查：客观填报 → 系统按统一规则逐项判定（不同输入必然产出不同结论） */
+  /* 判定规则（依据手册第 121—123 条）：
+     朝向：正南=通过；东南/西南=基本通过；东西向=勉强；北向/不清楚=不通过
+     结构：一字坡/人字坡/平顶砖混或框架=通过；土木结构或年久失修=需企业验房；土房危房=不通过
+     面积：≥40㎡=通过（可装约 15 块以上）；20—40㎡=基本通过；<20㎡=不通过；板块数=面积/3.2 向下取整
+     遮挡：全天无遮挡=通过；早晚轻微遮挡=基本通过；白天明显遮挡=不通过
+     产权：权属清楚=通过；其余=需先解决 */
+  function zcJudge() {
+    var ori = document.getElementById("zcOri").value,
+        st = document.getElementById("zcStruct").value,
+        area = +document.getElementById("zcArea").value || 0,
+        shade = document.getElementById("zcShade").value,
+        own = document.getElementById("zcOwn").value;
+    var panels = Math.floor(area / 3.2);
+    var items = [];
+    /* 1 朝向 */
+    if (ori === "south") items.push(["朝向", "ok", "正南朝向，光照条件最佳。"]);
+    else if (ori === "se-sw") items.push(["朝向", "mid", "东南/西南朝向基本可用，发电量与租金略低于正南。"]);
+    else if (ori === "e-w") items.push(["朝向", "mid", "东西向勉强可装，发电效率偏低，需企业实测评估。"]);
+    else items.push(["朝向", "no", ori === "north" ? "北向光照不足，不宜安装。" : "朝向不清楚，请先现场确认或等企业勘测。"]);
+    /* 2 结构 */
+    if (st === "civil-old") items.push(["结构", "mid", "土木结构或年久失修房屋，必须由企业验房后再定。"]);
+    else if (st === "mud-danger") items.push(["结构", "no", "土房、危房承重不达标，不能安装。"]);
+    else items.push(["结构", "ok", "砖混或框架结构，承重条件符合基本要求。"]);
+    /* 3 面积 */
+    if (area >= 40) items.push(["面积", "ok", area + " ㎡ 可装约 " + panels + " 块板（15 块以上），规模合适。"]);
+    else if (area >= 20) items.push(["面积", "mid", area + " ㎡ 约可装 " + panels + " 块板，规模偏小，收益有限。"]);
+    else items.push(["面积", "no", area + " ㎡ 仅约可装 " + panels + " 块板，面积不足 20 ㎡，不宜安装。"]);
+    /* 4 遮挡 */
+    if (shade === "none") items.push(["遮挡", "ok", "全天无遮挡，发电条件好。"]);
+    else if (shade === "slight") items.push(["遮挡", "mid", "早晚轻微遮挡影响有限，以企业实测为准。"]);
+    else items.push(["遮挡", "no", "白天有明显遮挡，发电量损失大，不宜安装。"]);
+    /* 5 产权 */
+    if (own === "clear") items.push(["产权", "ok", "自家宅基地、权属清楚，具备签约前提。"]);
+    else items.push(["产权", "mid", own === "dispute" ? "权属有争议，须先解决争议再报名。" : own === "rented" ? "租来的房子须取得产权人书面同意，先解决权属问题。" : "产权情况不清楚，请先到村两委核实权属。"]);
+    return { items: items, panels: panels, inputs: { 朝向: ori, 结构: st, 面积: area, 遮挡: shade, 产权: own } };
+  }
+  document.getElementById("zcBtn").addEventListener("click", function () {
+    var r = zcJudge();
+    var nOk = r.items.filter(function (x) { return x[1] === "ok"; }).length,
+        nNo = r.items.filter(function (x) { return x[1] === "no"; }).length;
+    var verdict = nNo > 0 ? "暂不具备" : nOk === 5 ? "具备基本条件" : "部分条件需复核";
+    var badge = { ok: '<b style="color:#2e7d4f">✓ 通过</b>', mid: '<b style="color:#b8860b">△ 需复核</b>', no: '<b style="color:#c0392b">✗ 不通过</b>' };
+    var o = document.getElementById("zcOut");
+    o.style.display = "block";
+    document.getElementById("zcPrint").style.display = "inline-flex";
+    o.innerHTML = '<div class="note-box" style="margin:0">' +
+      r.items.map(function (x) {
+        return '<div style="display:flex; gap:10px; padding:7px 0; border-bottom:1px dashed rgba(90,107,124,.3); font-size:15px"><b style="min-width:44px">' + x[0] + '</b>' + badge[x[1]] + '<span style="color:#44525f">' + x[2] + '</span></div>';
+      }).join("") +
+      '<p style="margin-top:12px; font-size:16px"><b>总体结论：' + verdict + '。</b>' +
+      (verdict === "具备基本条件" ? "5 项全部通过，可到村两委登记。提醒：登记不等于签约，签不签自家商量定。" :
+       verdict === "部分条件需复核" ? "部分条件需复核或先解决（见上表 △ 项）；未决事项建议先咨询村两委。" :
+       "存在不通过项（见上表 ✗ 项），暂不建议报名；情形改善后可重新判定。容量受限的可登记候补排队。") + "</p>" +
+      '<p class="caption" style="margin-top:8px">本结论由系统按统一规则自动判定，最终以企业上门勘测为准。</p></div>';
+    /* 提交存档：游客也可提交，不阻塞界面，失败静默 */
+    try {
+      if (window.MG && typeof MG.evalSubmit === "function") {
+        var scores = {};
+        r.items.forEach(function (x) { scores[x[0]] = x[1]; });
+        MG.evalSubmit("gongfulu", "farmer_check", "", "", r.inputs, scores, verdict);
+      }
+    } catch (e) { /* 静默 */ }
+  });
+  document.getElementById("zcPrint").addEventListener("click", function () {
+    PV.printZone("#zcOut", "屋顶光伏条件自查结论");
+  });
+
+  /* 6 环节时间轴 */
+  var T = [
+    ["登记排队", "村两委", "随时", "提供房屋与产权信息，如实登记"],
+    ["上门勘测", "企业", "登记后按批次安排", "在家等候，带看屋顶，听勘测结论"],
+    ["签约", "企业＋村两委", "半天", "逐条看合同，对照 5 大条款，拿一份合同回家"],
+    ["安装施工", "企业施工队", "一般几天", "配合腾挪屋顶杂物，收工后共同验收"],
+    ["并网发电", "企业＋电网", "以并网确认单为准", "确认电表装好、并网时间记清"],
+    ["收取租金", "企业按周期打款", "25 年", "核对到账，有疑问找村联系人"]
+  ];
+  document.getElementById("tl6").innerHTML = T.map(function (t, i) {
+    return '<div class="tl-node" data-i="' + i + '"><div class="no">' + (i + 1) + '</div><b>' + t[0] + '</b></div>';
+  }).join("");
+  document.getElementById("tl6").addEventListener("click", function (e) {
+    var n = e.target.closest(".tl-node"); if (!n) return;
+    document.querySelectorAll(".tl-node").forEach(function (x) { x.classList.remove("sel"); });
+    n.classList.add("sel");
+    var t = T[+n.dataset.i], d = document.getElementById("tl6Detail");
+    d.style.display = "block";
+    d.innerHTML = "<h3>" + t[0] + "</h3><p style='color:#c4cfda; font-size:15.5px; margin-top:8px'><b style='color:var(--gold2)'>谁来做：</b>" + t[1] + "　<b style='color:var(--gold2)'>大概多久：</b>" + t[2] + "　<b style='color:var(--gold2)'>农户配合：</b>" + t[3] + "</p>";
+  });
+
+  /* 租金速查 */
+  function rentCalc() {
+    var n = +document.getElementById("rentN").value || 0, pr = +document.getElementById("rentT").value, e = +document.getElementById("rentE").value || 0;
+    var y = n * pr;
+    document.getElementById("rentYear").textContent = y;
+    document.getElementById("rent25").textContent = y * 25;
+    document.getElementById("rentM").textContent = Math.round(y / 12);
+    document.getElementById("rentLeft").textContent = Math.max(0, y - e);
+    var m = y / 12, base = PVCONST.PENSION;
+    PV.cmpBars(document.getElementById("rentCmp"), [
+      { name: "我家租金（月均）", v: m, text: Math.round(m), color: "#D4A84B" },
+      { name: "基础养老金（示意）", v: base, text: "≈200", color: "#3D5A75" }
+    ]);
+  }
+  ["rentN", "rentT", "rentE"].forEach(function (id) { document.getElementById(id).addEventListener("input", rentCalc); });
+  rentCalc();
+
+  /* 合同清单警示 */
+  document.getElementById("clauseBox").addEventListener("change", function () {
+    var all = document.querySelectorAll(".cl"), miss = 0;
+    all.forEach(function (c) { c.closest(".clause").classList.toggle("miss", !c.checked); if (!c.checked) miss++; });
+    var o = document.getElementById("clauseOut");
+    if (miss > 0) { o.style.display = "block"; o.innerHTML = "<b>还有 " + miss + " 条未确认。</b>红色条款务必在合同中找到对应文字再签字；找不到的当场问，问不清的「回家商量 3 天」——正规企业不会催。"; }
+    else { o.style.display = "block"; o.className = "note-box rv"; o.innerHTML = "<b style='color:#2e7d4f'>5 大条款全部确认。</b>可以签约。记得合同原件留 1 份、拍照存 1 份。"; }
+  });
+
+  /* 骗局识别（命中弹红警示；全部不沾给出绿色安全出口） */
+  document.querySelectorAll("#scamCard .scam-opt:not(.scam-none)").forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (b.classList.contains("hit")) { // 再点一次取消命中
+        b.classList.remove("hit");
+        return;
+      }
+      b.classList.add("hit");
+      document.getElementById("scamOk").style.display = "none";
+      document.getElementById("scamAlert").style.display = "flex";
+    });
+  });
+  document.getElementById("scamNone").addEventListener("click", function () {
+    if (document.querySelectorAll("#scamCard .scam-opt.hit").length) {
+      document.getElementById("scamAlert").style.display = "flex"; // 已有命中项，仍按风险处理
+      return;
+    }
+    document.getElementById("scamOk").style.display = "block";
+  });
+
+  /* 签约 8 步 */
+  var S = ["核身份：对方是不是本村统一项目的中标企业人员，工牌、授权书两对照。", "核合同：合同文本与村里公示的备案范本是否一致。", "核租金：单价、年租金、支付周期是否与明白纸一致，数字写在合同里。", "核「三不」：全文搜索贷款、担保、融资租赁字样，有则不签。", "核到期：25 年后电站怎么处置，白纸黑字。", "核损失：限发、灾损、房屋损伤由谁承担，指向企业的才算数。", "留副本：合同原件自家留 1 份，拍照存手机。", "缓一缓：当场拿不准的，说「回家商量 3 天」，正规企业不会催。"];
+  var si = 0, done8 = [];
+  function renderSign() {
+    var box = document.getElementById("signBox");
+    document.getElementById("signProg").textContent = "第 " + Math.min(si + 1, 8) + " 步 / 共 8 步";
+    if (si < 8) {
+      box.innerHTML = '<div class="sign-step cur"><h3 style="color:var(--gold2)">第 ' + (si + 1) + " 步</h3><p style='font-size:17px; margin-top:8px'>" + S[si] + "</p></div>";
+    } else {
+      box.innerHTML = "<h3 style='color:var(--gold2)'>签约确认单</h3><ol style='padding-left:22px; font-size:15px; line-height:2; margin-top:8px'>" + S.map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ol><p style='margin-top:10px'>8 步全部确认，可以签约。确认单建议与合同一并保存。</p>";
+      document.getElementById("signNext").style.display = "none";
+      document.getElementById("signPrint").style.display = "inline-flex";
+      document.getElementById("signProg").textContent = "已完成 8 / 8 步";
+    }
+  }
+  document.getElementById("signNext").addEventListener("click", function () { si++; renderSign(); });
+  renderSign();
+
+  /* 办事指引 */
+  var G = [
+    ["想安装", "村两委登记", "登记排队 → 企业勘测 → 签约 → 施工 → 并网；登记不等于签约，签不签自家定", "以村级通知为准；容量不够的按登记顺序排"],
+    ["房屋漏水", "电表箱上的报修电话或村联系人", "拍照留证 → 报修 → 企业上门查因定责 → 修复，修完试水验证", "24 小时内响应，定责后 7 日内修复"],
+    ["灾害理赔", "报修电话＋村联系人", "留证报案 → 企业走保险 → 修复赔付，农户不用自己跑腿索赔", "24 小时内报案受理"],
+    ["电站拆改（翻建房）", "村联系人转企业", "提前书面申请 → 企业评估拆装方案与费用承担 → 约定恢复责任再动工，切勿自行上房拆板", "提前 1 个月申请为宜"],
+    ["户主去世（继承）", "村两委＋企业", "凭继承证明材料办理合同主体变更，租金权益随房屋依法继承，钱不会断、不会丢", "材料齐全后及时办理"],
+    ["卖房过户", "村两委＋企业", "买卖双方共同办理合同主体变更，合同承接条款写进房屋买卖约定", "过户前办妥，避免「房卖了租金说不清」"],
+    ["拆迁征收", "镇政府＋村两委＋企业", "按征收政策与合同约定处理电站迁移或补偿，征收损失不得转嫁农户", "以征收公告与合同为准"]
+  ];
+  document.getElementById("guideList").innerHTML = G.map(function (g, i) {
+    return '<button class="scam-opt" data-i="' + i + '" style="border-width:1px">' + (i + 1) + ". " + g[0] + "</button>";
+  }).join("");
+  document.getElementById("guideList").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-i]"); if (!b) return;
+    var g = G[+b.dataset.i];
+    document.getElementById("guideDetail").innerHTML = "<h3>" + g[0] + "</h3><p style='color:#44525f; font-size:15.5px; margin-top:10px'><b>第一步找谁：</b>" + g[1] + "<br><b>怎么办：</b>" + g[2] + "<br><b>时限参考：</b>" + g[3] + "</p><p class='caption' style='margin-top:10px'>手册第 135—136 条</p>";
+  });
+});
+</script>
+</body>
+</html>

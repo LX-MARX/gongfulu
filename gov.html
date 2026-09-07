@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>政府工作台 —— 屋顶上的共富路</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+.search-panel{padding:34px; margin-top:30px}
+#polSearch{font-size:18px; padding:16px 22px}
+.lvl-tags{margin:16px 0 6px}
+.pol-item{padding:18px 0; border-bottom:1px dashed rgba(61,90,117,.4)}
+.pol-item .tt{font-weight:600; font-size:16.5px; color:var(--paper)}
+.pol-item .meta{font-size:12.5px; color:var(--mist); margin:4px 0 6px}
+.pol-item .ap{font-size:14.5px; color:#b8c4d0}
+.gantt{display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin-top:30px}
+.g-cell{background:#fff; border:1px solid #e2e0d6; border-radius:12px; padding:18px 16px; cursor:pointer; transition:.3s; position:relative}
+.g-cell:hover{border-color:var(--gold); transform:translateY(-4px)}
+.g-cell .no{font-family:var(--mono); font-size:26px; color:#a5832f; font-weight:700}
+.g-cell .nm{font-weight:700; margin:4px 0 2px}
+.g-cell .tm{font-size:12.5px; color:#8a95a1}
+.g-cell.on{border-color:var(--gold); box-shadow:0 10px 26px rgba(164,131,47,.18)}
+@media(max-width:860px){.gantt{grid-template-columns:1fr 1fr}}
+#gDetail{margin-top:24px}
+.raci td{text-align:center}
+.raci td:first-child{text-align:left; font-weight:600}
+.raci td[data-v]{cursor:pointer}
+.raci td[data-v]:hover{background:rgba(212,168,75,.2) !important; outline:1px solid var(--gold)}
+.rv-badge{font-weight:700; font-family:var(--mono)}
+.audit-row{display:grid; grid-template-columns:34px 200px 1fr 120px; gap:14px; align-items:center; padding:13px 0; border-bottom:1px dashed #ddd6c2}
+@media(max-width:760px){.audit-row{grid-template-columns:34px 1fr}}
+.ledger{display:grid; grid-template-columns:repeat(5,1fr); gap:18px; margin-top:30px}
+@media(max-width:1100px){.ledger{grid-template-columns:1fr 1fr}}
+.lg-card input{padding:8px 10px; font-size:15px}
+.lg-card .pct{font-family:var(--mono); font-size:34px; color:var(--gold2); margin-top:10px}
+.mini-line{width:100%; height:auto}
+</style>
+</head>
+<body>
+<div data-crumb></div>
+
+<section class="section grain" style="padding-top:56px">
+  <div class="wrap">
+    <div class="kicker rv">角色指南 · 政府</div>
+    <h1 class="rv">政府工作台：制度供给与风险防控</h1>
+    <p class="lead rv" style="margin-top:14px">县、镇政府是整村推进的「第一推动力」：纳入试点盘子、组织招标定项、协调部门与电网、守住准入底线、建立考核台账。本页依据大荔县整县推进实践与《建设手册》第二篇整理。</p>
+  </div>
+</section>
+
+<!-- 政策检索库 -->
+<section class="section grain" style="padding-top:30px">
+  <div class="wrap">
+    <div class="kicker rv">政策工具 · 五级政策库</div>
+    <h2 class="rv">政策检索库（119 条）</h2>
+    <p class="lead rv">课题组 2025 年 8 月—2026 年 1 月建库，覆盖国家、省、市、县、镇村 5 级共 121 条政策文本，剔除 2 条误入库后展示 119 条，持续更新。</p>
+    <div class="glass search-panel rv">
+      <input id="polSearch" type="text" placeholder="搜索政策名称、发文机关、关键词……">
+      <div class="lvl-tags" id="lvlTags">
+        <button class="tag on" data-lv="">全部</button>
+        <button class="tag" data-lv="国家级">国家级</button>
+        <button class="tag" data-lv="省级">省级</button>
+        <button class="tag" data-lv="市级">市级</button>
+        <button class="tag" data-lv="县级">县级</button>
+        <button class="tag" data-lv="镇村">镇村级</button>
+      </div>
+      <div class="caption" id="polCount"></div>
+    </div>
+    <div id="polList" class="rv" style="margin-top:8px"></div>
+  </div>
+</section>
+
+<!-- 6 阶段甘特 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">进度管理</div>
+    <h2 class="rv">6 阶段项目进度管理器</h2>
+    <p class="lead rv">方案申报 → 资源摸排 → 招标定项 → 动员签约 → 建设并网 → 运营监管。输入启动日期，自动生成时间轴；点击阶段卡片展开实施细则。</p>
+    <div style="max-width:340px; margin-top:18px"><label>项目启动日期</label><input type="text" id="startDate" placeholder="如：2026-10-01" value="2026-10-01"></div>
+    <div class="gantt" id="gantt"></div>
+    <div id="gDetail" class="card" style="display:none"></div>
+  </div>
+</section>
+
+<!-- RACI -->
+<section class="section grain">
+  <div class="wrap">
+    <div class="kicker rv">责任分工</div>
+    <h2 class="rv">RACI 责任矩阵</h2>
+    <p class="lead rv">9 个工作事项 × 5 个部门。R＝负责执行，A＝最终负责，C＝事前协商，I＝事后知会；每行有且仅有 1 个「A」。点击单元格查看该职责的具体条文。</p>
+    <div class="card rv" style="margin-top:30px; overflow-x:auto">
+      <table class="tbl raci" id="raciTbl"></table>
+    </div>
+    <div id="raciDetail" class="note-box rv" style="margin-top:18px">点击矩阵中的任意单元格，查看该部门在该事项上的职责条文。</div>
+  </div>
+</section>
+
+<!-- 准入审查 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">风险防控</div>
+    <h2 class="rv">准入审查 6 项打分器</h2>
+    <p class="lead rv">对投资运营主体逐项审查。命中「一票否决」情形（农户出资举债、名义融资、重大失信、显失公平租金）即直接否决（手册第 56—58 条）。</p>
+    <div class="card rv" style="margin-top:30px" id="auditBox">
+      <div class="audit-row"><b>#</b><b>审查项</b><b>审查要点</b><b>结论</b></div>
+      <div id="auditRows"></div>
+      <div class="warn-box" style="margin-top:20px">
+        <b>一票否决情形（勾选任一即否决）：</b>
+        <div id="vetoBox" style="margin-top:10px; display:grid; grid-template-columns:1fr 1fr; gap:6px 20px">
+          <label style="margin:0; color:#eec5bf"><input type="checkbox" class="veto"> 要求农户以任何形式出资或举债</label>
+          <label style="margin:0; color:#eec5bf"><input type="checkbox" class="veto"> 合同含以农户名义融资的安排</label>
+          <label style="margin:0; color:#eec5bf"><input type="checkbox" class="veto"> 企业资信存在重大不良记录</label>
+          <label style="margin:0; color:#eec5bf"><input type="checkbox" class="veto"> 租金条款显失公平（显著低于当地合理水平）</label>
+        </div>
+      </div>
+      <div style="margin-top:22px; display:flex; gap:16px; flex-wrap:wrap">
+        <button class="btn btn-gold" id="auditBtn">生成审查结论书</button>
+        <button class="btn btn-line" id="auditPrint" style="display:none" onclick="PV.print()">导出 PDF（打印）</button>
+      </div>
+      <div id="auditResult" class="note-box" style="margin-top:18px; display:none"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 考核台账 -->
+<section class="section grain">
+  <div class="wrap">
+    <div class="kicker rv">盯住 25 年</div>
+    <h2 class="rv">考核台账在线模板（5 项指标）</h2>
+    <p class="lead rv">在线填写分子分母，自动计算百分比；基准值取东高垣村与大荔县全县口径，仅作参考，不得直接套用为考核标准（手册第 65 条）。</p>
+    <div class="ledger" id="ledger"></div>
+    <div style="margin-top:26px; display:flex; gap:16px; flex-wrap:wrap">
+      <button class="btn btn-gold" id="lgCsv">导出 Excel（CSV）</button>
+      <button class="btn btn-line" onclick="PV.print()">导出 PDF（打印）</button>
+    </div>
+    <p class="caption" style="margin-top:14px">全县基准来源：大荔县全县（含东高垣村），截至 2025 年 7—8 月企业台账。</p>
+  </div>
+</section>
+
+<!-- 531 应对 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">政策变化应对</div>
+    <h2 class="rv">「531 新政」之后，政府做什么</h2>
+    <div class="grid3" style="margin-top:34px">
+      <div class="card rv">
+        <h3>政策变化</h3>
+        <p style="color:#5a6b7c; font-size:15.5px; margin-top:8px">2025 年「531 新政」推动新能源上网电价全面市场化，上网电量原则上全部进入电力市场，按投产时间区分存量与增量项目分类施策，固定收益预期被打破。</p>
+        <p class="caption" style="margin-top:10px">公开政策文件；课题组 121 条五级政策库持续跟踪</p>
+      </div>
+      <div class="card rv">
+        <h3>落地影响</h3>
+        <svg class="mini-line" viewBox="0 0 320 170" style="margin-top:10px">
+          <line x1="40" y1="140" x2="300" y2="140" stroke="#c8cdd4"/>
+          <line x1="40" y1="140" x2="40" y2="14" stroke="#c8cdd4"/>
+          <polyline points="70,74 170,22 270,126" fill="none" stroke="#C84B3F" stroke-width="3"/>
+          <g fill="#22303f" font-size="13" font-family="monospace">
+            <circle cx="70" cy="74" r="4" fill="#a5832f"/><text x="58" y="62">620</text>
+            <circle cx="170" cy="22" r="4" fill="#a5832f"/><text x="158" y="14">1183</text>
+            <circle cx="270" cy="126" r="4" fill="#C84B3F"/><text x="258" y="118">116</text>
+          </g>
+          <g fill="#8a95a1" font-size="12" text-anchor="middle"><text x="70" y="158">2023 年</text><text x="170" y="158">2024 年</text><text x="270" y="158">2025 年</text></g>
+        </svg>
+        <p style="color:#5a6b7c; font-size:14px">大荔县全县（含东高垣村）新增并网户数断崖式放缓，截至 2025 年 7—8 月企业台账。</p>
+      </div>
+      <div class="card rv">
+        <h3>4 条应对建议</h3>
+        <ul style="color:#5a6b7c; font-size:15px; margin-top:8px; padding-left:20px; line-height:2">
+          <li>对存量项目：稳定履约预期，监督租金按期兑付</li>
+          <li>对增量项目：重估收益模型，审慎规划新增规模</li>
+          <li>对电网：把容量扩容纳入乡村基础设施盘子</li>
+          <li>对模式：探索绿电交易、源网荷储等新收益通道</li>
+        </ul>
+        <p class="caption" style="margin-top:10px">课题组 2026 年 5—9 月跟踪分析建议（手册第八章）</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 政府侧答疑 -->
+<section class="section grain">
+  <div class="wrap">
+    <div class="kicker rv">常见 3 问</div>
+    <h2 class="rv">政府侧答疑</h2>
+    <div style="margin-top:26px" class="rv">
+      <details class="acc"><summary>县级政策文件网上查不到，如何核验真伪？</summary><div class="acc-body">东高垣村实践中的政策文件为县级发展改革部门下发的红头文件，逐级下发到镇，不下发到村、不对外公开。核验路径：通过镇、村两级逐级向发文机关核实文号与内容。（2026 年 2 月入户访谈）</div></details>
+      <details class="acc"><summary>电网容量不够，新增装机批不下来怎么办？</summary><div class="acc-body">东高垣村即出现过「村民想装但装不了」的情况，电网已为该村投入数千万元改造线路、加装变压器，仍存在拉闸限发。建议把台区容量摸底前置于签约环节，容量不足的区域暂缓签约、列入电网改造计划分批释放。（2026 年 2 月入户访谈）</div></details>
+      <details class="acc"><summary>租金水平农户不满意，政府要不要管？</summary><div class="acc-body">租金属市场契约，政府不宜直接定价，但可发布区域租金参考区间、组织供需双方公开协商，并把「分红兑现率」纳入对企业的考核。调研中部分农户对租金水平存在更高期待，应通过透明化测算回应而非行政干预。（课题组 2026 年 2 月驻点调研建议）</div></details>
+    </div>
+  </div>
+</section>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  /* 政策检索（云端政策库优先，连接失败或未配置时回退本地缓存） */
+  var lv = "", kw = "";
+  var list = document.getElementById("polList"), cnt = document.getElementById("polCount");
+  var polRows = PVDATA.policies;
+  function mapPol(p) { /* 云端 snake_case 字段映射为本地 camelCase，本地数据原样通过 */
+    return { id: p.id, level: p.level, title: p.title, org: p.org, date: p.date,
+      docNo: p.docNo !== undefined ? p.docNo : p.doc_no,
+      topics: p.topics || [],
+      applyPoint: p.applyPoint !== undefined ? p.applyPoint : p.apply_point,
+      requirement: p.requirement, deadline: p.deadline, subsidy: p.subsidy };
+  }
+  function renderPol() {
+    var rows = polRows.filter(function (p) {
+      var okLv = !lv || p.level.indexOf(lv.replace("镇村", "镇")) >= 0;
+      var okKw = !kw || (p.title + p.org + p.topics.join(" ") + p.docNo).toLowerCase().indexOf(kw) >= 0;
+      return okLv && okKw;
+    });
+    cnt.textContent = "共 " + rows.length + " 条（展示前 30 条）" + (window.MG && MG.state.online ? "丨数据来源：云端政策库（实时）" : "丨数据来源：本地缓存");
+    list.innerHTML = rows.slice(0, 30).map(function (p) {
+      return '<div class="pol-item"><div class="tt">' + p.title + '</div>' +
+        '<div class="meta">' + p.level + " 丨 " + p.org + " 丨 " + (p.docNo || "文号见原文") + " 丨 " + p.date + "</div>" +
+        '<div class="ap"><b style="color:var(--gold2)">基层落实要点：</b>' + (p.applyPoint || p.requirement || "—") + "</div></div>";
+    }).join("") || '<p class="caption">无匹配结果。</p>';
+  }
+  function loadPol() {
+    var cloudLv = lv === "镇村" ? "镇村级" : lv; /* 云端 level 取值为「镇村级」 */
+    MG.gfPolicies(cloudLv ? { level: cloudLv } : {}).then(function (rows) {
+      polRows = rows && rows.length ? rows.map(mapPol) : PVDATA.policies; /* null 或空集一律回退本地缓存 */
+      renderPol();
+    });
+  }
+  document.getElementById("polSearch").addEventListener("input", function (e) { kw = e.target.value.trim().toLowerCase(); renderPol(); });
+  document.getElementById("lvlTags").addEventListener("click", function (e) {
+    var b = e.target.closest(".tag"); if (!b) return;
+    document.querySelectorAll("#lvlTags .tag").forEach(function (t) { t.classList.remove("on"); });
+    b.classList.add("on"); lv = b.dataset.lv; loadPol();
+  });
+  loadPol();
+
+  /* 6 阶段甘特 */
+  var stages = [
+    { nm: "方案申报", tm: "1—2 个月", lead: "县发展改革／能源主管部门", out: "试点方案及批复", pts: "组建方案编制专班；开展县域屋顶资源与电网承载力普查；明确试点村选择标准、容量总账与风险防控专章；按程序申报取得批复。注意：防止「拍脑袋定点」，容量约束必须写进方案正文。东高垣实例：大荔县纳入国家整县试点后印发红头文件，东高垣村被确定为 3 个示范村之一。" },
+    { nm: "资源摸排", tm: "1—2 个月", lead: "镇政府、村两委、电网企业", out: "屋顶资源台账、容量核算意见", pts: "统一制发入户摸底表（表 M-1），5 项要素一项不缺；入户摸排与意愿初调一次上门并办；函请电网企业出具容量核算书面意见；结果村内公示 7 天。东高垣实例：合格屋顶筛选直接决定了 185 户的签约上限。" },
+    { nm: "招标定项", tm: "1—2 个月", lead: "县发展改革／能源主管部门", out: "中标通知书、投资协议", pts: "评标因素中资信、业绩、运维、保险方案权重应高于报价；对中标候选人执行准入审查 6 项清单；投资协议明确限发损失承担、租金支付保障、保险配置等刚性条款。东高垣实例：「统一招标＋国企中标」是骗贷前科之后重建信任的制度支点。" },
+    { nm: "动员签约", tm: "2—4 个月", lead: "镇政府、村两委、企业", out: "签约台账、合同备案清册", pts: "村民大会一次讲清；党员干部与样板户带头签约；逐户交底合同核心条款；签约台账日报镇、周报县；合同报镇政府备案。坚持自愿底线，不设指标、不搞摊派。东高垣实例：3 招完成信任重建，最终签约 185 户。" },
+    { nm: "建设并网", tm: "3—6 个月", lead: "企业、电网企业", out: "验收报告、并网确认单", pts: "按巷道分批施工，防水项户户必验；电网企业批量受理并网申请、集中验收；并网滞后超期的由县级部门约谈。东高垣实例：2023 年 4 月省现场会前完成 185 户建设并网，为 3 家中标单位中唯一。" },
+    { nm: "运营监管", tm: "25 年持续", lead: "镇政府、县级部门", out: "年度考核台账、评估报告", pts: "企业按月报送汇总数据；镇政府按年填制 5 张考核台账；分红兑现率、客诉办结率与履约评价硬挂钩；每年 1 次农户满意度抽样回访。注意「留痕」：验收单、结算单、工单、考核台账都是 25 年履约期的证据链环节。" }
+  ];
+  var gantt = document.getElementById("gantt");
+  function renderGantt() {
+    var d0 = new Date(document.getElementById("startDate").value || "2026-10-01");
+    if (isNaN(d0)) d0 = new Date("2026-10-01");
+    var spans = [2, 2, 2, 4, 6, 300];
+    var acc = 0;
+    gantt.innerHTML = stages.map(function (s, i) {
+      var st = new Date(d0); st.setMonth(st.getMonth() + acc); acc += spans[i];
+      var en = new Date(d0); en.setMonth(en.getMonth() + acc);
+      var rng = i === 5 ? (st.getFullYear() + " 年起，25 年持续") : (st.getFullYear() + "." + (st.getMonth() + 1) + " — " + en.getFullYear() + "." + (en.getMonth() + 1));
+      return '<div class="g-cell" data-i="' + i + '"><div class="no">0' + (i + 1) + '</div><div class="nm">' + s.nm + '</div><div class="tm">' + s.tm + '丨' + rng + '</div></div>';
+    }).join("");
+  }
+  renderGantt();
+  document.getElementById("startDate").addEventListener("input", renderGantt);
+  gantt.addEventListener("click", function (e) {
+    var c = e.target.closest(".g-cell"); if (!c) return;
+    gantt.querySelectorAll(".g-cell").forEach(function (x) { x.classList.remove("on"); });
+    c.classList.add("on");
+    var s = stages[+c.dataset.i], d = document.getElementById("gDetail");
+    d.style.display = "block";
+    d.innerHTML = "<h3>第 " + (+c.dataset.i + 1) + " 阶段 · " + s.nm + "</h3>" +
+      '<p style="margin:10px 0; color:#5a6b7c">' + s.pts + "</p>" +
+      '<p style="font-size:14.5px"><b>牵头单位：</b>' + s.lead + "　<b>关键成果物：</b>" + s.out + "</p>" +
+      '<p class="caption" style="margin-top:8px">《建设手册》第 51—55 条 6 段式实施细则</p>';
+  });
+
+  /* RACI */
+  var depts = ["县发展改革／能源主管部门", "镇政府", "电网企业", "村两委", "投资运营企业"];
+  var raci = [
+    ["试点方案编制与申报", "A/R", "C", "C", "I", "I"],
+    ["屋顶资源摸排", "I", "A", "C", "R", "C"],
+    ["台区容量核算与改造", "C", "C", "A/R", "I", "C"],
+    ["招标与准入审查", "A/R", "C", "I", "I", "C"],
+    ["宣传动员与签约组织", "I", "A", "I", "R", "R"],
+    ["施工组织与安全管理", "I", "C", "C", "C", "A/R"],
+    ["并网验收", "I", "I", "A/R", "I", "R"],
+    ["租金结算与公示监督", "I", "A", "I", "R", "R"],
+    ["客诉与纠纷调处", "C", "A", "I", "R", "R"]
+  ];
+  var rmap = { "A": "最终负责：对结果负总责，每行仅 1 个", "R": "负责执行：具体操办", "C": "事前协商：启动前完成并留痕", "I": "事后知会：结果通报即可", "A/R": "最终负责并亲自执行" };
+  var tbl = document.getElementById("raciTbl");
+  tbl.innerHTML = "<tr><th>工作事项</th>" + depts.map(function (d) { return "<th>" + d + "</th>"; }).join("") + "</tr>" +
+    raci.map(function (row) {
+      return "<tr><td>" + row[0] + "</td>" + row.slice(1).map(function (v, j) {
+        return '<td data-v="' + v + '" data-d="' + j + '"><span class="rv-badge" style="color:' + (v.indexOf("A") >= 0 ? "var(--gold2)" : "#cfd8e0") + '">' + v + "</span></td>";
+      }).join("") + "</tr>";
+    }).join("");
+  tbl.addEventListener("click", function (e) {
+    var td = e.target.closest("td[data-v]"); if (!td) return;
+    var item = td.parentElement.firstChild.textContent;
+    document.getElementById("raciDetail").innerHTML = "<b>" + item + " × " + depts[+td.dataset.d] + "（" + td.dataset.v + "）：</b>" + rmap[td.dataset.v] + "。要领：每一行必须有且仅有 1 个「A」，防止多头负责演变为无人负责；「C」的协商应在事项启动前完成并留痕，事后补协商视为程序瑕疵。（手册第 50 条）";
+  });
+
+  /* 准入审查 */
+  var auditItems = [
+    ["主体资信", "注册资本、股权结构、经营年限；国有企业或资信良好企业优先"],
+    ["资金来源", "是否自有或合规融资；是否要求农户出资、贷款、担保"],
+    ["合同文本", "是否使用备案范本；有无隐藏贷款、担保、融资租赁条款"],
+    ["业绩与能力", "同类项目业绩可验证；运维网点、人员配置与响应时限明确"],
+    ["农户信息使用", "身份证、银行卡用途仅限签约与结算（最少必要原则）"],
+    ["风险兜底", "限发、灾损、征收损失分担明确且不转嫁农户"]
+  ];
+  document.getElementById("auditRows").innerHTML = auditItems.map(function (a, i) {
+    return '<div class="audit-row"><b>' + (i + 1) + '</b><b>' + a[0] + '</b><span style="font-size:14.5px; color:#5a6b7c">' + a[1] + '</span>' +
+      '<select class="audit-sel"><option value="">未审</option><option value="1">通过</option><option value="0">不通过</option></select></div>';
+  }).join("");
+  document.getElementById("auditBtn").addEventListener("click", function () {
+    var sels = document.querySelectorAll(".audit-sel");
+    var fails = [], unchk = [];
+    sels.forEach(function (s, i) { if (s.value === "0") fails.push(auditItems[i][0]); else if (!s.value) unchk.push(auditItems[i][0]); });
+    var vetoed = Array.prototype.some.call(document.querySelectorAll(".veto"), function (v) { return v.checked; });
+    var r = document.getElementById("auditResult");
+    r.style.display = "block";
+    document.getElementById("auditPrint").style.display = "inline-flex";
+    if (vetoed) r.innerHTML = '<b style="color:var(--red)">审查结论：一票否决。</b>命中一票否决情形，否决结论应书面作出并载明依据条款；被否决企业享有陈述申辩权，但申辩期间不得入村签约；否决信息在县域内通报，防止改换名头异地再进。（手册第 58 条）';
+    else if (fails.length) r.innerHTML = '<b style="color:var(--red)">审查结论：不通过。</b>未通过项：' + fails.join("、") + "。逐项留痕后退回补正，补正前不得进入签约环节。";
+    else if (unchk.length) r.innerHTML = "<b>审查结论：待补审。</b>未完成审查项：" + unchk.join("、") + "。6 项逐项留痕后方可出具备案意见。";
+    else r.innerHTML = '<b style="color:#2e7d4f">审查结论：通过。</b>6 项审查全部通过且无一票否决情形，可进入签约备案环节。审查底稿归档，保存期不短于合同期限。';
+  });
+
+  /* 考核台账 */
+  var ledgers = [
+    ["签约率", "已签约农户", "具备安装条件农户", "东高垣村 185 户签约"],
+    ["发电完成率", "实际发电量", "计划发电量", "全县 2024 年 97.1%；2025 年 1—7 月 92.2%"],
+    ["分红兑现率", "按期足额兑付农户", "签约农户", "按 25 年租赁合同逐户核验"],
+    ["停机处置及时率", "时限内复运电站", "停机电站", "全县停机 22 户（纠纷 17、故障 3、电网 2）"],
+    ["客诉办结率", "已办结客诉", "客诉总数", "全县客诉 13 项，漏水 10 户占比最大"]
+  ];
+  var lg = document.getElementById("ledger");
+  lg.innerHTML = ledgers.map(function (L, i) {
+    return '<div class="card lg-card"><b>' + L[0] + '</b>' +
+      "<label>" + L[1] + "（分子）</label><input type='number' min='0' value='0' id='lg" + i + "a'>" +
+      "<label>" + L[2] + "（分母）</label><input type='number' min='0' value='0' id='lg" + i + "b'>" +
+      '<div class="pct" id="lg' + i + 'p">—</div>' +
+      '<div class="caption">参考基准：' + L[3] + "</div></div>";
+  }).join("");
+  function calcLg(i) {
+    var a = +document.getElementById("lg" + i + "a").value, b = +document.getElementById("lg" + i + "b").value;
+    document.getElementById("lg" + i + "p").textContent = b > 0 ? (a / b * 100).toFixed(1) + "%" : "—";
+  }
+  ledgers.forEach(function (_, i) {
+    document.getElementById("lg" + i + "a").addEventListener("input", function () { calcLg(i); });
+    document.getElementById("lg" + i + "b").addEventListener("input", function () { calcLg(i); });
+  });
+  document.getElementById("lgCsv").addEventListener("click", function () {
+    var rows = [["考核指标", "分子", "分母", "百分比", "参考基准"]];
+    ledgers.forEach(function (L, i) {
+      rows.push([L[0], document.getElementById("lg" + i + "a").value, document.getElementById("lg" + i + "b").value, document.getElementById("lg" + i + "p").textContent, L[3]]);
+    });
+    PV.csv("整村光伏考核台账", rows);
+  });
+});
+</script>
+</body>
+</html>

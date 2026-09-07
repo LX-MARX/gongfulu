@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>村干部工作台 —— 屋顶上的共富路</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+.vstep{display:grid; grid-template-columns:110px 1fr; gap:24px; padding:30px 0; border-bottom:1px solid #e2e0d6}
+.vstep .big{font-family:var(--mono); font-size:72px; font-weight:700; line-height:1;
+  background:linear-gradient(135deg,#8a6a2a,#D4A84B 40%,#F0D78C 55%,#D4A84B); -webkit-background-clip:text; background-clip:text; color:transparent}
+@media(max-width:700px){.vstep{grid-template-columns:1fr} .vstep .big{font-size:52px}}
+.vstep .cols{display:grid; grid-template-columns:1fr 1fr; gap:6px 26px; margin-top:12px}
+@media(max-width:760px){.vstep .cols{grid-template-columns:1fr}}
+.vstep .blk{font-size:14.5px; color:#5a6b7c}
+.vstep .blk b{color:#22303f}
+#mzPreview{background:#fff; color:#22303f; border:1px solid #c8b98a; padding:34px; font-size:15px; line-height:2}
+#mzPreview h3{text-align:center; font-size:20px}
+#mzPreview .sig{text-align:right; margin-top:20px}
+.dispute-grid{display:grid; grid-template-columns:280px 1fr; gap:26px; margin-top:28px}
+@media(max-width:860px){.dispute-grid{grid-template-columns:1fr}}
+.dsp-btn{display:block; width:100%; text-align:left; background:var(--ink); border:1px solid var(--mist); color:var(--paper); border-radius:12px; padding:13px 18px; margin-bottom:9px; font-size:15px; transition:.25s}
+.dsp-btn:hover{border-color:var(--gold)} .dsp-btn.sel{border-color:var(--gold); background:rgba(212,168,75,.1)}
+#agendaOut,#capOut,#queueOut{margin-top:18px}
+.forms-banner{display:flex; align-items:center; gap:30px; flex-wrap:wrap; background:linear-gradient(135deg,#0d1d33,#132a46); border:1px solid var(--gold); border-radius:var(--r-card); padding:36px 40px; margin-top:30px}
+.forms-banner .fb-badge{font-family:var(--mono); font-size:52px; font-weight:700; line-height:1;
+  background:linear-gradient(135deg,#8a6a2a,#D4A84B 40%,#F0D78C 55%,#D4A84B); -webkit-background-clip:text; background-clip:text; color:transparent}
+.forms-banner .fb-body{flex:1; min-width:280px}
+.forms-banner h3{font-size:24px; margin:0 0 10px}
+.forms-banner p{font-size:15px; color:#c4cfda; line-height:1.9; margin:0 0 20px}
+@page{size:A4; margin:16mm}
+@media print{ #mzPreview{border:none; padding:0} }
+</style>
+</head>
+<body>
+<div data-crumb></div>
+
+<section class="section grain" style="padding-top:56px">
+  <div class="wrap">
+    <div class="kicker rv">角色指南 · 村干部</div>
+    <h1 class="rv">村干部工作台：一家一户做工作</h1>
+    <p class="lead rv" style="margin-top:14px">村两委是政府与市场之间的「转换器」，也是农户信任的「第一担保人」。东高垣经验一句话：党员干部带头签，村企联合入户讲，样板农户现身说法，台账进度日日清。</p>
+  </div>
+</section>
+
+<!-- 7 步建设法 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">组织实施</div>
+    <h2 class="rv">7 步建设法向导</h2>
+    <p class="lead rv">每步含目标、动作清单、常见坑、东高垣实例与 6 段式实施细则；可标记完成，随时生成进度报告。</p>
+    <div id="steps7" style="margin-top:20px"></div>
+    <div style="margin-top:26px; display:flex; gap:16px; flex-wrap:wrap">
+      <button class="btn btn-gold" id="s7Btn">生成进度报告</button>
+      <button class="btn btn-line" id="s7Print" style="display:none" onclick="PV.print()">导出 PDF（打印）</button>
+    </div>
+    <div id="s7Out" class="note-box" style="margin-top:16px; display:none"></div>
+  </div>
+</section>
+
+<!-- 宣传动员工具包 -->
+<section class="section grain">
+  <div class="wrap">
+    <div class="kicker rv">宣传动员</div>
+    <h2 class="rv">宣传动员工具包</h2>
+    <div class="grid2" style="margin-top:34px">
+      <div class="card rv">
+        <h3>村民大会议程生成器</h3>
+        <label>村庄名称</label><input type="text" id="agV" placeholder="如：东高垣村">
+        <label>会议日期</label><input type="text" id="agD" placeholder="如：2026-10-15">
+        <button class="btn btn-gold" style="margin-top:18px" id="agBtn">生成 8 步标准议程</button>
+        <div id="agendaOut"></div>
+      </div>
+      <div class="card rv">
+        <h3>入户宣讲提纲（大白话 5 条）</h3>
+        <ol style="color:#c4cfda; font-size:15.5px; padding-left:22px; line-height:2; margin-top:10px">
+          <li>先算账：你家屋顶能装多少块、一年拿多少、25 年拿多少。</li>
+          <li>再讲模式：不用掏一分钱，企业投资建设，你只出租屋顶。</li>
+          <li>讲兜底：坏了找谁、砸了赔谁、租金会不会少。</li>
+          <li>亮身份：国企投资、政府招标、村里党员干部都签了。</li>
+          <li>留尾巴：把合同拿回家看 3 天，想清楚了再签。</li>
+        </ol>
+        <p class="caption" style="margin-top:10px">手册第 106 条；晚饭后全家在家时段入户，一次不超过 30 分钟，不催签、不逼签</p>
+      </div>
+    </div>
+    <div class="card rv" style="margin-top:26px">
+      <h3>三大顾虑标准应答（配样板户 W 某案例）</h3>
+      <div class="grid3" style="margin-top:16px">
+        <div><b style="color:var(--gold2)">怕承重压坏房子</b><p style="font-size:14.5px; color:#b8c4d0; margin-top:6px">安装前企业逐户做结构与承载评估，不合格不装；支架按当地风雪荷载标准核算；因电站致损由企业修复赔偿，写进合同。</p></div>
+        <div><b style="color:var(--gold2)">怕辐射影响健康</b><p style="font-size:14.5px; color:#b8c4d0; margin-top:6px">组件发电是直流低压过程，经逆变器转换后电磁水平与家用电器相当，不存在超标准辐射；可请专业人员现场检测答疑。</p></div>
+        <div><b style="color:var(--gold2)">怕合同有坑</b><p style="font-size:14.5px; color:#b8c4d0; margin-top:6px">合同经县级部门审查备案；农户不出资、不贷款、不担保；凡要身份证办贷款的一律拒绝并举报。</p></div>
+      </div>
+      <p class="caption" style="margin-top:12px">源自村民 W 某 2026 年 2 月入户访谈；W 某年租金约 1800 元：「不用自己掏一分钱，也不用干任何活，就能稳定拿到这笔钱。」（手册第 107 条）</p>
+    </div>
+    <div class="card rv" style="margin-top:26px; border-color:var(--gold)">
+      <h3>★ 政策明白纸生成器</h3>
+      <p style="font-size:14.5px; color:#b8c4d0; margin-top:6px">输入 5 项信息，一键生成 1 页 A4《××村屋顶光伏明白纸》（限 600 字、6 段式），可直接打印发放。</p>
+      <div class="grid2" style="margin-top:14px">
+        <div><label>村庄名称</label><input type="text" id="mzV" placeholder="如：东高垣村"></div>
+        <div><label>平屋顶租金（元/块/年）</label><input type="number" id="mzR" value="30" min="0"></div>
+        <div><label>人字坡租金（元/块/年）</label><input type="number" id="mzR2" value="15" min="0"></div>
+        <div><label>报修电话</label><input type="text" id="mzP" placeholder="如：400-××××-××××"></div>
+        <div><label>村联系人</label><input type="text" id="mzC" placeholder="如：村光伏协管员 ××"></div>
+      </div>
+      <div style="margin-top:16px; display:flex; gap:14px; flex-wrap:wrap">
+        <button class="btn btn-gold" id="mzBtn">生成明白纸</button>
+        <button class="btn btn-line" id="mzPrint" style="display:none" onclick="PV.printZone('#mzPreview')">打印（A4）</button>
+      </div>
+      <div id="mzOut" style="margin-top:20px; display:none"><div id="mzPreview"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 容量检测 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">电网约束</div>
+    <h2 class="rv">容量检测工具</h2>
+    <p class="lead rv">变压器容量是整村光伏最硬的约束。向农户解释时可用类比：「变压器就像村里的水井，井就那么大，接的管子多了每家水就小。」</p>
+    <div class="grid2" style="margin-top:30px">
+      <div class="card rv">
+        <label>台区变压器容量（kVA）</label><input type="number" id="capTotal" value="400">
+        <label>现有装机（kW）</label><input type="number" id="capNow" value="0">
+        <label>计划新增户数（户，按单户约 30 kW 估）</label><input type="number" id="capNew" value="50">
+        <button class="btn btn-gold" style="margin-top:18px" id="capBtn">检测容量</button>
+        <div id="capOut"></div>
+      </div>
+      <div class="card rv">
+        <h3>候补农户登记</h3>
+        <p style="font-size:14px; color:#5a6b7c; margin:6px 0 10px">登记 3 项要素（户主、屋顶条件、登记时间），自动生成排序公示表；数据仅存本机。</p>
+        <label>户主称谓（建议化名，如「张××」）</label><input type="text" id="qName" placeholder="张××">
+        <label>屋顶条件</label>
+        <select id="qRoof"><option>一字坡 · 朝南</option><option>一字坡 · 朝东西</option><option>人字坡</option><option>平顶</option></select>
+        <button class="btn btn-line" style="margin-top:16px" id="qAdd">登记入队</button>
+        <div id="queueOut"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 纠纷调解 -->
+<section class="section grain">
+  <div class="wrap">
+    <div class="kicker rv">矛盾调解</div>
+    <h2 class="rv">纠纷调解路径指引（5 类分流）</h2>
+    <p class="lead rv">调解纪律 3 条：不代替任何一方作承诺；全程留痕；涉企业责任的以书面工单移交，不做口头了断。</p>
+    <div class="dispute-grid rv">
+      <div id="dspList"></div>
+      <div class="card" id="dspDetail"><p style="color:#b8c4d0">点击左侧纠纷类型，查看首选路径、升级路径与典型情景处置示例。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 模板下载专区 → 在线填写引擎入口 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">即取即用</div>
+    <h2 class="rv">工作表格模板专区</h2>
+    <p class="lead rv">《整村光伏建设手册》第八篇 23 张工作表已全面升级为在线引擎，不再提供手工打印的空白模板。</p>
+    <div class="forms-banner rv">
+      <div class="fb-badge">M-1<br>—<br>M-23</div>
+      <div class="fb-body">
+        <h3>23 张工作表 · 在线填写引擎</h3>
+        <p>覆盖手册第八篇 M-1 至 M-23 全部模板：在线填写、自动判定必填项（★），一键生成公文格式打印版（A4 · 三线表 · 方正小标宋表题），登录后可暂存存档、随时回填续填。</p>
+        <a class="btn btn-gold" href="forms.html" style="font-size:17px; padding:14px 34px">进入在线填写 →</a>
+      </div>
+    </div>
+    <div class="note-box rv" style="margin-top:24px">
+      <b>填表说明（手册第 140 条）：</b>①一事一表，不得合并填制；②关键栏目（★）不得空置，确无内容填「无」；③一律用钢笔或签字笔填写，涂改处签字确认；④电子化地区字段不得少于模板。
+    </div>
+  </div>
+</section>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  /* 7 步 */
+  var S7 = [
+    { nm: "前期摸排", goal: "摸清屋顶资源、农户意愿与电网条件 3 本底账。", acts: "①逐户登记屋顶类型、朝向、面积、结构、产权 5 项要素；②排除危房与产权争议房屋；③向电网企业核实台区容量；④形成屋顶资源台账与意愿名单，公示 7 天。", pit: "只数户数不看结构，签约后才发现装不了；产权口头确认无书面证明。", ex: "东高垣村地处高原沟壑地带，合格屋顶筛选是签约 185 户的前置工作。", six: "目的：形成真实、完整、可核查的村庄资源底账。步骤：领表（M-1）→分组入户（至少 1 名村干部＋1 名熟悉村情党员）→逐户填 5 项要素并拍照→汇总初稿→公示 7 天→定稿报镇备案。注意：入户一次办成；信息只用于项目用途；外出务工户电话补登不留空白户。" },
+    { nm: "宣传动员", goal: "让村民听懂政策、消除顾虑、自愿报名。", acts: "①召开村民大会（8 步议程）；②发放通俗版政策明白纸每户至少 1 份；③党员干部与样板户现身说法；④入户宣讲全覆盖，三大顾虑逐户应答。", pit: "只开大会不入户，信息衰减；夸大收益宣传埋纠纷隐患；回避骗贷前科反加重猜疑。", ex: "该村因早期小公司骗贷事件一度普遍抵触，靠 3 招重建信任：党员带头装、村企联合逐户讲、国企与政府招标背书。", six: "步骤：大会集中宣讲→发明白纸→党员样板户率先签约并开放参观→入户全覆盖→报名登记（报名不等于签约，留足家庭商议时间）。严禁以「名额有限」制造紧张催签。" },
+    { nm: "签约组织", goal: "规范、自愿、留痕地完成逐户签约。", acts: "①集中签约与入户签约结合；②签约前逐户交底合同 5 大条款并签确认；③核验身份与产权证明原件；④台账当日登记、合同副本交农户；⑤报镇政府备案。", pit: "代签替签；农户未留存合同；口头承诺与书面不一致。", ex: "样板户 W 某 2023 年首批签约，系主动找村干部报名。全村 185 户签约未发生程序瑕疵引发的合同纠纷。", six: "步骤：发布签约安排→逐户交底→核验原件→现场签约一式多份→当日登记台账→报镇备案。对犹豫农户明确告知「可以再考虑，不催签」。" },
+    { nm: "安装配合", goal: "保障施工安全有序、农户配合到位。", acts: "①施工排期提前 3 天通知到户；②村干部每日巡查，协调挪车堆料通行；③损伤与遗留问题当场记录、当场交办、限期销号；④组织农户参与竣工验收，防水项户户必验。", pit: "施工扰民无人管，小事拖成客诉；验收走过场，漏水入住后才暴露。", ex: "全县客诉 13 项中房屋漏水 10 户占比最大（大荔县全县（含东高垣村），截至 2025 年 7—8 月企业台账），防水验收是最需村级盯防的环节。", six: "巡查不替代监理，村干部只记问题、不判技术；农户不到场的验收无效；施工纠纷第一时间介入。" },
+    { nm: "并网确认", goal: "确认电站合规并网、农户权益起算无误。", acts: "①逐户确认并网时间与计量装置；②书面告知租金起算时点；③并网信息纳入村级台账；④未并网户每周跟踪直至销号。", pit: "装完未并网，农户以为「装上就有钱」；起算时点模糊引发结算争议。", ex: "该村曾在省级现场会前实现并网发电，并网组织的高效是示范地位的重要组成。", six: "把「物理安装完成」与「权益起算」2 个时点分别固定；租金起算以合同与并网确认单为准，不以农户理解为准。" },
+    { nm: "运维协同", goal: "当好农户与企业之间的「第一联系人」。", acts: "①公示报修电话、400 热线与村级联系人；②农户报修先行登记、当日转企业工单；③雨雪大风前后协助提示农户；④参与停机等问题电站处置协调。", pit: "农户报修找不到人，怨气转向村两委；村级越权承诺企业责任。", ex: "运维驿站每站约 8—9 人、管护 3000—5000 户，「小故障不过夜」；腊月二十八雪损事件中村级通道快速传递功不可没。", six: "村级只传递与协调，不作责任认定与赔偿承诺；协管员变动 3 日内交接并更新公示；老年农户不会报修的，协管员主动代报。" },
+    { nm: "收益分配监督", goal: "确保租金按期足额到户、集体收益规范使用。", acts: "①逐户核对每期租金发放名单与金额；②受理异议 3 日内转企业限时答复；③按季度公示发放汇总（隐去全名）；④集体建筑租金纳入村务公开；⑤配合镇年度考核。", pit: "只公示总数不到户，农户无从核对；异议登记无回音，小不满积成大矛盾。", ex: "租金按期发放与按季公示，是「部分农户对租金水平存在更高期待」但未演变为群体性争议的重要制度原因。", six: "发现拖欠苗头立即报告镇政府，不捂盖子；集体收益单独设账、用途限定、程序合规、公开到户、接受监督。" }
+  ];
+  document.getElementById("steps7").innerHTML = S7.map(function (s, i) {
+    return '<div class="vstep rv"><div class="big">0' + (i + 1) + '</div><div>' +
+      '<div style="display:flex; align-items:center; gap:14px"><h3>' + s.nm + '</h3><label style="margin:0; font-size:13px"><input type="checkbox" class="s7c" style="width:auto; accent-color:#a5832f"> 标记完成</label></div>' +
+      '<div class="cols">' +
+      '<div class="blk"><b>目标：</b>' + s.goal + '</div><div class="blk"><b>动作清单：</b>' + s.acts + '</div>' +
+      '<div class="blk" style="color:#8a5a50"><b>常见坑：</b>' + s.pit + '</div><div class="blk" style="color:#7a6420"><b>东高垣实例：</b>' + s.ex + '</div>' +
+      '</div><details class="acc" style="margin-top:12px"><summary>6 段式实施细则</summary><div class="acc-body">' + s.six + "</div></details></div></div>";
+  }).join("");
+  document.getElementById("s7Btn").addEventListener("click", function () {
+    var n = document.querySelectorAll(".s7c:checked").length;
+    var o = document.getElementById("s7Out");
+    o.style.display = "block";
+    document.getElementById("s7Print").style.display = "inline-flex";
+    o.innerHTML = "<b>7 步建设法进度：" + n + " / 7。</b>" + (n === 7 ? "全流程已闭环，转入运营期常态化监督：台账日日清、公示按季做、异议不过周。" : "进行中。当前应聚焦第 " + (n + 1) + " 步「" + S7[n].nm + "」：" + S7[n].goal);
+  });
+
+  /* 大会议程 */
+  document.getElementById("agBtn").addEventListener("click", function () {
+    var v = document.getElementById("agV").value || "××村", d = document.getElementById("agD").value || "××××年××月××日";
+    var items = ["主持人说明会议主题与参会人员（镇干部、企业代表、村两委）", "镇干部讲政策：项目由来、招标情况、自愿原则", "企业代表讲方案：模式（农户零成本纯租赁、25 年）、租金标准（30 元/块/年，人字坡 15 元/块/年）、权责", "村两委讲安排：摸排结果、报名与签约流程、时间节点", "样板户或党员代表发言", "现场问答（三大顾虑必答）", "公示报名方式与咨询渠道", "主持人宣布纪律：不强制、不摊派、自愿签约"];
+    document.getElementById("agendaOut").innerHTML = '<div class="note-box" style="margin-top:16px"><b>' + v + "村民大会议程（" + d + "）</b><ol style='padding-left:22px; line-height:2; font-size:14.5px'>" +
+      items.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ol><p class='caption'>会期控制在 90 分钟以内，问答不限时；会议不作现场签约动员——把「听讲」与「签约」在时间上分开。（手册第 105 条）</p></div>";
+  });
+
+  /* 明白纸 */
+  document.getElementById("mzBtn").addEventListener("click", function () {
+    var v = document.getElementById("mzV").value || "××村", r1 = document.getElementById("mzR").value || "30",
+        r2 = document.getElementById("mzR2").value || "15",
+        p = document.getElementById("mzP").value || "（待填）", c = document.getElementById("mzC").value || "（待填）";
+    document.getElementById("mzOut").style.display = "block";
+    document.getElementById("mzPrint").style.display = "inline-flex";
+    document.getElementById("mzPreview").innerHTML =
+      "<h3>" + v + "屋顶光伏明白纸</h3>" +
+      "<p><b>一、这是什么：</b>政府统一招标引进正规企业，租用咱家屋顶建光伏电站，发电全部卖给电网。</p>" +
+      "<p><b>二、要咱出啥：</b>一分钱不用出，不贷款、不担保，只出租屋顶。</p>" +
+      "<p><b>三、咱能得啥：</b>一块板一年租金 " + r1 + " 元（人字坡 " + r2 + " 元），按合同 25 年固定，按期打到咱卡上。</p>" +
+      "<p><b>四、出了问题找谁：</b>电站坏了、房子漏了，打报修电话 " + p + "，或找村联系人 " + c + "；限发停发的损失企业承担，租金不少。</p>" +
+      "<p><b>五、防骗提醒：</b>不是本村统一项目的，催签字、要身份证、吹高收益的，一律不信，先找村两委核实。</p>" +
+      "<p><b>六、自愿原则：</b>装不装、什么时候签，自家商量定，任何人不得强迫。</p>" +
+      '<p class="sig">××镇人民政府、' + v + "村民委员会（盖章）　　年　月　日</p>" +
+      '<p class="caption" style="color:#8a95a1">明白纸限 1 页不超过 600 字；填写内容经镇政府审核后印制；与合同条款摘要不一致时以合同为准。（手册第 108 条）</p>';
+  });
+
+  /* 容量检测 */
+  document.getElementById("capBtn").addEventListener("click", function () {
+    var total = +document.getElementById("capTotal").value, now = +document.getElementById("capNow").value, nw = +document.getElementById("capNew").value;
+    var add = nw * 30, usable = total * 0.8, over = now + add - usable;
+    var o = document.getElementById("capOut"), tpl;
+    if (over <= 0) {
+      tpl = '<div class="note-box" style="margin-top:16px"><b style="color:#2e7d4f">未超载。</b>可用容量约 ' + usable.toFixed(0) + ' kW，新增 ' + add + ' kW 后仍有裕度 ' + (-over).toFixed(0) + " kW。仍须以电网企业书面容量核算意见为准（超过 6 个月未启用的应复核）。</div>";
+    } else {
+      var batches = Math.ceil((now + add - usable) / (total * 0.8)) + 1;
+      tpl = '<div class="warn-box" style="margin-top:16px"><b>超载预警：</b>超出 ' + over.toFixed(0) + " kW，超载比例约 " + (over / usable * 100).toFixed(0) + '%。建议：①暂停超容量部分签约，登记候补排队；②函请电网企业出具改造方案、投资测算与时序；③改造落实前签约规模不得超出可开放容量；④分 ' + batches + ' 批释放名额，排序规则公开。</div>' +
+        '<details class="acc" style="margin-top:12px"><summary>电网增容申请模板（点击展开，可打印）</summary><div class="acc-body">××供电公司：我村（××镇××村）拟推进整村屋顶光伏建设，现有台区容量 ×× kVA，已接入 ×× kW，拟新增 ×× 户约 ×× kW。特函请贵公司出具台区接入容量核算书面意见；容量不足部分，请一并出具改造方案、投资测算与时序安排。联系人：×××，电话：×××。××镇人民政府（代章）　年　月　日</div></details>';
+    }
+    o.innerHTML = tpl;
+  });
+
+  /* 候补登记 */
+  var queue = [];
+  document.getElementById("qAdd").addEventListener("click", function () {
+    var n = document.getElementById("qName").value.trim() || "（未填）";
+    queue.push({ n: n, r: document.getElementById("qRoof").value, t: new Date().toLocaleDateString("zh-CN") });
+    document.getElementById("queueOut").innerHTML = '<table class="tbl" style="margin-top:14px"><tr><th>排序</th><th>户主</th><th>屋顶条件</th><th>登记时间</th></tr>' +
+      queue.map(function (q, i) { return "<tr><td>" + (i + 1) + "</td><td>" + q.n + "</td><td>" + q.r + "</td><td>" + q.t + "</td></tr>"; }).join("") +
+      '</table><p class="caption" style="margin-top:8px">张榜公示用表；容量释放后按登记顺序优先安排，杜绝「找关系插队」。（手册第 117 条，空白模板见表 M-3）</p>';
+  });
+
+  /* 纠纷分流 */
+  var dsp = [
+    ["农户与企业", "首选：村两委登记转企业限时处置。升级：镇政府督办；合同争议依法解决。", "情景四：农户报修漏水，企业与农户各执一词——村两委参与责任认定，以竣工验收记录与漏水点位为依据；责任存疑的建议企业先行维修、责任再议。要点：「先止损、后定责」，农户的房屋不能等鉴定结果。"],
+    ["农户之间", "首选：村调解委员会现场调解。升级：镇司法所调解。", "情景一：「邻居家光伏板挡了我家采光」——现场查看遮挡事实，确有遮挡的协调企业评估移位、降高；无法调整的引导协商补偿。要点：采光争议须在签约勘测阶段前置排查。"],
+    ["农户与村集体", "首选：村务公开＋村民代表会议说明。升级：镇政府指导纠正。", "情景五：候补排序被质疑「有人插队」——出示候补登记台账与排序规则逐条说明；规则有瑕疵的经村民代表会议修订后公示。要点：公平性质疑只能用公开化解。"],
+    ["企业与电网", "首选：企业与电网企业协商。升级：县级部门协调。", "容量、限发、接入争议多由此出。东高垣教训：容量核算必须前置到立项阶段，「先建设、后改造」的被动局面正是容量核算后置的代价。"],
+    ["涉法涉诉", "首选：立即报告镇政府与公安机关。升级：司法途径。", "发现骗贷线索（要身份证办贷款、查无备案）即属此类。东高垣早期骗贷事件警示：信任一旦破产，重建成本远高于预防成本。"]
+  ];
+  document.getElementById("dspList").innerHTML = dsp.map(function (d, i) {
+    return '<button class="dsp-btn" data-i="' + i + '">' + d[0] + "</button>";
+  }).join("");
+  document.getElementById("dspList").addEventListener("click", function (e) {
+    var b = e.target.closest(".dsp-btn"); if (!b) return;
+    document.querySelectorAll(".dsp-btn").forEach(function (x) { x.classList.remove("sel"); });
+    b.classList.add("sel");
+    var d = dsp[+b.dataset.i];
+    document.getElementById("dspDetail").innerHTML = "<h3>" + d[0] + "</h3><p style='color:#c4cfda; font-size:15px; margin-top:10px'>" + d[1] + "</p><p style='color:#b8c4d0; font-size:14.5px; margin-top:12px'><b style='color:var(--gold2)'>典型情景：</b>" + d[2] + "</p>";
+  });
+});
+</script>
+</body>
+</html>

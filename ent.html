@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>企业工作台 —— 屋顶上的共富路</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+.calc-grid{display:grid; grid-template-columns:2fr 3fr; gap:30px; margin-top:34px}
+@media(max-width:960px){.calc-grid{grid-template-columns:1fr}}
+.in-panel{padding:28px}
+.in-panel .row2{display:grid; grid-template-columns:1fr 1fr; gap:0 16px}
+.res-big{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:24px}
+@media(max-width:960px){.res-big{grid-template-columns:1fr 1fr}}
+.res-big .cell{background:rgba(10,22,40,.5); border:1px solid rgba(212,168,75,.3); border-radius:12px; padding:16px 12px; text-align:center}
+.res-big .din{font-size:30px}
+.res-big .lb{font-size:12.5px; color:#9fb0c0; margin-top:4px}
+.ring-wrap{display:grid; grid-template-columns:1fr 1fr; gap:30px; align-items:center}
+@media(max-width:900px){.ring-wrap{grid-template-columns:1fr}}
+.dd-item{display:flex; gap:14px; align-items:flex-start; padding:13px 0; border-bottom:1px dashed rgba(61,90,117,.35)}
+.dd-item input{width:20px; height:20px; margin-top:5px; accent-color:var(--gold); flex:none}
+.dd-item .up{margin-left:auto; flex:none}
+.flow8{position:relative}
+#flow8 .fstep{position:relative; padding-left:38px}
+#flow8 .fstep .step-dot{left:0}
+.sim-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:30px}
+@media(max-width:900px){.sim-grid{grid-template-columns:1fr}}
+.sim-opt{display:block; width:100%; text-align:left; background:var(--ink); border:1px solid var(--mist); color:var(--paper); border-radius:12px; padding:14px 18px; margin-bottom:10px; font-size:15.5px; transition:.25s}
+.sim-opt:hover{border-color:var(--gold)}
+.sim-opt.sel{border-color:var(--gold); background:rgba(212,168,75,.1)}
+.life{position:relative; padding-left:40px}
+.life::before{content:""; position:absolute; left:12px; top:0; height:var(--grow,0%); width:3px; background:linear-gradient(180deg,var(--gold2),var(--gold)); transition:height .2s linear}
+.life::after{content:""; position:absolute; left:12px; top:0; bottom:0; width:3px; background:rgba(61,90,117,.35); z-index:-1}
+.life-item{position:relative; padding:0 0 36px 0}
+.life-item .dot{position:absolute; left:-35px; top:2px; width:18px; height:18px; border-radius:50%; background:var(--ink2); border:3px solid var(--gold)}
+</style>
+</head>
+<body>
+<div data-crumb></div>
+
+<section class="section grain" style="padding-top:56px">
+  <div class="wrap">
+    <div class="kicker rv">角色指南 · 企业</div>
+    <h1 class="rv">企业工作台：算清经济账，守好安全线</h1>
+    <p class="lead rv" style="margin-top:14px">投资运营主体是项目的「风险承担者」与「长期在场者」。样本项目由 H 光伏公司（省属国有企业）全额投资建设，G 项目运营公司负责运营、结算与分红。</p>
+  </div>
+</section>
+
+<!-- 收益测算引擎 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">投资决策 · 工具</div>
+    <h2 class="rv">收益测算引擎</h2>
+    <p class="lead rv">全部计算在前端完成；参数默认值取东高垣村样本口径，输出为课题组测算参考值，不构成投资结论。</p>
+    <div class="calc-grid">
+      <div class="card in-panel rv">
+        <h3>输入参数</h3>
+        <div class="row2">
+          <div><label>省份</label><select id="cProv"><option>陕西省</option><option>其他（手动调参）</option></select></div>
+          <div><label>地市</label><select id="cCity"><option>渭南市</option><option>其他</option></select></div>
+        </div>
+        <div class="row2">
+          <div><label>县（区）</label><select id="cCounty"><option>大荔县</option><option>其他</option></select></div>
+          <div><label>可装机农户数（户）</label><input type="number" id="cN" value="185" min="1"></div>
+        </div>
+        <label>户均屋顶可用面积（㎡）：<b id="cAreaV">80</b></label>
+        <input type="range" id="cArea" min="30" max="200" value="80">
+        <label>屋顶类型分布（一字坡占比 %）：<b id="cSlopeV">80</b></label>
+        <input type="range" id="cSlope" min="0" max="100" value="80">
+        <div class="row2">
+          <div><label>上网电价（元/kWh）</label><input type="number" id="cPrice" value="0.3545" step="0.01" min="0"></div>
+          <div><label>年等效利用小时（h）</label><input type="number" id="cHours" value="1350" min="0"></div>
+        </div>
+        <div class="row2">
+          <div><label>组件功率（W）</label><input type="number" id="cWatt" value="635" min="0"></div>
+          <div><label>系统成本（元/W）</label><input type="number" id="cCost" value="3.5" step="0.1" min="0"></div>
+        </div>
+        <label>技术路线</label>
+        <select id="cTech">
+          <option value="1,1">PERC（效率基准，成本基准）</option>
+          <option value="1.06,1.05">TOPCon（效率 +6%，造价 +5%）</option>
+          <option value="1.11,1.12">HJT（效率 +11%，造价 +12%）</option>
+        </select>
+        <label>融资方案</label>
+        <select id="cFin">
+          <option value="0">全额自有（无融资成本）</option>
+          <option value="0.035">70% 贷款 · 年利率 3.5% 示意</option>
+          <option value="0.045">70% 贷款 · 年利率 4.5% 示意</option>
+        </select>
+        <div class="row2">
+          <div><label><input type="checkbox" id="cCarbon" style="width:auto"> 计入碳交易收益（60 元/吨示意）</label></div>
+          <div><label>限发率模拟：<b id="cCurtV">0</b>%</label><input type="range" id="cCurt" min="0" max="15" value="0"></div>
+        </div>
+        <p class="caption" style="margin-top:12px">技术路线、融资利率与碳价为测算示意参数；东高垣样本：单瓦投资约 3.5 元、利用小时约 1350 h、电价 0.3545 元/kWh（脱硫煤标杆电价）。「531 新政」后新增项目须按市场化电价重算。</p>
+      </div>
+      <div class="rv">
+        <div class="res-big">
+          <div class="cell"><div class="din num-glow" id="rInv">—</div><div class="lb">总投资（万元）</div></div>
+          <div class="cell"><div class="din num-glow" id="rRev">—</div><div class="lb">年净收益（万元）</div></div>
+          <div class="cell"><div class="din num-glow" id="rPb">—</div><div class="lb">回收期（年）</div></div>
+          <div class="cell"><div class="din num-glow" id="rNet25">—</div><div class="lb">25 年净收益（万元）</div></div>
+          <div class="cell"><div class="din num-glow" id="rRent">—</div><div class="lb">农户户均年租金（元）</div></div>
+        </div>
+        <div class="card" style="margin-bottom:18px">
+          <b>敏感性分析：电价 — 回收期曲线</b>
+          <svg id="sensSvg" viewBox="0 0 560 220" style="width:100%; margin-top:10px"></svg>
+          <p class="caption">随上方电价参数实时重绘；区间为三变量（电价、利用小时、限发率）组合极值。手册敏感性提示：发电量每下浮 5%，年收益约减 14 万元；电价每下浮 0.01 元/kWh，年收益约减 8 万元（以 805 万 kWh 为基准）。</p>
+        </div>
+        <div class="card">
+          <b>农户端收益：与农村基础养老金对比（月均，元）</b>
+          <svg id="cmpSvg" viewBox="0 0 560 150" style="width:100%; margin-top:10px"></svg>
+          <p class="caption">基础养老金取全国农村居民基础养老金常见量级示意（约 200 元/月），仅作对比参照；农户租金按上方参数测算。</p>
+        </div>
+        <div style="margin-top:20px"><button class="btn btn-gold" onclick="PV.print()">生成《投资可行性测算报告》PDF（打印）</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3D 回收期环 -->
+<section class="section grain">
+  <div class="wrap ring-wrap">
+    <div>
+      <div class="kicker rv">东高垣样本 · 静态面板</div>
+      <h2 class="rv">7—8 年：回收期进度环</h2>
+      <p class="lead rv" style="margin-top:12px">东高垣村样本总投资约 2100 万元、年发电收益约 286 万元，简化口径回收期约 7—8 年；25 年租期内含约 17 年以上净收益窗口。补齐运维、租金、保险、税费与限发损失后，回收期将相应延长（手册第 72—74 条）。</p>
+      <p class="caption" style="margin-top:12px">东高垣村口径，2026 年 2 月企业访谈；课题组交叉验证 285.4 万元，口径自洽。</p>
+    </div>
+    <div class="ring3d-stage" id="ringStage"></div>
+  </div>
+</section>
+
+<!-- 尽调 10 项 -->
+<section class="section grain" style="padding-top:40px">
+  <div class="wrap">
+    <div class="kicker rv">投前必查</div>
+    <h2 class="rv">投前尽调 10 项清单</h2>
+    <p class="lead rv">逐项取证并留存底稿；第 2 项（电网容量）与第 5 项（村庄治理）权重最高——前者决定收益上限，后者决定执行成本（手册第 75—76 条）。</p>
+    <div class="card rv" style="margin-top:28px" id="ddList"></div>
+    <div style="margin-top:20px; display:flex; gap:16px; flex-wrap:wrap">
+      <button class="btn btn-gold" id="ddBtn">生成《投前尽调报告》</button>
+      <button class="btn btn-line" id="ddPrint" style="display:none" onclick="PV.print()">导出 PDF（打印）</button>
+    </div>
+    <div id="ddResult" class="note-box" style="margin-top:16px; display:none"></div>
+  </div>
+</section>
+
+<!-- 8 步建设向导 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">建设实施</div>
+    <h2 class="rv">8 步建设流程向导</h2>
+    <div class="steps-vert" style="margin-top:34px" id="flow8"></div>
+  </div>
+</section>
+
+<!-- 运维工单模拟器 -->
+<section class="section grain">
+  <div class="wrap">
+    <div class="kicker rv">培训工具</div>
+    <h2 class="rv">运维工单模拟器</h2>
+    <p class="lead rv">场景：农户报修「发电量下降 30%」。观察虚拟仪表盘，选择排查方向，系统给出标准处置方案。全县口径下 1900 余户电站、69.62 MW 的规模化运营，依靠的正是「线上监测＋驿站巡检＋三级工单」体系（停机 22 户／超压 514 户／亚健康 156 户，大荔县全县（含东高垣村），截至 2025 年 7—8 月企业台账）。</p>
+    <div class="sim-grid">
+      <div class="card rv">
+        <b>虚拟仪表盘</b>
+        <svg viewBox="0 0 420 190" style="width:100%; margin-top:12px">
+          <rect x="0" y="0" width="420" height="190" rx="10" fill="rgba(10,22,40,.6)"/>
+          <text x="16" y="26" fill="#a9bccf" font-size="12">近 7 日发电曲线（kWh）</text>
+          <polyline points="20,60 75,55 130,58 185,62 240,120 295,140 350,138" fill="none" stroke="#C84B3F" stroke-width="2.6"/>
+          <polyline points="20,60 75,55 130,58 185,62 240,60 295,58 350,60" fill="none" stroke="#3D5A75" stroke-width="2" stroke-dasharray="5 5"/>
+          <text x="330" y="52" fill="#3D5A75" font-size="11">正常基线</text>
+          <text x="240" y="170" fill="#C84B3F" font-size="12">第 5 日起骤降约 30%</text>
+          <text x="16" y="106" fill="#a9bccf" font-size="12">天气：近 3 日晴，无降水</text>
+          <text x="16" y="126" fill="#a9bccf" font-size="12">台区电压：未越限</text>
+        </svg>
+      </div>
+      <div class="rv">
+        <b>选择排查方向</b>
+        <div style="margin-top:12px" id="simOpts">
+          <button class="sim-opt" data-i="0">组件遮挡（新建棚架、树木、积灰）</button>
+          <button class="sim-opt" data-i="1">逆变器故障（告警码、停机）</button>
+          <button class="sim-opt" data-i="2">线路故障（接头松动、线缆破损）</button>
+          <button class="sim-opt" data-i="3">电网限发（台区超压降载）</button>
+        </div>
+        <div id="simResult" class="note-box" style="display:none; margin-top:6px"></div>
+        <button class="btn btn-line" id="simPdf" style="display:none; margin-top:14px" onclick="PV.print()">生成工单记录（打印 PDF）</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 25 年生命周期 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker rv">全生命周期</div>
+    <h2 class="rv">25 年，5 个阶段</h2>
+    <p class="lead rv">时间轴随滚动向下「生长」。每阶段标注重点工作、考核指标与关键节点。</p>
+    <div class="life" id="life" style="margin-top:36px">
+      <div class="life-item rv"><span class="dot"></span><h3>第 0 年 · 建设期</h3><p style="color:#5a6b7c; font-size:15.5px">签约—安装—并网：逐户建档、排期施工、并网验收，同步完成保险投保。考核：签约率、防水验收户户必验。</p></div>
+      <div class="life-item rv"><span class="dot"></span><h3>第 1—5 年 · 磨合期</h3><p style="color:#5a6b7c; font-size:15.5px">发电爬坡与信任巩固：发电量对标设计值，客诉高发期重点盯漏水与施工遗留。考核：发电完成率、客诉办结率。</p></div>
+      <div class="life-item rv"><span class="dot"></span><h3>第 6—15 年 · 稳定期</h3><p style="color:#5a6b7c; font-size:15.5px">投资回收关键窗口：控制运维成本，跟踪电价政策，确保发电完成率稳定；组件衰减监测、逆变器中期更换。考核：回收进度、运维成本率。</p></div>
+      <div class="life-item rv"><span class="dot"></span><h3>第 16—25 年 · 后期</h3><p style="color:#5a6b7c; font-size:15.5px">净收益与技改：探索绿电交易等增值通道；设备健康度分级管理，防止亚健康演变为停机。考核：净收益兑现、技改完成率。</p></div>
+      <div class="life-item rv"><span class="dot"></span><h3>约满 · 退役期</h3><p style="color:#5a6b7c; font-size:15.5px">到期处置预案：提前 2 年启动续约或拆除安置方案征询，避免到期纠纷；拆除与屋顶恢复由企业负责（以签约书面约定为准）。</p></div>
+    </div>
+    <p class="caption">时间轴为课题组依据 25 年租约与回收期测算整理的管理建议框架（手册第十四章）。</p>
+  </div>
+</section>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  /* 测算引擎 */
+  var ids = ["cN", "cArea", "cSlope", "cPrice", "cHours", "cWatt", "cCost", "cTech", "cFin", "cCarbon", "cCurt"];
+  function calc() {
+    var N = +v("cN"), A = +v("cArea"), slope = +v("cSlope") / 100, price = +v("cPrice"), hours = +v("cHours"),
+        watt = +v("cWatt"), cost = +v("cCost"), curt = +v("cCurt") / 100;
+    var tech = v("cTech").split(","), eff = +tech[0], costMul = +tech[1];
+    var finRate = +v("cFin");
+    document.getElementById("cAreaV").textContent = A;
+    document.getElementById("cSlopeV").textContent = slope * 100;
+    document.getElementById("cCurtV").textContent = +v("cCurt");
+    var panelsPer = Math.floor(A * PVCONST.ROOF_K / PVCONST.PANEL_AREA);
+    var rentPer = PVCONST.RENT_YZ * slope + PVCONST.RENT_RZ * (1 - slope);
+    var kwPer = panelsPer * watt / 1000 * eff;
+    var totalKw = kwPer * N;
+    var inv = totalKw * 1000 * cost * costMul / 10000; // 万元
+    var kwh = totalKw * hours * (1 - curt);
+    var gross = kwh * price / 10000;
+    var rentTotal = panelsPer * N * rentPer / 10000;
+    var om = gross * 0.08;
+    var finCost = inv * 0.7 * finRate;
+    var carbon = document.getElementById("cCarbon").checked ? kwh * 0.8 / 1000 * 60 / 10000 : 0;
+    var net = gross - rentTotal - om - finCost + carbon;
+    var pb = net > 0 ? inv / net : Infinity;
+    var net25 = net * 25 - inv;
+    t("rInv", inv.toFixed(0)); t("rRev", net.toFixed(1));
+    t("rPb", isFinite(pb) ? pb.toFixed(1) : "不可回收"); t("rNet25", net25.toFixed(0));
+    t("rRent", Math.round(panelsPer * rentPer));
+    drawSens(N, panelsPer, kwPer, rentPer, hours, cost * costMul, finRate, curt);
+    drawCmp(panelsPer * rentPer / 12);
+    return { pb: pb };
+  }
+  function v(id) { return document.getElementById(id).value; }
+  function t(id, s) { document.getElementById(id).textContent = s; }
+  function drawSens(N, panels, kwPer, rentPer, hours, cost, finRate, curt) {
+    var svg = document.getElementById("sensSvg"), pts = [];
+    for (var p = 0.25; p <= 0.4501; p += 0.01) {
+      var kw = kwPer * N, inv = kw * 1000 * cost / 10000;
+      var gross = kw * hours * (1 - curt) * p / 10000;
+      var net = gross - panels * N * rentPer / 10000 - gross * 0.08 - inv * 0.7 * finRate;
+      var pb = net > 0 ? inv / net : 30;
+      pts.push([p, Math.min(30, pb)]);
+    }
+    var X = function (p) { return 40 + (p - 0.25) / 0.2 * 500; };
+    var Y = function (y) { return 200 - (y / 30) * 180; };
+    var d = "M" + pts.map(function (q) { return X(q[0]).toFixed(1) + " " + Y(q[1]).toFixed(1); }).join(" L");
+    var cur = +v("cPrice");
+    svg.innerHTML =
+      '<line x1="40" y1="200" x2="540" y2="200" stroke="#c8cdd4"/><line x1="40" y1="200" x2="40" y2="16" stroke="#c8cdd4"/>' +
+      '<path d="' + d + '" fill="none" stroke="#a5832f" stroke-width="2.6"/>' +
+      '<line x1="' + X(cur) + '" y1="16" x2="' + X(cur) + '" y2="200" stroke="#C84B3F" stroke-dasharray="4 4"/>' +
+      '<text x="' + (X(cur) + 6) + '" y="30" fill="#C84B3F" font-size="12">当前 ' + cur + " 元</text>" +
+      '<text x="44" y="24" fill="#8a95a1" font-size="11">回收期（年，封顶 30）</text>' +
+      '<text x="480" y="216" fill="#8a95a1" font-size="11">电价 0.25—0.45 元/kWh</text>';
+  }
+  function drawCmp(month) {
+    var svg = document.getElementById("cmpSvg");
+    var base = 200, max = Math.max(month, base) * 1.2;
+    var h1 = month / max * 110, h2 = base / max * 110;
+    svg.innerHTML =
+      '<rect x="60" y="' + (130 - h1) + '" width="120" height="' + h1 + '" rx="6" fill="#D4A84B"/>' +
+      '<rect x="300" y="' + (130 - h2) + '" width="120" height="' + h2 + '" rx="6" fill="#3D5A75"/>' +
+      '<text x="120" y="' + (122 - h1) + '" text-anchor="middle" fill="#22303f" font-size="16" font-weight="700">' + Math.round(month) + "</text>" +
+      '<text x="360" y="' + (122 - h2) + '" text-anchor="middle" fill="#22303f" font-size="16" font-weight="700">' + base + "</text>" +
+      '<text x="120" y="146" text-anchor="middle" fill="#5a6b7c" font-size="13">光伏租金（测算）</text>' +
+      '<text x="360" y="146" text-anchor="middle" fill="#5a6b7c" font-size="13">基础养老金（示意）</text>';
+  }
+  ids.forEach(function (id) {
+    document.getElementById(id).addEventListener("input", calc);
+    document.getElementById(id).addEventListener("change", calc);
+  });
+  calc();
+
+  /* 3D 回收期环 */
+  FX.ring(document.getElementById("ringStage"), 7.5 / 25,
+    '<div class="din num-glow">7—8</div><div class="label" style="color:#a9bccf">年 · 简化口径回收期</div><div class="caption">25 年租期 · 净收益窗口约 17 年+</div>');
+
+  /* 尽调 10 项 */
+  var dd = ["政策合规：县试点方案、并网与补贴政策口径、土地与规划约束", "电网容量：台区容量核算、改造计划与投资主体、限发历史", "屋顶资源：合格屋顶台账、产权清晰度、危房排除情况", "资源评估：当地光照资源、等效利用小时数测算", "村庄治理：村两委动员能力、历史矛盾、既有光伏负面事件", "农户意愿：抽样意愿调查、可接受租金水平", "合同安排：合同范本合规性、租金支付周期、到期处置条款", "成本测算：单瓦造价、施工组织、并网配套成本", "保险安排：财产综合险、公众责任险询价与承保条件", "退出与极端情形：征收拆迁、房屋翻建、企业退出时的处置预案"];
+  document.getElementById("ddList").innerHTML = dd.map(function (d, i) {
+    return '<div class="dd-item"><input type="checkbox" class="dd-c" id="dd' + i + '"><label for="dd' + i + '" style="margin:0; color:#c4cfda">' + (i + 1) + ". " + d + '</label><label class="pill mist up" style="cursor:pointer">上传证据（模拟）<input type="file" style="display:none" class="dd-f"></label></div>';
+  }).join("");
+  document.querySelectorAll(".dd-f").forEach(function (f) {
+    f.addEventListener("change", function () { f.parentElement.textContent = f.files.length ? "已附：" + f.files[0].name : "上传证据（模拟）"; });
+  });
+  document.getElementById("ddBtn").addEventListener("click", function () {
+    var done = document.querySelectorAll(".dd-c:checked").length;
+    var r = document.getElementById("ddResult");
+    r.style.display = "block";
+    document.getElementById("ddPrint").style.display = "inline-flex";
+    r.innerHTML = "<b>尽调进度：" + done + " / 10。</b>" + (done === 10 ? "10 项全部完成取证，可召开尽调评审会，逐项给出「通过、附条件通过、不通过」结论；附条件事项在投资协议中转化为先决条件。底稿归档，保存期不短于合同期限。" : "尚有 " + (10 - done) + " 项未完成。提醒：电网容量与村庄治理是东高垣经验中权重最高的 2 项；退出与极端情形最易被忽略，而 25 年周期内征收、翻建、继承是确定性事件。");
+  });
+
+  /* 8 步向导 */
+  var steps = [
+    ["勘测设计", "逐户复测屋顶尺寸、结构、朝向，出具单户设计图与村级电气总图。", "复测与摸底不一致即暂停该户流程并书面说明；不带异议施工。", "东高垣单户约 32 kW、约 50 块组件，逐户确认是「零重大施工纠纷」的基础。"],
+    ["备案与接入申请", "办理项目备案，向电网企业提交接入申请并获取接入方案。", "接入方案未落实前不盲目开工。"],
+    ["材料集采", "组件、支架、逆变器集中采购，留存合格证与质保文件。", "低价杂牌件是后期亚健康电站的源头。"],
+    ["分批施工", "按巷道分批进场，每户施工前确认进场时间与注意事项。", "提前 3 天通知到户，避开农忙与恶劣天气。"],
+    ["质量安全管控", "支架锚固、防水处理、电气安装逐项自检，隐蔽工程拍照存档。", "防水是重中之重：全县客诉 13 项中漏水 10 户。"],
+    ["竣工验收", "企业自检后组织农户、村集体代表共同验收，签署验收单（表 M-7）。", "防水执行「雨后复验」：首次降雨后无渗漏方为最终合格。"],
+    ["并网验收", "电网企业计量装置安装与并网验收，签订购售电合同。", "逐户书面告知租金起算时点。"],
+    ["资料归档", "合同、设计图、验收单、保单、并网确认单一户一档。", "档案保存不少于 25 年，是纠纷定责的基线证据。"]
+  ];
+  document.getElementById("flow8").innerHTML = steps.map(function (s, i) {
+    return '<div class="fstep" style="position:relative; padding-bottom:22px"><span class="step-dot">' + (i + 1) + '</span>' +
+      '<div style="display:flex; align-items:center; gap:12px"><h3 style="color:#22303f">' + s[0] + '</h3><label style="margin:0; font-size:13px"><input type="checkbox" style="width:auto; accent-color:#a5832f"> 标记完成</label></div>' +
+      '<p style="color:#5a6b7c; font-size:15px; margin-top:6px"><b>目标／动作：</b>' + s[1] + "</p>" +
+      '<p style="color:#8a5a50; font-size:14.5px"><b>常见坑：</b>' + s[2] + "</p>" +
+      (s[3] ? '<p style="color:#7a6420; font-size:14.5px"><b>东高垣实例：</b>' + s[3] + "</p>" : "") + "</div>";
+  }).join("");
+
+  /* 运维模拟器 */
+  var sims = [
+    ["组件遮挡", "处置方案：驿站当日上门核查，清除遮挡或清洗组件，复测发电量。预计修复：24 小时内。成本：清洗约 0.05 元/W 示意，由企业运维列支。建议：纳入例行巡检排期，防止演变为亚健康。"],
+    ["逆变器故障", "处置方案：红色工单，24 小时内响应；驿站常用件现场更换，大件区域调拨。预计修复：一般 72 小时内。成本：整机更换约 0.15—0.25 元/W 示意，质保期内由厂家承担。"],
+    ["线路故障", "处置方案：断电排查接头与线缆，更换破损段，做绝缘复测。预计修复：48 小时内。成本：材料与人工小额列支。提醒：农户切勿自行上房拆装。"],
+    ["电网限发", "处置方案：核实台区电压曲线，列入电网改造清单按月跟踪；按合同约定限发损失由企业承担，农户租金分文不少。预计修复：依赖台区改造时序。成本：限发损失按发电量计提。"]
+  ];
+  document.getElementById("simOpts").addEventListener("click", function (e) {
+    var b = e.target.closest(".sim-opt"); if (!b) return;
+    document.querySelectorAll(".sim-opt").forEach(function (x) { x.classList.remove("sel"); });
+    b.classList.add("sel");
+    var s = sims[+b.dataset.i], r = document.getElementById("simResult");
+    r.style.display = "block";
+    r.innerHTML = "<b>" + s[0] + "。</b>" + s[1];
+    document.getElementById("simPdf").style.display = "inline-flex";
+  });
+
+  /* 生命周期滚动生长 */
+  var life = document.getElementById("life");
+  addEventListener("scroll", function () {
+    var r = life.getBoundingClientRect();
+    var p = Math.max(0, Math.min(1, (innerHeight * .8 - r.top) / r.height));
+    life.style.setProperty("--grow", (p * 100) + "%");
+  }, { passive: true });
+});
+</script>
+</body>
+</html>
