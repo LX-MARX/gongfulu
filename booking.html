@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>预约调研 —— 屋顶上的共富路</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+.bk-head{text-align:center; padding:140px 0 60px}
+.bk-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:20px}
+@media(max-width:980px){.bk-grid{grid-template-columns:1fr}}
+.bk-card{padding:34px 30px; display:flex; flex-direction:column; gap:12px}
+.bk-card .ic{width:48px; height:48px; stroke:var(--gold); fill:none; stroke-width:1.6}
+.bk-card .bd{flex:1; font-size:14.5px; color:#b8c4d0}
+#qForm label{margin-top:12px}
+#qDone{display:none; text-align:center}
+.svc{display:grid; grid-template-columns:repeat(4,1fr); gap:22px; margin-top:30px}
+@media(max-width:900px){.svc{grid-template-columns:1fr 1fr}}
+.svc .card{text-align:center}
+.svc b{display:block; font-size:19px; margin-bottom:6px; color:#22303f}
+</style>
+</head>
+<body>
+
+<section class="bk-head grain">
+  <div class="wrap">
+    <div class="kicker rv">转化闭环</div>
+    <h1 class="rv">预约驻村调研</h1>
+    <p class="lead rv" style="margin:14px auto 0">需要定制化整村光伏方案？三种方式，任选其一。</p>
+  </div>
+</section>
+
+<section class="section grain" style="padding-top:20px">
+  <div class="wrap">
+    <div class="bk-grid">
+      <!-- 问卷 -->
+      <div class="glass bk-card rv">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z M14 2v6h6 M9 13h8 M9 17h8"/></svg>
+        <h3 style="color:var(--gold2)">① 在线问卷预约</h3>
+        <p class="bd">极简 5 题，约 1 分钟填完；提交后获得预约编号，课题组 3 个工作日内与您联系确认调研时间。</p>
+        <div id="qForm">
+          <label>Q1 您的姓名</label><input type="text" id="q1">
+          <label>Q2 您的单位／职务</label><input type="text" id="q2" placeholder="如：××县发改委／××村村支书／××企业投资部">
+          <label>Q3 联系电话（必填）</label><input type="tel" id="q3" placeholder="手机号">
+          <label>Q4 调研地点</label>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
+            <select id="q4p"><option>陕西省</option><option>其他省份</option></select>
+            <select id="q4c"><option>渭南市</option><option>其他地市</option></select>
+            <select id="q4x"><option>大荔县</option><option>其他县区</option></select>
+            <input type="text" id="q4v" placeholder="镇、村名称">
+          </div>
+          <label>Q5 村庄基本情况</label><textarea id="q5" rows="3" placeholder="全村约＿＿户，有意向／已开展光伏的约＿＿户，主要想解决什么问题"></textarea>
+          <button class="btn btn-gold" style="margin-top:18px; width:100%" id="qSubmit">填写预约问卷 · 提交</button>
+        </div>
+        <div id="qDone">
+          <div style="font-size:44px">✓</div>
+          <h3 style="color:var(--gold2); margin-top:6px">预约已提交</h3>
+          <p class="bd" style="margin-top:8px">登记编号：<b class="din num-glow" id="qNo" style="font-size:20px"></b></p>
+          <p class="bd" id="qMode"></p>
+          <button class="btn btn-line" id="qVoucherBtn" style="margin-top:12px; font-size:14px; padding:9px 18px">下载登记凭证（打印 A4）</button>
+        </div>
+      </div>
+      <!-- 电话 -->
+      <div class="glass bk-card rv">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a12 12 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>
+        <h3 style="color:var(--gold2)">② 电话预约</h3>
+        <p class="bd">联系人：夏立轩<br><b class="din num-glow" style="font-size:26px">13721171245</b><br>工作日 9:00—18:00<br>提示：请提前准备村庄名称与大致户数。</p>
+        <a class="btn btn-gold" href="tel:13721171245" id="telBtn">直接致电</a>
+        <button class="btn btn-line" id="telCopy" style="font-size:14px; padding:9px 16px">复制号码（桌面端）</button>
+      </div>
+      <!-- 邮箱 -->
+      <div class="glass bk-card rv">
+        <svg class="ic" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6L22 7"/></svg>
+        <h3 style="color:var(--gold2)">③ 邮箱预约</h3>
+        <p class="bd">发送邮件至<br><b class="num-glow" style="font-size:18px">1491568874@qq.com</b><br>点击按钮唤起邮件客户端，已预填主题与正文模板（含村庄名称／联系人／电话／户数／需求）。</p>
+        <a class="btn btn-gold" id="mailBtn" href="mailto:1491568874@qq.com?subject=%E9%A2%84%E7%BA%A6%E9%A9%BB%E6%9D%91%E8%B0%83%E7%A0%94%EF%BC%9A%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E5%85%B1%E5%AF%8C%E8%B7%AF&body=%E6%9D%91%E5%BA%84%E5%90%8D%E7%A7%B0%EF%BC%9A%0A%E8%81%94%E7%B3%BB%E4%BA%BA%EF%BC%9A%0A%E8%81%94%E7%B3%BB%E7%94%B5%E8%AF%9D%EF%BC%9A%0A%E5%85%A8%E6%9D%91%E6%88%B7%E6%95%B0%EF%BC%9A%0A%E4%B8%BB%E8%A6%81%E9%9C%80%E6%B1%82%EF%BC%9A%EF%BC%88%E6%94%B6%E7%9B%8A%E6%B5%8B%E7%AE%97%EF%BC%8F%E9%A1%B9%E7%9B%AE%E7%94%B3%E6%8A%A5%E5%92%A8%E8%AF%A2%EF%BC%8F%E6%95%B4%E6%9D%91%E6%96%B9%E6%A1%88%E5%AE%9A%E5%88%B6%EF%BC%8F%E6%94%BF%E7%AD%96%E8%A7%A3%E8%AF%BB%EF%BC%89">发送邮件</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker" style="text-align:center">服务说明</div>
+    <h2 style="text-align:center">预约前，您可能想知道</h2>
+    <div class="svc">
+      <div class="card rv"><b>服务范围</b><span style="color:#5a6b7c; font-size:15px">全国</span></div>
+      <div class="card rv"><b>预约提前期</b><span style="color:#5a6b7c; font-size:15px">15—30 天</span></div>
+      <div class="card rv" style="grid-column:span 2"><b>调研内容</b><span style="color:#5a6b7c; font-size:15px">收益测算 · 项目申报咨询 · 整村方案定制 · 政策解读</span></div>
+    </div>
+    <p class="caption" style="text-align:center; margin-top:22px">在线时预约数据实时写入云端数据库；离线时仅在本机生成编号展示，请电话或邮件二次确认。</p>
+  </div>
+</section>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<div style="display:none"><div id="qVoucher"></div></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("qSubmit").addEventListener("click", function () {
+    var name = document.getElementById("q1").value.trim();
+    var unit = document.getElementById("q2").value.trim();
+    var tel = document.getElementById("q3").value.trim();
+    var addr = document.getElementById("q4p").value + document.getElementById("q4c").value + document.getElementById("q4x").value;
+    var vg = document.getElementById("q4v").value.trim();
+    var brief = document.getElementById("q5").value.trim();
+    if (!name) { alert("请填写您的姓名（Q1 为必填）。"); return; }
+    if (!/^1\d{10}$/.test(tel)) { alert("请填写 11 位手机号（Q3 为必填）。"); return; }
+    if (!vg) { alert("请填写镇、村名称（Q4 为必填）。"); return; }
+    var hm = brief.match(/(\d+)\s*户/);
+    var rec = {
+      site: "gongfulu",
+      village: addr + vg,
+      contact: unit ? name + "（" + unit + "）" : name,
+      phone: tel,
+      households: hm ? parseInt(hm[1], 10) : null,
+      needs: brief || null
+    };
+    var d = new Date();
+    var ymd = d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
+    var dateStr = d.getFullYear() + " 年 " + (d.getMonth() + 1) + " 月 " + d.getDate() + " 日";
+    MG.book(rec).then(function (rows) {
+      var online = !!(rows && rows.length && rows[0].id != null);
+      var no = online ? "GFL-" + ymd + "-" + rows[0].id
+                      : "MG-" + ymd + "-" + String(Math.floor(Math.random() * 900) + 100); /* 离线回退：沿用原有本机编号 */
+      document.getElementById("qNo").textContent = no;
+      document.getElementById("qMode").textContent = online
+        ? "已实时写入云端数据库，课题组将在 3 个工作日内与您联系确认调研时间。也可直接致电或发邮件二次确认（见右侧两种方式）。"
+        : "当前为离线缓存模式，预约未上传服务器，请通过电话或邮件（见右侧两种方式）二次确认。";
+      document.getElementById("qVoucher").innerHTML =
+        '<div style="max-width:640px; margin:0 auto; font-size:15px; line-height:2">' +
+        '<p style="text-align:center; font-size:13px; letter-spacing:.2em">屋顶上的共富路 · 整村光伏驻村调研</p>' +
+        '<table class="tbl" style="margin-top:6px">' +
+        "<tr><th style='width:130px'>登记编号</th><td><b>" + no + "</b></td></tr>" +
+        "<tr><th>调研村庄</th><td>" + rec.village + "</td></tr>" +
+        "<tr><th>联系人</th><td>" + rec.contact + "</td></tr>" +
+        "<tr><th>联系电话</th><td>" + rec.phone + "</td></tr>" +
+        "<tr><th>村庄基本情况</th><td>" + (brief || "（未填写）") + "</td></tr>" +
+        "<tr><th>提交时间</th><td>" + dateStr + " " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0") + "</td></tr>" +
+        "<tr><th>登记日期</th><td>" + dateStr + "</td></tr>" +
+        "<tr><th>登记状态</th><td>" + (online ? "已写入云端数据库" : "离线本机登记，待二次确认") + "</td></tr>" +
+        "</table>" +
+        '<p style="margin-top:14px">课题组将在 3 个工作日内与您联系确认调研时间；如需加急，请致电 13721171245 或发送邮件至 1491568874@qq.com，并报登记编号。</p>' +
+        '<p style="text-align:right; margin-top:18px">屋顶上的共富路项目组</p>' +
+        '<p style="text-align:right; margin-top:4px">' + dateStr + "</p></div>";
+      document.getElementById("qForm").style.display = "none";
+      document.getElementById("qDone").style.display = "block";
+    });
+  });
+  document.getElementById("qVoucherBtn").addEventListener("click", function () {
+    PV.printZone("#qVoucher", "预约登记凭证");
+  });
+  document.getElementById("telCopy").addEventListener("click", function () {
+    var t = this;
+    function ok() { t.textContent = "已复制：13721171245"; }
+    if (navigator.clipboard) navigator.clipboard.writeText("13721171245").then(ok, ok); else ok();
+  });
+});
+</script>
+</body>
+</html>
