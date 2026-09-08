@@ -1,0 +1,98 @@
+/* 「屋顶上的共富路」公文打印样式
+ * 依据党政机关公文格式惯例：A4 纵向，页边距上 2.54cm 下 2.54cm 左 3.17cm 右 3.17cm；
+ * 表题方正小标宋简体二号（22pt），表头信息仿宋_GB2312 三号（16pt），
+ * 表格本体宋体四号（14pt）三线表，表尾说明仿宋_GB2312 小四（12pt），行距固定值 28 磅。
+ * 仅作用于打印隔离区内的 .gov-doc，不影响站点屏幕样式。
+ */
+
+@page { size: A4 portrait; margin: 2.54cm 3.17cm; }
+
+.gov-doc {
+  color: #000;
+  background: #fff;
+  line-height: 28pt; /* 行距固定值 28 磅 */
+  font-size: 14pt;
+  font-family: SimSun, "宋体", serif;
+  text-align: left;
+}
+
+/* 表题：方正小标宋简体二号（22pt）居中 */
+.gov-title {
+  font-family: "方正小标宋简体", "FZXiaoBiaoSong-B05S", "STZhongsong", SimSun, serif;
+  font-size: 22pt;
+  line-height: 34pt;
+  font-weight: 400;
+  text-align: center;
+  margin: 0 0 12pt;
+}
+
+/* 表头信息行：仿宋_GB2312 三号（16pt） */
+.gov-meta {
+  font-family: "仿宋_GB2312", "FangSong_GB2312", FangSong, STFangsong, serif;
+  font-size: 16pt;
+  margin: 0 0 10pt;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0 24pt;
+}
+
+/* 表格本体：三线表（顶线、栏目线、底线，无竖线、无其余横线），宋体四号（14pt） */
+.gov-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
+  border-top: 2.25pt solid #000;
+  border-bottom: 2.25pt solid #000;
+  font-family: SimSun, "宋体", serif;
+  font-size: 14pt;
+  line-height: 28pt;
+  table-layout: auto;
+}
+.gov-tbl th,
+.gov-tbl td {
+  border: none;
+  padding: 4pt 8pt;
+  vertical-align: top;
+  word-break: break-all;
+  text-align: left;
+  font-weight: 400;
+}
+/* 栏目线：表头下唯一一条细分隔线 */
+.gov-tbl thead th {
+  border-bottom: 0.75pt solid #000;
+  font-family: SimHei, "黑体", sans-serif;
+  text-align: center;
+}
+/* single 表两列：栏目标题列用楷体_GB2312 */
+.gov-tbl .gov-k {
+  font-family: "楷体_GB2312", "KaiTi_GB2312", KaiTi, serif;
+  width: 32%;
+  white-space: normal;
+}
+.gov-tbl .gov-c { text-align: center; }
+
+/* 表尾：填表说明摘要，仿宋_GB2312 小四（12pt） */
+.gov-note {
+  font-family: "仿宋_GB2312", "FangSong_GB2312", FangSong, STFangsong, serif;
+  font-size: 12pt;
+  line-height: 22pt;
+  margin: 14pt 0 0;
+  text-align: justify;
+}
+
+/* 落款区：右对齐两行（单位＋成文日期），仿宋_GB2312 三号 */
+.gov-sign {
+  font-family: "仿宋_GB2312", "FangSong_GB2312", FangSong, STFangsong, serif;
+  font-size: 16pt;
+  text-align: right;
+  margin-top: 22pt;
+}
+.gov-sign p { margin: 0; }
+
+@media print {
+  .gov-doc { width: 100%; }
+  .gov-tbl { page-break-inside: auto; }
+  .gov-tbl tr { page-break-inside: avoid; }
+  .gov-sign { page-break-inside: avoid; }
+}

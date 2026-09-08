@@ -1,0 +1,1838 @@
+[
+  {
+    "no": "M-1",
+    "name": "入户摸底表",
+    "stage": "资源摸排",
+    "filler": "村两委摸排组",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①本表为屋顶资源台账的原始凭证，一户一表；②标“排除”的选项一经勾选，该户不进入签约名单，但表格仍须留存；③意愿栏只作初调参考，不构成签约承诺；④摸排人与户主双签字后方为有效。",
+    "fields": [
+      {
+        "key": "hzxm",
+        "label": "户主姓名",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "lxdh",
+        "label": "联系电话",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "fwzl",
+        "label": "房屋坐落",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "wdlx",
+        "label": "屋顶类型",
+        "type": "select",
+        "options": [
+          "一字坡",
+          "人字坡",
+          "平顶",
+          "其他"
+        ],
+        "star": true
+      },
+      {
+        "key": "wdcx",
+        "label": "屋顶朝向",
+        "type": "select",
+        "options": [
+          "南向",
+          "近南向",
+          "其他"
+        ],
+        "star": true
+      },
+      {
+        "key": "klymj",
+        "label": "可利用面积（约 m²）",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "fwjg",
+        "label": "房屋结构",
+        "type": "select",
+        "options": [
+          "砖混",
+          "框架",
+          "土木（排除）",
+          "危旧（排除）"
+        ],
+        "star": true
+      },
+      {
+        "key": "jcnf",
+        "label": "建成年份",
+        "type": "number",
+        "star": false
+      },
+      {
+        "key": "zdqk",
+        "label": "遮挡情况",
+        "type": "select",
+        "options": [
+          "无遮挡",
+          "有遮挡（说明：）"
+        ],
+        "star": true
+      },
+      {
+        "key": "cqzm",
+        "label": "产权证明",
+        "type": "select",
+        "options": [
+          "有",
+          "无",
+          "有争议（排除）"
+        ],
+        "star": true
+      },
+      {
+        "key": "azyy",
+        "label": "安装意愿",
+        "type": "select",
+        "options": [
+          "愿意",
+          "观望",
+          "不愿意"
+        ],
+        "star": true
+      },
+      {
+        "key": "mp_rq",
+        "label": "摸排人/日期",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "hzqz",
+        "label": "户主签字",
+        "type": "text",
+        "star": false
+      }
+    ]
+  },
+  {
+    "no": "M-2",
+    "name": "签约意向登记表",
+    "stage": "动员签约",
+    "filler": "村两委",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①意向类别分 3 类，农户可书面变更意向；②“放弃”户注明原因（屋顶不合格/容量受限/个人不愿/其他）；③本表按周报镇政府，作为签约进度监测依据；④登记顺序即候补顺序，不得人为调整。",
+    "columns": [
+      {
+        "key": "hzxm",
+        "label": "户主姓名",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "mdbh",
+        "label": "摸底表编号",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "yxlb",
+        "label": "意向类别（正式报名/候补/放弃）",
+        "type": "select",
+        "options": [
+          "正式报名",
+          "候补",
+          "放弃"
+        ],
+        "star": false,
+        "width": 150
+      },
+      {
+        "key": "djrq",
+        "label": "登记日期",
+        "type": "date",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "jbr",
+        "label": "经办人",
+        "type": "text",
+        "star": false,
+        "width": 90
+      },
+      {
+        "key": "bz",
+        "label": "备注",
+        "type": "text",
+        "star": false,
+        "width": 160
+      }
+    ]
+  },
+  {
+    "no": "M-3",
+    "name": "候补农户登记表",
+    "stage": "动员签约/运营期",
+    "filler": "村两委",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①未装原因按“容量受限/屋顶不合格/其他”填写，容量受限的须附容量核算口径说明；②排序按登记时间先后，张榜公示；③容量释放后按排序通知，通知记录（时间、方式、结果）逐条留存；④长期无望安装的，由村干部上门说明并在备注栏记录。",
+    "columns": [
+      {
+        "key": "hzxm",
+        "label": "户主姓名",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "wdtjjl",
+        "label": "屋顶条件结论",
+        "type": "text",
+        "star": false,
+        "width": 120
+      },
+      {
+        "key": "wzyy",
+        "label": "未装原因",
+        "type": "select",
+        "options": [
+          "容量受限",
+          "屋顶不合格",
+          "其他"
+        ],
+        "star": true,
+        "width": 120
+      },
+      {
+        "key": "djsj",
+        "label": "登记时间",
+        "type": "date",
+        "star": true,
+        "width": 110
+      },
+      {
+        "key": "px",
+        "label": "排序",
+        "type": "number",
+        "star": false,
+        "width": 70
+      },
+      {
+        "key": "tzjl",
+        "label": "通知记录",
+        "type": "text",
+        "star": false,
+        "width": 160
+      },
+      {
+        "key": "bz",
+        "label": "备注",
+        "type": "text",
+        "star": false,
+        "width": 140
+      }
+    ]
+  },
+  {
+    "no": "M-4",
+    "name": "屋顶条件评估表",
+    "stage": "勘测设计",
+    "filler": "企业技术人员",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①本表由企业技术人员填制，是单户设计图的前置文件；②结论为“不可安装”的，须向农户当面说明原因；③农户对结论有异议的，可申请复核 1 次；④本表归入单户档案。",
+    "fields": [
+      {
+        "key": "hzkcbh",
+        "label": "户主/勘测编号",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "fccc",
+        "label": "复测尺寸（m）",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "jgaqpd",
+        "label": "结构安全判断",
+        "type": "select",
+        "options": [
+          "合格",
+          "不合格（说明：）"
+        ],
+        "star": true
+      },
+      {
+        "key": "cxzdfc",
+        "label": "朝向与遮挡复测",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "kazbks",
+        "label": "可安装板块数（估算）",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "ydzjrl",
+        "label": "预计装机容量（kW）",
+        "type": "number",
+        "star": false
+      },
+      {
+        "key": "wmfswcz",
+        "label": "屋面附属物处置",
+        "type": "checkboxes",
+        "options": [
+          "热水器",
+          "天线",
+          "其他（方式：）"
+        ],
+        "star": false
+      },
+      {
+        "key": "pgjl",
+        "label": "评估结论",
+        "type": "select",
+        "options": [
+          "可安装",
+          "暂缓",
+          "不可安装"
+        ],
+        "star": true
+      },
+      {
+        "key": "pgrfhr",
+        "label": "评估人/复核人",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "nhqrqz",
+        "label": "农户确认签字",
+        "type": "text",
+        "star": true
+      }
+    ]
+  },
+  {
+    "no": "M-5",
+    "name": "合同交底确认表",
+    "stage": "签约",
+    "filler": "企业+村两委",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①本表在签约前逐户填制，6 项交底一项不缺；②农户对任一项表示不理解的，交底人须重新讲解直至确认；③本表与合同一并归档，是“已尽告知义务”的直接证据；④老年农户签约的，建议子女在场共同确认。",
+    "fields": [
+      {
+        "key": "jd_zjbz",
+        "label": "租金标准与支付周期｜农户确认（已理解签字）",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "jd_zq25",
+        "label": "租期 25 年及到期处置｜农户确认（已理解签字）",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "jd_sanbu",
+        "label": "农户“三不”（不出资、不贷款、不担保）｜农户确认（已理解签字）",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "jd_ssfd",
+        "label": "损失分担（限发、灾损由企业承担）｜农户确认（已理解签字）",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "jd_wyjc",
+        "label": "违约与解除条款｜农户确认（已理解签字）",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "jd_bxts",
+        "label": "报修与投诉渠道｜农户确认（已理解签字）",
+        "type": "text",
+        "star": true
+      }
+    ]
+  },
+  {
+    "no": "M-6",
+    "name": "施工日巡查记录表",
+    "stage": "施工",
+    "filler": "村干部巡查员",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①施工期间每日填制，一日一表；②发现问题当场交办，注明整改时限；③销号以现场复核为准；④本表由村两委留存，施工期结束后汇总归档。",
+    "columns": [
+      {
+        "key": "rq",
+        "label": "日期",
+        "type": "date",
+        "star": false,
+        "width": 100
+      },
+      {
+        "key": "sgdw",
+        "label": "施工点位（户）",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "aqzk",
+        "label": "安全状况",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "rmsx",
+        "label": "扰民事项",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "fxwt",
+        "label": "发现问题",
+        "type": "text",
+        "star": false,
+        "width": 140
+      },
+      {
+        "key": "jbdx",
+        "label": "交办对象",
+        "type": "text",
+        "star": false,
+        "width": 100
+      },
+      {
+        "key": "xhqk",
+        "label": "销号情况",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "xcr",
+        "label": "巡查人",
+        "type": "text",
+        "star": false,
+        "width": 90
+      }
+    ]
+  },
+  {
+    "no": "M-7",
+    "name": "竣工验收单",
+    "stage": "验收",
+    "filler": "企业+农户+村集体代表",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①验收由企业自检合格后，组织农户、村集体代表共同进行；②整改项限期复验，复验记录附后；③防水项执行“雨后复验”，首次降雨无渗漏方为最终合格；④验收单一式 3 份，农户、村两委、企业各执 1 份。",
+    "fields": [
+      {
+        "key": "zjmd_jl",
+        "label": "支架与锚固｜结论",
+        "type": "select",
+        "options": [
+          "合格",
+          "整改"
+        ],
+        "star": true
+      },
+      {
+        "key": "zjmd_bz",
+        "label": "支架与锚固｜备注",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "zjaz_jl",
+        "label": "组件安装｜结论",
+        "type": "select",
+        "options": [
+          "合格",
+          "整改"
+        ],
+        "star": true
+      },
+      {
+        "key": "zjaz_bz",
+        "label": "组件安装｜备注",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "fscl_jl",
+        "label": "防水处理｜结论",
+        "type": "select",
+        "options": [
+          "合格",
+          "整改"
+        ],
+        "star": true
+      },
+      {
+        "key": "fscl_bz",
+        "label": "防水处理｜备注",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "dqaq_jl",
+        "label": "电气安全｜结论",
+        "type": "select",
+        "options": [
+          "合格",
+          "整改"
+        ],
+        "star": true
+      },
+      {
+        "key": "dqaq_bz",
+        "label": "电气安全｜备注",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "bwjl_jl",
+        "label": "并网计量｜结论",
+        "type": "select",
+        "options": [
+          "合格",
+          "整改"
+        ],
+        "star": true
+      },
+      {
+        "key": "bwjl_bz",
+        "label": "并网计量｜备注",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "xchf_jl",
+        "label": "现场恢复｜结论",
+        "type": "select",
+        "options": [
+          "合格",
+          "整改"
+        ],
+        "star": true
+      },
+      {
+        "key": "xchf_bz",
+        "label": "现场恢复｜备注",
+        "type": "text",
+        "star": false
+      }
+    ]
+  },
+  {
+    "no": "M-8",
+    "name": "并网确认登记表",
+    "stage": "并网",
+    "filler": "村两委",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①并网日期以电网企业并网验收记录为准；②租金起算时点须与合同条款一致并书面告知农户；③竣工后超过 30 日未并网的，备注原因并列入跟踪清单；④本表纳入村级台账。",
+    "columns": [
+      {
+        "key": "hz",
+        "label": "户主",
+        "type": "text",
+        "star": false,
+        "width": 100
+      },
+      {
+        "key": "jgrq",
+        "label": "竣工日期",
+        "type": "date",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "jlazzq",
+        "label": "计量装置安装日期",
+        "type": "date",
+        "star": false,
+        "width": 140
+      },
+      {
+        "key": "bwrq",
+        "label": "并网日期",
+        "type": "date",
+        "star": true,
+        "width": 110
+      },
+      {
+        "key": "zjqssd",
+        "label": "租金起算时点",
+        "type": "date",
+        "star": true,
+        "width": 120
+      },
+      {
+        "key": "gzfs",
+        "label": "告知方式",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "nhqz",
+        "label": "农户签字",
+        "type": "text",
+        "star": false,
+        "width": 100
+      },
+      {
+        "key": "jbr",
+        "label": "经办人",
+        "type": "text",
+        "star": false,
+        "width": 90
+      }
+    ]
+  },
+  {
+    "no": "M-9",
+    "name": "矛盾调解记录表",
+    "stage": "全程",
+    "filler": "村调解委员会",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①一事一页，调解不成的当日移交镇政府并标注“未结”；②调解过程不得代替任何一方作承诺；③记录由参与调解人当场签字；④每周跟踪未结事项直至销号。",
+    "fields": [
+      {
+        "key": "jfbh",
+        "label": "纠纷编号",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "dsqf",
+        "label": "当事各方",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "jflx",
+        "label": "纠纷类型",
+        "type": "select",
+        "options": [
+          "农户与企业",
+          "农户之间",
+          "农户与村集体",
+          "其他"
+        ],
+        "star": true
+      },
+      {
+        "key": "syjg",
+        "label": "事由经过",
+        "type": "textarea",
+        "star": true
+      },
+      {
+        "key": "tjsjdd",
+        "label": "调解时间与地点",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "cytjr",
+        "label": "参与调解人",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "tjjl",
+        "label": "调解结论",
+        "type": "textarea",
+        "star": false
+      },
+      {
+        "key": "hxjb",
+        "label": "后续交办（工单号/移交单位）",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "dsfqz",
+        "label": "当事方签字",
+        "type": "text",
+        "star": false
+      }
+    ]
+  },
+  {
+    "no": "M-10",
+    "name": "并网进度周报表",
+    "stage": "建设期",
+    "filler": "企业报镇、村",
+    "keep": "建设期内",
+    "kind": "multi",
+    "note": "填表说明：①建设期由企业每周填报，报镇政府与村两委；②未并网原因按“电网受理中/计量待装/验收待排/其他”分类；③同一户滞后超过约定期限的，镇级启动督办；④周报与村级台账按月核对。",
+    "columns": [
+      {
+        "key": "pc",
+        "label": "批次",
+        "type": "text",
+        "star": false,
+        "width": 90
+      },
+      {
+        "key": "yjghs",
+        "label": "已竣工户数",
+        "type": "number",
+        "star": false,
+        "width": 100
+      },
+      {
+        "key": "ysqhs",
+        "label": "已提交并网申请户数",
+        "type": "number",
+        "star": false,
+        "width": 150
+      },
+      {
+        "key": "ybwhs",
+        "label": "已并网户数",
+        "type": "number",
+        "star": true,
+        "width": 100
+      },
+      {
+        "key": "wbwyyfl",
+        "label": "未并网原因分类",
+        "type": "select",
+        "options": [
+          "电网受理中",
+          "计量待装",
+          "验收待排",
+          "其他"
+        ],
+        "star": false,
+        "width": 130
+      },
+      {
+        "key": "yjbwsj",
+        "label": "预计并网时间",
+        "type": "date",
+        "star": false,
+        "width": 120
+      },
+      {
+        "key": "tbr_rq",
+        "label": "填报人/日期",
+        "type": "text",
+        "star": false,
+        "width": 120
+      }
+    ]
+  },
+  {
+    "no": "M-11",
+    "name": "运维工单",
+    "stage": "运营期",
+    "filler": "企业运维驿站",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①接报渠道分“电表箱电话/400 热线/村两委转办/平台自动派单”4 类；②处置过程记录备件使用与现场照片编号；③农户确认栏可签“满意/基本满意/不满意”，不满意的重开工单；④工单全程线上留痕，纸质件按月归档。",
+    "columns": [
+      {
+        "key": "gdh",
+        "label": "工单号",
+        "type": "text",
+        "star": true,
+        "width": 100
+      },
+      {
+        "key": "bxqd",
+        "label": "报修渠道",
+        "type": "select",
+        "options": [
+          "电表箱电话",
+          "400 热线",
+          "村两委转办",
+          "平台自动派单"
+        ],
+        "star": true,
+        "width": 120
+      },
+      {
+        "key": "hzlxfs",
+        "label": "户主/联系方式",
+        "type": "text",
+        "star": false,
+        "width": 130
+      },
+      {
+        "key": "gzms",
+        "label": "故障描述",
+        "type": "text",
+        "star": true,
+        "width": 160
+      },
+      {
+        "key": "jbsj",
+        "label": "接报时间",
+        "type": "date",
+        "star": true,
+        "width": 110
+      },
+      {
+        "key": "pdsj",
+        "label": "派单时间",
+        "type": "date",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "czr",
+        "label": "处置人",
+        "type": "text",
+        "star": false,
+        "width": 90
+      },
+      {
+        "key": "czgcjg",
+        "label": "处置过程与结果",
+        "type": "text",
+        "star": true,
+        "width": 180
+      },
+      {
+        "key": "hfsj",
+        "label": "恢复时间",
+        "type": "date",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "nhqr",
+        "label": "农户确认",
+        "type": "select",
+        "options": [
+          "满意",
+          "基本满意",
+          "不满意"
+        ],
+        "star": false,
+        "width": 110
+      }
+    ]
+  },
+  {
+    "no": "M-12",
+    "name": "客诉受理登记表",
+    "stage": "运营期",
+    "filler": "企业客服/村协管员",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①类别按“安全隐患/发电故障/房屋漏水/租金结算/其他纠纷”分列；②响应与办结时限执行第 13.2 节时限表；③超期件逐件说明原因；④本表与运维工单编号关联。",
+    "columns": [
+      {
+        "key": "slbh",
+        "label": "受理编号",
+        "type": "text",
+        "star": true,
+        "width": 100
+      },
+      {
+        "key": "slsj",
+        "label": "受理时间",
+        "type": "date",
+        "star": true,
+        "width": 110
+      },
+      {
+        "key": "fyr",
+        "label": "反映人",
+        "type": "text",
+        "star": false,
+        "width": 90
+      },
+      {
+        "key": "lb",
+        "label": "类别",
+        "type": "select",
+        "options": [
+          "安全隐患",
+          "发电故障",
+          "房屋漏水",
+          "租金结算",
+          "其他纠纷"
+        ],
+        "star": true,
+        "width": 110
+      },
+      {
+        "key": "sqnr",
+        "label": "诉求内容",
+        "type": "text",
+        "star": true,
+        "width": 170
+      },
+      {
+        "key": "cnxysx",
+        "label": "承诺响应时限",
+        "type": "text",
+        "star": false,
+        "width": 120
+      },
+      {
+        "key": "zbqx",
+        "label": "转办去向",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "bjsj",
+        "label": "办结时间",
+        "type": "date",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "hfjg",
+        "label": "回访结果",
+        "type": "text",
+        "star": false,
+        "width": 110
+      }
+    ]
+  },
+  {
+    "no": "M-13",
+    "name": "回访记录表",
+    "stage": "运营期",
+    "filler": "企业客服",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①办结后 3 日内回访；②满意度分“满意/基本满意/不满意”3 档，不满意的必须重开工单；③农户意见原文记录，不作概括删改；④回访率纳入客服考核。",
+    "columns": [
+      {
+        "key": "hfrq",
+        "label": "回访日期",
+        "type": "date",
+        "star": true,
+        "width": 110
+      },
+      {
+        "key": "gdksh",
+        "label": "工单/客诉编号",
+        "type": "text",
+        "star": true,
+        "width": 120
+      },
+      {
+        "key": "hz",
+        "label": "户主",
+        "type": "text",
+        "star": false,
+        "width": 90
+      },
+      {
+        "key": "hffs",
+        "label": "回访方式",
+        "type": "text",
+        "star": false,
+        "width": 100
+      },
+      {
+        "key": "myd",
+        "label": "满意度",
+        "type": "select",
+        "options": [
+          "满意",
+          "基本满意",
+          "不满意"
+        ],
+        "star": true,
+        "width": 100
+      },
+      {
+        "key": "nhyj",
+        "label": "农户意见",
+        "type": "text",
+        "star": false,
+        "width": 170
+      },
+      {
+        "key": "sfck",
+        "label": "是否重开",
+        "type": "select",
+        "options": [
+          "是",
+          "否"
+        ],
+        "star": false,
+        "width": 90
+      },
+      {
+        "key": "hfr",
+        "label": "回访人",
+        "type": "text",
+        "star": false,
+        "width": 90
+      }
+    ]
+  },
+  {
+    "no": "M-14",
+    "name": "租金发放核对表",
+    "stage": "每个结算周期",
+    "filler": "村两委",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①每期结算后由村两委依据企业发放清单逐户核对；②差异户逐户登记说明，3 日内转企业答复；③核对结果按季度公示汇总（到户隐去全名）；④本表与年度对账表（表 M-15）数据一致。",
+    "columns": [
+      {
+        "key": "jszq",
+        "label": "结算周期",
+        "type": "text",
+        "star": true,
+        "width": 110
+      },
+      {
+        "key": "hz",
+        "label": "户主",
+        "type": "text",
+        "star": false,
+        "width": 90
+      },
+      {
+        "key": "bks",
+        "label": "板块数",
+        "type": "number",
+        "star": false,
+        "width": 80
+      },
+      {
+        "key": "dj",
+        "label": "单价（元/块/年）",
+        "type": "number",
+        "star": true,
+        "width": 130
+      },
+      {
+        "key": "yfje",
+        "label": "应付金额",
+        "type": "number",
+        "star": true,
+        "width": 100
+      },
+      {
+        "key": "sfje",
+        "label": "实付金额",
+        "type": "number",
+        "star": true,
+        "width": 100
+      },
+      {
+        "key": "dzrq",
+        "label": "到账日期",
+        "type": "date",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "cysm",
+        "label": "差异说明",
+        "type": "text",
+        "star": false,
+        "width": 150
+      },
+      {
+        "key": "hdr",
+        "label": "核对人",
+        "type": "text",
+        "star": false,
+        "width": 90
+      }
+    ]
+  },
+  {
+    "no": "M-15",
+    "name": "农户年度收益对账表",
+    "stage": "每年",
+    "filler": "企业出具、农户确认",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①每年由企业出具、送户确认；②差异须书面说明并限期纠正；③农户拒绝签字的，由村两委见证记录；④本表为农户 25 年收益的逐年凭证。",
+    "fields": [
+      {
+        "key": "hzdzbh",
+        "label": "户主/电站编号",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "bksydj",
+        "label": "板块数与单价",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "bnyfzj",
+        "label": "本年度应付租金",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "bnsfzj",
+        "label": "本年度实付租金",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "lnljyf",
+        "label": "历年累计已付",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "cysm",
+        "label": "差异说明",
+        "type": "textarea",
+        "star": false
+      },
+      {
+        "key": "qygzjbr",
+        "label": "企业盖章/经办人",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "nhqrqz",
+        "label": "农户确认签字",
+        "type": "text",
+        "star": true
+      }
+    ]
+  },
+  {
+    "no": "M-16",
+    "name": "保险报案记录表",
+    "stage": "灾害发生时",
+    "filler": "企业",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①灾害发生后 24 小时内报案并登记本表；②现场照片、气象证明编号一并登记；③涉农户财产损失的，受损清单附后；④赔付金额等涉敏信息按企业保密口径管理，本表只登记处置状态。",
+    "fields": [
+      {
+        "key": "babh",
+        "label": "报案编号",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "cxsj",
+        "label": "出险时间",
+        "type": "date",
+        "star": true
+      },
+      {
+        "key": "cxdd",
+        "label": "出险地点（户）",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "zhlx",
+        "label": "灾害类型",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "ssgk",
+        "label": "损失概况",
+        "type": "textarea",
+        "star": false
+      },
+      {
+        "key": "basj",
+        "label": "报案时间",
+        "type": "date",
+        "star": true
+      },
+      {
+        "key": "cksj",
+        "label": "查勘时间",
+        "type": "date",
+        "star": false
+      },
+      {
+        "key": "dsjl",
+        "label": "定损结论",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "pfxfqk",
+        "label": "赔付与修复情况",
+        "type": "textarea",
+        "star": false
+      },
+      {
+        "key": "bz",
+        "label": "备注",
+        "type": "textarea",
+        "star": false
+      }
+    ]
+  },
+  {
+    "no": "M-17",
+    "name": "问题电站台账",
+    "stage": "运营期",
+    "filler": "企业运维部门",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①分类按“停机（纠纷/故障/电网）/超压/亚健康”填列；②超期未销号的自动升级预警；③按月向镇政府与村两委通报汇总（不含涉敏明细）；④台账数据与年度考核台账一致。",
+    "columns": [
+      {
+        "key": "hh",
+        "label": "户号",
+        "type": "text",
+        "star": true,
+        "width": 90
+      },
+      {
+        "key": "fl",
+        "label": "分类",
+        "type": "select",
+        "options": [
+          "停机（纠纷）",
+          "停机（故障）",
+          "停机（电网）",
+          "超压",
+          "亚健康"
+        ],
+        "star": true,
+        "width": 120
+      },
+      {
+        "key": "fxsj",
+        "label": "发现时间",
+        "type": "date",
+        "star": true,
+        "width": 110
+      },
+      {
+        "key": "czgc",
+        "label": "处置过程",
+        "type": "text",
+        "star": true,
+        "width": 170
+      },
+      {
+        "key": "hfsj",
+        "label": "恢复时间",
+        "type": "date",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "zrgs",
+        "label": "责任归属",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "xhrq",
+        "label": "销号日期",
+        "type": "date",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "bz",
+        "label": "备注",
+        "type": "text",
+        "star": false,
+        "width": 140
+      }
+    ]
+  },
+  {
+    "no": "M-18",
+    "name": "年度考核汇总表",
+    "stage": "每年",
+    "filler": "镇政府",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①由镇政府按年填制，报县级部门备案；②基准区间可参考大荔县全县数据（见第 65 条），但不得直接套用为考核标准；③分红兑现率与客诉办结率与企业履约评价硬挂钩；④考核结果向村两委通报。",
+    "fields": [
+      {
+        "key": "qyl_bn",
+        "label": "签约率（%）｜本年数值",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "qyl_sn",
+        "label": "签约率（%）｜上年数值",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "qyl_jzqj",
+        "label": "签约率（%）｜基准区间",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "qyl_pj",
+        "label": "签约率（%）｜评价",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "qyl_gjyq",
+        "label": "签约率（%）｜改进要求",
+        "type": "textarea",
+        "star": true
+      },
+      {
+        "key": "fdwcl_bn",
+        "label": "发电完成率（%）｜本年数值",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "fdwcl_sn",
+        "label": "发电完成率（%）｜上年数值",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "fdwcl_jzqj",
+        "label": "发电完成率（%）｜基准区间",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "fdwcl_pj",
+        "label": "发电完成率（%）｜评价",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "fdwcl_gjyq",
+        "label": "发电完成率（%）｜改进要求",
+        "type": "textarea",
+        "star": true
+      },
+      {
+        "key": "fhdxl_bn",
+        "label": "分红兑现率（%）｜本年数值",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "fhdxl_sn",
+        "label": "分红兑现率（%）｜上年数值",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "fhdxl_jzqj",
+        "label": "分红兑现率（%）｜基准区间",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "fhdxl_pj",
+        "label": "分红兑现率（%）｜评价",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "fhdxl_gjyq",
+        "label": "分红兑现率（%）｜改进要求",
+        "type": "textarea",
+        "star": true
+      },
+      {
+        "key": "tjczl_bn",
+        "label": "停机处置率（%）｜本年数值",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "tjczl_sn",
+        "label": "停机处置率（%）｜上年数值",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "tjczl_jzqj",
+        "label": "停机处置率（%）｜基准区间",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "tjczl_pj",
+        "label": "停机处置率（%）｜评价",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "tjczl_gjyq",
+        "label": "停机处置率（%）｜改进要求",
+        "type": "textarea",
+        "star": true
+      },
+      {
+        "key": "ksbjl_bn",
+        "label": "客诉办结率（%）｜本年数值",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "ksbjl_sn",
+        "label": "客诉办结率（%）｜上年数值",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "ksbjl_jzqj",
+        "label": "客诉办结率（%）｜基准区间",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "ksbjl_pj",
+        "label": "客诉办结率（%）｜评价",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "ksbjl_gjyq",
+        "label": "客诉办结率（%）｜改进要求",
+        "type": "textarea",
+        "star": true
+      }
+    ]
+  },
+  {
+    "no": "M-19",
+    "name": "政策宣讲记录表",
+    "stage": "动员期/政策变化时",
+    "filler": "村两委",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①村民大会、入户宣讲集中期、政策变化宣讲均填本表；②主要提问原文记录，作为后续答疑与口径修订依据；③遗留问题须明确答复时限与责任人；④本表纳入动员台账。",
+    "columns": [
+      {
+        "key": "xjrq",
+        "label": "宣讲日期",
+        "type": "date",
+        "star": true,
+        "width": 110
+      },
+      {
+        "key": "dd",
+        "label": "地点",
+        "type": "text",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "zjr",
+        "label": "主讲人",
+        "type": "text",
+        "star": false,
+        "width": 90
+      },
+      {
+        "key": "cjrs",
+        "label": "参加人数",
+        "type": "number",
+        "star": false,
+        "width": 90
+      },
+      {
+        "key": "xjzt",
+        "label": "宣讲主题",
+        "type": "text",
+        "star": true,
+        "width": 140
+      },
+      {
+        "key": "zytwdf",
+        "label": "主要提问与答复",
+        "type": "text",
+        "star": true,
+        "width": 180
+      },
+      {
+        "key": "ylwt",
+        "label": "遗留问题及答复时限",
+        "type": "text",
+        "star": false,
+        "width": 160
+      },
+      {
+        "key": "jlr",
+        "label": "记录人",
+        "type": "text",
+        "star": false,
+        "width": 90
+      }
+    ]
+  },
+  {
+    "no": "M-20",
+    "name": "合同主体变更申请表",
+    "stage": "继承/卖房/分家",
+    "filler": "农户+企业",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①变更全程书面化，口头变更无效；②变更期间租金支付对象与方式保持不变，变更完成后统一结算；③证明材料原件核验、复印件归档；④变更完成后村级台账与企业档案同步更新。",
+    "fields": [
+      {
+        "key": "yhtzt",
+        "label": "原合同主体（户主）",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "bgsy",
+        "label": "变更事由",
+        "type": "select",
+        "options": [
+          "继承",
+          "卖房",
+          "分家",
+          "其他"
+        ],
+        "star": true
+      },
+      {
+        "key": "xhtzt",
+        "label": "新合同主体",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "zmclqd",
+        "label": "证明材料清单",
+        "type": "textarea",
+        "star": true
+      },
+      {
+        "key": "zjjsxj",
+        "label": "租金结算衔接安排",
+        "type": "textarea",
+        "star": true
+      },
+      {
+        "key": "lwyj",
+        "label": "村两委意见（盖章）",
+        "type": "textarea",
+        "star": false
+      },
+      {
+        "key": "qyyj",
+        "label": "企业意见（盖章）",
+        "type": "textarea",
+        "star": false
+      },
+      {
+        "key": "dsrqz",
+        "label": "当事人签字",
+        "type": "text",
+        "star": true
+      }
+    ]
+  },
+  {
+    "no": "M-21",
+    "name": "农户养老现金流测算表",
+    "stage": "动员签约/宣讲算账",
+    "filler": "村两委+企业",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①本表为入户算账底单，一式 2 份，农户留存 1 份、村台账存 1 份；②“估计板块数”“可利用面积”为估算值，必须与合同值分栏区分，最终以企业勘测与合同为准；③表头或表尾须标注“个案测算，不构成收益承诺”；④农户为 70 岁以上老人的，建议子女到场或电话确认后签字；⑤本表与表 M-22（老年农户宣讲记录表）配套使用。",
+    "fields": [
+      {
+        "key": "hzxmbh",
+        "label": "户主姓名/编号",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "wdlx",
+        "label": "屋顶类型",
+        "type": "select",
+        "options": [
+          "一字坡",
+          "人字坡",
+          "其他"
+        ],
+        "star": true
+      },
+      {
+        "key": "klymj",
+        "label": "可利用面积（约 m²）",
+        "type": "number",
+        "star": false
+      },
+      {
+        "key": "gjbks",
+        "label": "估计板块数（块）",
+        "type": "number",
+        "star": false
+      },
+      {
+        "key": "sydj",
+        "label": "适用单价（元/块/年）",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "nzj",
+        "label": "年租金（元/年）",
+        "type": "number",
+        "star": true
+      },
+      {
+        "key": "yjxjl",
+        "label": "月均现金流（元/月）",
+        "type": "number",
+        "star": false
+      },
+      {
+        "key": "jtndfzc",
+        "label": "家庭年电费支出（元）",
+        "type": "number",
+        "star": false
+      },
+      {
+        "key": "fgdfhny",
+        "label": "覆盖电费后年结余（元）",
+        "type": "number",
+        "star": false
+      },
+      {
+        "key": "lj25nzj",
+        "label": "25 年累计租金（元）",
+        "type": "number",
+        "star": false
+      },
+      {
+        "key": "csryqz",
+        "label": "测算人/宣讲人签字",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "nhqz",
+        "label": "农户（或子女）签字",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "csrq",
+        "label": "测算日期",
+        "type": "date",
+        "star": false
+      }
+    ]
+  },
+  {
+    "no": "M-22",
+    "name": "老年农户宣讲记录表",
+    "stage": "动员期/涉老宣讲",
+    "filler": "村两委",
+    "keep": "不少于25年",
+    "kind": "single",
+    "note": "填表说明：①面向 60 岁以上农户的每一次入户宣讲均须填本表，当次填写、不事后补记；②宣讲中涉数字的，须附表 M-21 测算底单；③“仅老人”在场的，宣讲人须当场电话告知其子女并记录；④本表纳入动员台账，作为口径修订与纠纷溯源依据；⑤发现违规宣传表述的，在本表备注并报告村两委。",
+    "fields": [
+      {
+        "key": "xjrqdd",
+        "label": "宣讲日期/地点",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "xjdx",
+        "label": "宣讲对象（户主/年龄）",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "jtcyqk",
+        "label": "家庭成员在场情况",
+        "type": "select",
+        "options": [
+          "子女在场",
+          "子女视频连线",
+          "仅老人（已电话告知子女）"
+        ],
+        "star": false
+      },
+      {
+        "key": "xjr",
+        "label": "宣讲人",
+        "type": "text",
+        "star": true
+      },
+      {
+        "key": "szsfhxsz",
+        "label": "算账示范核心数值",
+        "type": "textarea",
+        "star": true
+      },
+      {
+        "key": "nhzygl",
+        "label": "农户主要顾虑",
+        "type": "checkboxes",
+        "options": [
+          "钱从哪来",
+          "会不会断",
+          "要不要贷款",
+          "去世后归谁",
+          "其他"
+        ],
+        "star": true
+      },
+      {
+        "key": "dfydzy",
+        "label": "答复要点摘要",
+        "type": "textarea",
+        "star": true
+      },
+      {
+        "key": "sfcsgfbs",
+        "label": "是否出示规范表述对照",
+        "type": "select",
+        "options": [
+          "是",
+          "否"
+        ],
+        "star": false
+      },
+      {
+        "key": "nhyx",
+        "label": "农户意向",
+        "type": "select",
+        "options": [
+          "愿意登记",
+          "再考虑",
+          "不愿意"
+        ],
+        "star": false
+      },
+      {
+        "key": "ylwtdfsx",
+        "label": "遗留问题与答复时限",
+        "type": "text",
+        "star": false
+      },
+      {
+        "key": "lrqz",
+        "label": "老人（或子女）签字",
+        "type": "text",
+        "star": true
+      }
+    ]
+  },
+  {
+    "no": "M-23",
+    "name": "老年农户租金到账年度核对表",
+    "stage": "每年",
+    "filler": "村两委",
+    "keep": "不少于25年",
+    "kind": "multi",
+    "note": "填表说明：①本表以户为单位、每年登记 1 行，优先覆盖 60 岁以上老年农户与子女在外家庭；②应付数对照企业年度结算单（表 M-15），实付数以银行流水或到账短信为准；③子女代核的，核对结果须回告老人本人并注明；④有差异的，转入租金结算核对流程（见第 101 条），处理结果销号后填齐；⑤本表与村级为老服务台账并轨保存，保存期不少于 25 年。",
+    "columns": [
+      {
+        "key": "nd",
+        "label": "年度",
+        "type": "number",
+        "star": false,
+        "width": 80
+      },
+      {
+        "key": "yfzj",
+        "label": "应付租金（元）",
+        "type": "number",
+        "star": true,
+        "width": 120
+      },
+      {
+        "key": "sfrq",
+        "label": "实付日期",
+        "type": "date",
+        "star": false,
+        "width": 110
+      },
+      {
+        "key": "sfje",
+        "label": "实付金额（元）",
+        "type": "number",
+        "star": true,
+        "width": 120
+      },
+      {
+        "key": "hdfs",
+        "label": "核对方式",
+        "type": "select",
+        "options": [
+          "本人",
+          "子女代核"
+        ],
+        "star": true,
+        "width": 110
+      },
+      {
+        "key": "cysm",
+        "label": "差异说明",
+        "type": "text",
+        "star": false,
+        "width": 150
+      },
+      {
+        "key": "cljg",
+        "label": "处理结果",
+        "type": "text",
+        "star": false,
+        "width": 140
+      },
+      {
+        "key": "hdr",
+        "label": "核对人",
+        "type": "text",
+        "star": false,
+        "width": 90
+      }
+    ]
+  }
+]
