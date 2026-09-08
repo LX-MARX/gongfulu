@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数智工具箱 —— 屋顶上的共富路</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+.tool-nav{position:sticky; top:64px; z-index:50; padding:14px 0; background:#0A1628; box-shadow:0 10px 28px rgba(0,0,0,.4)}
+.tool-nav .grid{display:grid; grid-template-columns:repeat(8,1fr); gap:10px}
+@media(max-width:980px){.tool-nav .grid{grid-template-columns:repeat(4,1fr)}}
+.tn-item{text-align:center; padding:12px 6px; border-radius:12px; border:1px solid rgba(255,255,255,.1); background:rgba(18,35,58,.6); color:#b8c4d0; font-size:13.5px; transition:.25s; cursor:pointer}
+.tn-item:hover{border-color:var(--gold); color:var(--gold2); transform:translateY(-3px)}
+.tn-item svg{width:26px; height:26px; stroke:var(--gold); margin-bottom:6px}
+.tool-sec{scroll-margin-top:150px}
+.res-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:20px 0}
+@media(max-width:800px){.res-grid{grid-template-columns:1fr 1fr}}
+.res-cell{background:#12233a; border:1px solid rgba(212,168,75,.35); border-radius:12px; padding:16px; text-align:center}
+.res-cell .caption{color:#b8c4d0}
+.res-cell .din{font-size:28px}
+.match-item{border:1px solid #e2e0d6; border-radius:12px; background:#fff; padding:18px 22px; margin-bottom:12px; color:#23303e}
+.match-item b{color:#12233a}
+.match-item .caption{color:#5a6b7c}
+.match-item summary{color:#12233a}
+.match-item .acc-body{color:#3a4a5c}
+.match-item .sc{font-family:var(--mono); color:#a5832f; font-weight:700}
+.mno{display:inline-block; background:var(--gold); color:#fff; border-radius:6px; padding:2px 10px; font-size:13px; font-weight:700; margin-right:8px}
+mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:3px}
+#contractText,.contract-text{white-space:pre-wrap; font-size:14.5px; line-height:1.9; background:#0d1b2e; border-radius:12px; padding:22px; color:#c4cfda}
+.mz-sheet{background:#fff; color:#22303f; border:1px solid #c8b98a; border-radius:12px; padding:30px; font-size:14.5px; line-height:1.9}
+.mz-sheet h3{text-align:center; font-size:19px}
+.mz-sheet .sig{text-align:right; margin-top:16px}
+.scam2{display:block; width:100%; text-align:left; background:#faf8f0; border:2px solid #ddd6c2; border-radius:12px; padding:13px 18px; margin-bottom:9px; font-size:15px; color:#22303f; transition:.25s}
+.scam2:hover{border-color:#a5832f}
+.scam2.hit{border-color:var(--red); background:rgba(200,75,63,.07)}
+.scam2.none{border-style:dashed}
+.faq-cols{columns:2; column-gap:18px}
+@media(max-width:860px){.faq-cols{columns:1}}
+.faq-cols .acc{break-inside:avoid}
+</style>
+</head>
+<body>
+<div data-crumb></div>
+
+<section class="section grain" style="padding-top:56px; padding-bottom:30px">
+  <div class="wrap">
+    <div class="kicker rv">交互中心</div>
+    <h1 class="rv">数智工具箱</h1>
+    <p class="lead rv" style="margin-top:14px">8 个工具、60 个术语、60 问智能 FAQ——测算全部在本机完成，政策与项目数据实时来自云端数据库，断网自动切换本地缓存。</p>
+  </div>
+</section>
+
+<div class="tool-nav grain">
+  <div class="wrap"><div class="grid" id="toolNav"></div></div>
+</div>
+
+<!-- 1 收益测算 -->
+<section class="section light tool-sec" id="t-calc">
+  <div class="wrap">
+    <div class="kicker">工具 1</div>
+    <h2>收益测算：你家屋顶，25 年能拿多少</h2>
+    <div class="grid2" style="margin-top:26px">
+      <div class="card">
+        <label>屋顶可用面积（㎡）：<b id="aV">80</b></label>
+        <input type="range" id="area" min="20" max="300" value="80">
+        <label>屋顶朝向</label>
+        <select id="ori"><option value="1">朝南（最佳）</option><option value="0.85">朝东／朝西</option><option value="0.6">朝北</option></select>
+        <label>屋顶类型</label>
+        <select id="typ"><option value="30">一字坡（30 元/块/年）</option><option value="15">人字坡（15 元/块/年）</option></select>
+        <p class="caption" style="margin-top:12px">测算参数：单块组件 635 W、占地约 2.6 ㎡，屋顶可用系数 0.8；年等效利用小时约 1350 h；减碳系数 0.8 kg/kWh。结果为课题组测算参考值，以企业入户实测为准。</p>
+      </div>
+      <div>
+        <div class="res-grid">
+          <div class="res-cell"><div class="din num-glow" id="oPanels">—</div><div class="caption">可装光伏板（块）</div></div>
+          <div class="res-cell"><div class="din num-glow" id="oKw">—</div><div class="caption">装机容量（kW）</div></div>
+          <div class="res-cell"><div class="din num-glow" id="oRent">—</div><div class="caption">年租金（元）</div></div>
+          <div class="res-cell"><div class="din num-glow" id="oRent25">—</div><div class="caption">25 年累计租金（元）</div></div>
+          <div class="res-cell"><div class="din num-glow" id="oKwh">—</div><div class="caption">年发电量（kWh）</div></div>
+          <div class="res-cell"><div class="din num-glow" id="oCo2">—</div><div class="caption">年减碳量（kg）</div></div>
+          <div class="res-cell"><div class="din num-glow" id="oMonth">—</div><div class="caption">月均租金（元）</div></div>
+          <div class="res-cell"><div class="din num-glow" id="oRate">—</div><div class="caption">朝向修正系数</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:10px; background:var(--ink2); border-color:rgba(212,168,75,.3)">
+      <b style="color:var(--gold2)">3D 柱状结果（悬停立柱查看精确值）</b>
+      <div id="bars3d"></div>
+    </div>
+    <p class="caption" style="margin-top:10px">提示：东高垣村户均年租金约 1500—2000 元（2026 年 2 月入户访谈）；朝北、人字坡租金减半是签约前必须问清的关键条款。</p>
+  </div>
+</section>
+
+<!-- 2 项目匹配 -->
+<section class="section grain tool-sec" id="t-match">
+  <div class="wrap">
+    <div class="kicker">工具 2</div>
+    <h2>项目匹配系统（62 项真实申报项目）</h2>
+    <div class="glass" style="padding:26px; margin-top:24px">
+      <div class="grid4">
+        <div><label>申报主体</label><select id="mRole"><option value="">不限</option><option>农户</option><option>村集体</option><option>企业</option><option>政府</option></select></div>
+        <div><label>需求领域</label><select id="mType"><option value="">不限</option></select></div>
+        <div><label>项目级别</label><select id="mLevel"><option value="">不限</option><option>国家级</option><option>省级</option><option>市级</option><option>县级</option></select></div>
+        <div><label>关键词</label><input type="text" id="mKw" placeholder="如：光伏、补贴"></div>
+      </div>
+    </div>
+    <div class="caption" id="mCount" style="margin:14px 0 6px"></div>
+    <div id="mList"></div>
+    <div style="margin-top:18px; display:flex; gap:14px; flex-wrap:wrap">
+      <button class="btn btn-gold" id="mPlan">生成「我的申报计划」（合并材料清单 CSV）</button>
+      <span class="caption" style="align-self:center">已收藏 <b class="num-glow" id="mFav">0</b> 项</span>
+    </div>
+  </div>
+</section>
+
+<!-- 3 合同生成 -->
+<section class="section light tool-sec" id="t-contract">
+  <div class="wrap">
+    <div class="kicker">工具 3</div>
+    <h2>合同条款生成器</h2>
+    <div class="grid2" style="margin-top:26px">
+      <div class="card">
+        <label>合同模式</label>
+        <select id="ctMode">
+          <option value="lease">纯屋顶租赁（推荐）</option>
+          <option value="coop">合作共建</option>
+          <option value="loan">贷款共建</option>
+        </select>
+        <div id="ctWarn" class="warn-box" style="display:none; margin-top:12px"><b>警示：</b>该模式存在骗贷／经营风险。东高垣村早期教训表明，建议优先选择纯屋顶租赁。</div>
+        <label>租金标准（元/块/年）</label><input type="number" id="ctRent" value="30">
+        <label>租期（年）</label><input type="number" id="ctYears" value="25">
+        <label>村庄名称</label><input type="text" id="ctVillage" placeholder="如：东高垣村">
+        <button class="btn btn-gold" style="margin-top:18px" id="ctGen">生成标准条款文本</button>
+      </div>
+      <div>
+        <div id="contractText" style="display:none"></div>
+        <div id="ctActions" style="display:none; margin-top:14px"><button class="btn btn-line" onclick="PV.printZone('#contractText')">打印条款文本</button></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:24px">
+      <h3>风险扫描：粘贴对方合同，高亮风险条款</h3>
+      <textarea id="scanIn" rows="5" placeholder="把对方给你的合同文本粘贴到这里……" style="margin-top:12px"></textarea>
+      <button class="btn btn-gold" style="margin-top:14px" id="scanBtn">开始扫描（50 条风险关键词）</button>
+      <div id="scanOut" style="margin-top:14px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 健康评级 -->
+<section class="section grain tool-sec" id="t-health">
+  <div class="wrap">
+    <div class="kicker">工具 4</div>
+    <h2>电站健康评级</h2>
+    <p class="lead">对照全县三级分类口径（停机 22 户／超压 514 户／亚健康 156 户，大荔县全县（含东高垣村），截至 2025 年 7—8 月企业台账），自评电站健康等级。</p>
+    <div class="card" style="margin-top:24px; max-width:720px">
+      <label>近 30 天是否停机？</label><select id="hStop"><option value="0">否</option><option value="1">是</option></select>
+      <label>并网点电压是否越限（超压）？</label><select id="hVolt"><option value="0">否</option><option value="1">是</option></select>
+      <label>发电量低于同区域均值幅度（%）</label><input type="number" id="hDrop" value="0" min="0" max="100">
+      <button class="btn btn-gold" style="margin-top:18px" id="hBtn">评级</button>
+      <div id="hOut" style="margin-top:16px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 租金公示 -->
+<section class="section light tool-sec" id="t-rent">
+  <div class="wrap">
+    <div class="kicker">工具 5</div>
+    <h2>租金公示表生成</h2>
+    <div class="card" style="margin-top:24px; max-width:720px">
+      <label>户主称谓（化名，如「王××」）</label><input type="text" id="rpName" placeholder="王××">
+      <label>板块数（块）</label><input type="number" id="rpN" value="50">
+      <label>单价（元/块/年）</label><input type="number" id="rpP" value="30">
+      <div style="margin-top:16px; display:flex; gap:14px; flex-wrap:wrap">
+        <button class="btn btn-gold" id="rpAdd">加入公示表</button>
+        <button class="btn btn-line" id="rpCsv">导出公示表（CSV）</button>
+      </div>
+      <div id="rpOut" style="margin-top:16px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 明白纸 -->
+<section class="section grain tool-sec" id="t-mz">
+  <div class="wrap">
+    <div class="kicker">工具 6</div>
+    <h2>明白纸生成</h2>
+    <p class="lead">输入 5 项信息，生成 1 页 A4《××村屋顶光伏明白纸》（限 600 字、6 段式），只打印明白纸本身，可直接发放。</p>
+    <div class="card" style="margin-top:24px">
+      <div class="grid2">
+        <div><label>村庄名称</label><input type="text" id="tmzV" placeholder="如：东高垣村"></div>
+        <div><label>平屋顶租金（元/块/年）</label><input type="number" id="tmzR" value="30" min="0"></div>
+        <div><label>人字坡租金（元/块/年）</label><input type="number" id="tmzR2" value="15" min="0"></div>
+        <div><label>报修电话</label><input type="text" id="tmzP" placeholder="如：400-××××-××××"></div>
+        <div><label>村联系人</label><input type="text" id="tmzC" placeholder="如：村光伏协管员 ××"></div>
+      </div>
+      <div style="margin-top:16px; display:flex; gap:14px; flex-wrap:wrap">
+        <button class="btn btn-gold" id="tmzBtn">生成明白纸</button>
+        <button class="btn btn-line" id="tmzPrint" style="display:none">打印（A4）</button>
+      </div>
+      <div id="tmzOut" style="margin-top:20px; display:none"><div id="tmzPreview" class="mz-sheet"></div></div>
+      <p class="caption" style="margin-top:12px">本页为精简版；村干部工作台另有村民大会议程生成器等配套动员工具。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7 骗局识别 -->
+<section class="section light tool-sec" id="t-scam">
+  <div class="wrap">
+    <div class="kicker">工具 7</div>
+    <h2>骗局识别</h2>
+    <p class="lead">4 个信号：催得急、要得多、说得高、查无据。任一命中即红色警报；全部不沾也请先电话核实再谈。</p>
+    <div class="card" style="margin-top:24px; max-width:760px">
+      <button class="scam2">催得急：不让商量、不让细看合同，催着马上签字按手印</button>
+      <button class="scam2">要得多：以任何理由要身份证原件、银行卡、手机验证码、人脸识别</button>
+      <button class="scam2">说得高：承诺的收益高得离谱，明显高于村里统一项目标准（30 元/块/年）</button>
+      <button class="scam2">查无据：说不出中标单位、拿不出政府备案，镇政府、村两委都表示不知情</button>
+      <button class="scam2 none" id="tscamNone">以上 4 种情况都没有</button>
+      <div id="tscamWarn" class="warn-box" style="display:none; margin-top:14px"><b>警惕！已命中骗贷典型信号。先不签。</b>请立即核实：① 找村两委当面问；② 打镇政府电话核实备案；③ 发现已受骗的，立即报告镇政府与公安机关。</div>
+      <div id="tscamOk" class="note-box" style="display:none; margin-top:14px"><b style="color:#2e7d4f">4 个信号均未命中。</b>仍建议签约前打一个电话给村两委或镇政府核实备案信息，并索要备案合同范本比对。</div>
+      <p class="caption" style="margin-top:12px">本页为精简版；农户工作台另有红色弹窗强提醒与签约 8 步向导。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8 办事指引 -->
+<section class="section grain tool-sec" id="t-guide">
+  <div class="wrap">
+    <div class="kicker">工具 8</div>
+    <h2>办事指引</h2>
+    <p class="lead">先选角色、再选事项：第一步找谁、分几步办、时限参考，逐步列出。</p>
+    <div class="card" style="margin-top:24px; max-width:820px">
+      <div class="grid2">
+        <div><label>我的角色</label><select id="gdRole"><option>农户</option><option>村干部</option><option>企业</option><option>政府</option></select></div>
+        <div><label>要办的事</label><select id="gdMatter"></select></div>
+      </div>
+      <div id="gdSteps" style="margin-top:20px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 术语词典 -->
+<section class="section light tool-sec" id="t-terms">
+  <div class="wrap">
+    <div class="kicker">随查随用</div>
+    <h2>术语词典（60 个）</h2>
+    <div style="max-width:480px; margin-top:20px"><input type="text" id="termKw" placeholder="搜索术语，如：限发、台账、RACI……"></div>
+    <div class="grid3" id="termList" style="margin-top:22px"></div>
+    <p class="caption" style="margin-top:14px">术语释义全部出自《建设手册》附录 D 及正文；全站其他页面带下划线的术语可悬停查看释义。</p>
+  </div>
+</section>
+
+<!-- 60 问 FAQ -->
+<section class="section grain tool-sec" id="t-faq">
+  <div class="wrap">
+    <div class="kicker">智能问答</div>
+    <h2>60 问智能 FAQ</h2>
+    <div style="margin:20px 0; display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+      <div id="faqTags">
+        <button class="tag on" data-g="">全部</button>
+        <button class="tag" data-g="G">政府组</button>
+        <button class="tag" data-g="E">企业组</button>
+        <button class="tag" data-g="V">村集体组</button>
+        <button class="tag" data-g="F">农户组</button>
+      </div>
+      <input type="text" id="faqKw" placeholder="关键词搜索……" style="max-width:280px">
+    </div>
+    <div class="faq-cols" id="faqList"></div>
+  </div>
+</section>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var tools = [["t-calc", "收益测算", "M4 2h16v20H4z M8 6h8 M8 11h2 M14 11h2 M8 15h2 M14 15h2 M8 19h8"],
+    ["t-match", "项目匹配", "M12 2l3 3-3 3-3-3z M5 9l3 3-3 3-3-3z M19 9l3 3-3 3-3-3z M12 16l3 3-3 3-3-3z"],
+    ["t-contract", "合同生成", "M6 2h9l5 5v15H6z M14 2v6h6 M9 13h8 M9 17h8"],
+    ["t-health", "健康评级", "M12 21C7 17 3 13.5 3 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 9 2.5c0 4-4 7.5-9 11.5z"],
+    ["t-rent", "租金公示", "M3 10l9-6 9 6 M5 9v11h14V9 M9 20v-6h6v6"],
+    ["t-mz", "明白纸生成", "M7 2h10l4 4v16H7z M10 9h7 M10 13h7 M10 17h5"],
+    ["t-scam", "骗局识别", "M12 3l10 18H2z M12 10v5 M12 18v.5"],
+    ["t-guide", "办事指引", "M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z M12 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"]];
+  document.getElementById("toolNav").innerHTML = tools.map(function (t) {
+    return '<div class="tn-item" onclick="document.getElementById(\'' + t[0] + "').scrollIntoView({behavior:'smooth'})\">" +
+      '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="' + t[2] + '"/></svg><br>' + t[1] + "</div>";
+  }).join("");
+
+  function t(id, s) { document.getElementById(id).textContent = s; }
+  function calc() {
+    var A = +document.getElementById("area").value, k = +document.getElementById("ori").value, pr = +document.getElementById("typ").value;
+    document.getElementById("aV").textContent = A;
+    var panels = Math.floor(A * PVCONST.ROOF_K / PVCONST.PANEL_AREA * k);
+    var kw = panels * PVCONST.PANEL_W / 1000;
+    var rent = panels * pr;
+    var kwh = Math.round(kw * PVCONST.HOURS);
+    t("oPanels", panels); t("oKw", kw.toFixed(1)); t("oRent", rent); t("oRent25", rent * PVCONST.YEARS);
+    t("oKwh", kwh); t("oCo2", Math.round(kwh * PVCONST.CO2_KG)); t("oMonth", Math.round(rent / 12)); t("oRate", k);
+    FX.bars(document.getElementById("bars3d"), [
+      { name: "年租金（元）", v: rent, text: rent + " 元" },
+      { name: "25 年累计（千元）", v: rent * PVCONST.YEARS / 1000, text: (rent * PVCONST.YEARS) + " 元" },
+      { name: "月均（元）", v: rent / 12, text: Math.round(rent / 12) + " 元" },
+      { name: "年发电（百 kWh）", v: kwh / 100, text: kwh + " kWh" }
+    ]);
+    var n = parseInt(localStorage.getItem("pv_calc_runs") || "0", 10) + 1;
+    localStorage.setItem("pv_calc_runs", n);
+  }
+  ["area", "ori", "typ"].forEach(function (id) { document.getElementById(id).addEventListener("input", calc); });
+  calc();
+
+  /* 项目匹配（云端项目库优先，连接失败或未配置时回退本地缓存；同分按资金规模二次排序） */
+  var favs = [];
+  var projRows = PVDATA.projects;
+  function fundScale(p) { /* 从补贴文本提取资金规模量级（万元权重大于元），用于同分二次排序 */
+    var s = String(p.subsidy || ""), m, best = 0, re = /(\d+(?:\.\d+)?)(\s*万)?/g;
+    while ((m = re.exec(s))) { var v = parseFloat(m[1]) * (m[2] ? 10000 : 1); if (v > best) best = v; }
+    return best;
+  }
+  function fillTypes(rows) { /* 依据完整项目集填充「需求领域」选项，保留当前选中项 */
+    var types = [];
+    rows.forEach(function (p) { if (p.type && types.indexOf(p.type) < 0) types.push(p.type); });
+    var sel = document.getElementById("mType"), cur = sel.value;
+    sel.innerHTML = '<option value="">不限</option>' + types.map(function (t) { return "<option>" + t + "</option>"; }).join("");
+    sel.value = cur;
+  }
+  fillTypes(PVDATA.projects);
+  /* 字段兼容：云端行与本地 PVDATA.projects 字段不完全一致时统一归一化，
+     兼容 roles 为逗号／顿号分隔字符串、编号缺失、字段别名等情况 */
+  function normProj(p, i) {
+    var roles = p.roles;
+    if (typeof roles === "string") roles = roles.split(/[、,，;；\/]/).map(function (s) { return s.trim(); }).filter(Boolean);
+    if (!roles || !roles.length) roles = [];
+    return {
+      no: +p.no || +p.id || (i + 1),
+      name: p.name || p.title || p.project_name || "",
+      dept: p.dept || p.department || p.organ || "",
+      deadline: p.deadline || p.end_date || "",
+      subsidy: p.subsidy || p.fund || p.funding || "",
+      materials: p.materials || p.docs || "",
+      conditions: p.conditions || p.requirement || "",
+      basis: p.basis || p.policy_basis || "",
+      roles: roles,
+      type: p.type || p.field || "",
+      level: p.level || ""
+    };
+  }
+  function match() {
+    var r = document.getElementById("mRole").value, tp = document.getElementById("mType").value,
+        lv = document.getElementById("mLevel").value, kw = document.getElementById("mKw").value.trim();
+    var rows = projRows.map(function (p) {
+      var s = 0;
+      if (r) s += p.roles.indexOf(r) >= 0 ? 40 : 0; else s += 20;
+      if (tp) s += p.type === tp ? 30 : 0; else s += 10;
+      if (lv) s += p.level === lv ? 20 : 0; else s += 10;
+      var kwHit = kw && (p.name + p.dept + p.basis + p.subsidy).indexOf(kw) >= 0;
+      if (kw && !kwHit) return { p: p, s: -1 }; /* 设了关键词却不命中的一律排除 */
+      if (kwHit) s += 25;
+      return { p: p, s: s };
+    }).filter(function (x) { return x.s >= 40; }).sort(function (a, b) {
+      return b.s - a.s || fundScale(b.p) - fundScale(a.p) || a.p.no - b.p.no;
+    });
+    var noFilter = !r && !tp && !lv && !kw;
+    var src = window.MG && MG.state.online ? "丨数据来源：云端项目库（实时）" : "丨数据来源：本地缓存";
+    document.getElementById("mCount").textContent = noFilter
+      ? "未设筛选条件，按资金规模排序展示全部 " + rows.length + " 项" + src
+      : "匹配到 " + rows.length + " 项（按匹配度排序，同分按资金规模，展示前 12 项）" + src;
+    var shown = noFilter ? rows : rows.slice(0, 12);
+    document.getElementById("mList").innerHTML = shown.map(function (x) {
+      var p = x.p;
+      return '<div class="match-item rv in"><div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap"><b style="font-size:16.5px"><span class="mno">M-' + ("0" + p.no).slice(-2) + '</span>' + p.name + '</b><span class="sc">匹配度 ' + x.s + "</span></div>" +
+        '<div class="caption" style="margin:6px 0">' + p.level + " 丨 主管：" + p.dept + " 丨 资金／补贴：" + p.subsidy + " 丨 截止：" + p.deadline + "</div>" +
+        '<details class="acc" style="margin-top:8px"><summary>政策依据 · 申报条件 · 材料清单</summary><div class="acc-body">' +
+        "<b>政策依据：</b>" + p.basis + "<br><b>申报条件：</b>" + p.conditions + "<br><b>材料清单：</b>" + p.materials + "<br><b>适用主体：</b>" + p.roles.join("、") + "</div></details>" +
+        '<button class="btn btn-line" style="margin-top:10px; padding:7px 16px; font-size:13.5px" data-fav="' + p.no + '">＋ 加入我的申报计划</button></div>';
+    }).join("") || '<p class="caption">无匹配项目，放宽条件试试。</p>';
+  }
+  function loadProj() {
+    var tp = document.getElementById("mType").value, lv = document.getElementById("mLevel").value;
+    var f = {};
+    if (lv) f.level = lv;
+    if (tp) f.type = tp;
+    MG.gfProjects(f).then(function (rows) {
+      if (rows && rows.length) {
+        projRows = rows.map(normProj).filter(function (p) { return p.name; }); /* 云端行先归一化再渲染 */
+        if (!tp && !lv) fillTypes(projRows); /* 全量返回时同步刷新「需求领域」选项 */
+      } else {
+        projRows = PVDATA.projects; /* null 或空集一律回退本地缓存 */
+      }
+      match();
+    });
+  }
+  ["mRole", "mKw"].forEach(function (id) { document.getElementById(id).addEventListener("input", match); });
+  ["mType", "mLevel"].forEach(function (id) { document.getElementById(id).addEventListener("input", loadProj); });
+  loadProj();
+  document.getElementById("mList").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-fav]"); if (!b) return;
+    var no = +b.dataset.fav;
+    if (favs.indexOf(no) < 0) { favs.push(no); b.textContent = "✓ 已加入"; }
+    document.getElementById("mFav").textContent = favs.length;
+  });
+  document.getElementById("mPlan").addEventListener("click", function () {
+    if (!favs.length) { alert("请先在匹配结果中加入项目。"); return; }
+    var rows = [["序号", "项目名称", "主管部门", "资金／补贴", "截止时间", "合并材料清单"]];
+    var missed = 0;
+    favs.forEach(function (no) {
+      /* 收藏来自当前渲染的 projRows；云端数据编号与本地缓存不重合，别回 PVDATA 里找 */
+      var p = projRows.find(function (x) { return x.no === no; });
+      if (!p) { missed++; return; }
+      rows.push([p.no, p.name, p.dept, p.subsidy, p.deadline, p.materials]);
+    });
+    if (missed) alert("有 " + missed + " 项收藏在当前项目库中未找到，已跳过（项目库更新后编号可能变化，请重新匹配加入）。");
+    if (rows.length < 2) return;
+    PV.csv("我的申报计划", rows);
+  });
+
+  document.getElementById("ctMode").addEventListener("change", function () {
+    document.getElementById("ctWarn").style.display = this.value === "lease" ? "none" : "block";
+  });
+  document.getElementById("ctGen").addEventListener("click", function () {
+    var mode = document.getElementById("ctMode").value;
+    var rent = document.getElementById("ctRent").value, ys = document.getElementById("ctYears").value, vg = document.getElementById("ctVillage").value || "××村";
+    var txt;
+    if (mode === "coop") {
+      txt = "屋顶光伏合作共建合同（核心条款文本 · " + vg + "）\n\n" +
+        "第一条（共建标的）甲方（农户）以自有房屋屋顶使用权作价参与共建，乙方（企业）出资安装、运营光伏发电设备；房屋所有权不变，合作期满屋顶使用权完整回归甲方。\n" +
+        "第二条（出资条款）乙方承担设备、施工、并网等全部货币出资；甲方仅以屋顶使用权参与，不出资、不贷款、不担保。任何要求甲方追加出资或承担设备价款的约定均属无效。\n" +
+        "第三条（收益分配）电站收益按约定比例分成：甲方分成比例为 ××%（折算不低于 " + rent + " 元/块/年的参照水平），分配基数、结算周期与账目公开方式逐项写明；只认书面比例，口头承诺无效。\n" +
+        "第四条（合作期限与退出）合作期 " + ys + " 年。期内甲方退出、房屋处置或乙方退出时的电站处置与清算办法：××××。本条不得留空白。\n" +
+        "第五条（风险分担）经营亏损、限发、灾损由乙方承担，甲方不承担经营亏损补足义务；房屋因安装受损的，由乙方负责修复或赔偿。\n" +
+        "第六条（违约与解除）双方违约责任对等：××××。\n\n" +
+        "风险提示：合作共建收益随发电量与电价波动，非固定租金；分成比例、亏损承担与账目核查权未写清的，一律不签。本文本为条款骨架，正式签约以县级部门备案范本为准。";
+    } else if (mode === "loan") {
+      txt = "屋顶光伏贷款共建合同（核心条款文本 · " + vg + "）\n\n" +
+        "第一条（贷款主体与偿还责任）以甲方（农户）名义申请贷款的，甲方即法定还款义务人：月供金额、还款年限、逾期罚息与提前还款条件必须逐字写明；乙方代偿或补贴承诺不构成甲方还款义务的免除。\n" +
+        "第二条（贷款用途与抵押担保）贷款仅限用于屋顶电站建设；凡以甲方房产、宅基地、征信作抵押担保或要求签署空白授权、代为办理手续的条款，一律删除，否则不签。\n" +
+        "第三条（收益分配）发电收益优先偿还贷款本息，剩余部分按约定比例归甲方；租金参照标准 " + rent + " 元/块/年仅为测算参照，实际到手收益以结算单为准。\n" +
+        "第四条（期限与到期处置）合作期 " + ys + " 年。贷款未结清前房屋转让、继承、拆迁时的债务承接办法：××××；到期后电站（移交／拆除）约定：××××。本条不得留空白。\n" +
+        "第五条（风险提示）发电收益不足以覆盖月供时，差额由谁补足必须写清；限发、灾损、电价下调导致收益下降的偿还责任归属：××××。\n" +
+        "第六条（违约与解除）双方违约责任对等：××××。\n\n" +
+        "风险提示：以农户名义办贷款即背上征信责任，逾期影响个人信用。东高垣村早期骗贷教训表明，建议优先选择纯屋顶租赁（农户不出资、不贷款、不担保）。本文本为条款骨架，正式签约以县级部门备案范本为准。";
+    } else {
+      txt = "屋顶光伏租赁合同（纯租赁条款骨架 · " + vg + "）\n\n" +
+        "第一条（租赁标的）甲方（农户）将自有房屋屋顶使用权出租给乙方（企业），用于安装、使用、维护光伏发电设备；房屋所有权不变，租期届满使用权完整回归甲方。\n" +
+        "第二条（租金与支付）租金标准 " + rent + " 元/块/年（人字坡 15 元/块/年），按实际安装板块数计算，每（年／半年）支付一次至甲方指定账户；只认书面数字，口头承诺无效。\n" +
+        "第三条（租期与到期处置）租期 " + ys + " 年。到期后电站（续租／移交／拆除）按以下约定执行：××××；拆除费用与屋顶恢复由乙方承担。本条不得留空白。\n" +
+        "第四条（农户「三不」）甲方不出资、不贷款、不担保。本合同不构成任何融资、担保或融资租赁安排；甲方身份证信息仅用于签约备案与结算。\n" +
+        "第五条（损失分担）拉闸限发、灾损、发电量波动造成的损失由乙方承担，甲方租金不受影响；房屋因安装受损的，由乙方负责修复或赔偿。\n" +
+        "第六条（违约与解除）双方违约责任对等：××××。\n\n" +
+        "提示：本文本为标准条款骨架，正式签约以县级部门备案范本为准；对照手册第 130 条 5 大条款逐条核验。";
+    }
+    var el = document.getElementById("contractText");
+    el.style.display = "block"; el.textContent = txt;
+    document.getElementById("ctActions").style.display = "block";
+  });
+
+  var KW = "贷款,担保,融资租赁,抵押,质押,征信,授权,保证金,押金,服务费,中介费,手续费,违约金,回购,转让,授权委托,全权,代为办理,银行卡,密码,验证码,人脸识别,空白,另行约定,口头,承诺收益,保底收益,高收益,回本,分红比例,股权,合伙,共建,集资,众筹,入伙,加盟,代理费,培训费,诚意金,定金,罚息,复利,展期,自动续约,不可撤销,放弃,免责,概不负责,最终解释权".split(",");
+  document.getElementById("scanBtn").addEventListener("click", function () {
+    var txt = document.getElementById("scanIn").value;
+    var out = document.getElementById("scanOut");
+    if (!txt.trim()) { out.innerHTML = '<p class="caption">请先粘贴合同文本。</p>'; return; }
+    var hits = [];
+    KW.forEach(function (k) { if (txt.indexOf(k) >= 0) hits.push(k); });
+    if (!hits.length) { out.innerHTML = '<div class="note-box"><b style="color:#2e7d4f">未命中风险关键词。</b>仍建议与村公示的备案范本逐条比对，并重点核验 5 大条款。</div>'; return; }
+    var shown = txt.replace(/</g, "＜");
+    hits.forEach(function (k) { shown = shown.split(k).join("<mark>" + k + "</mark>"); });
+    out.innerHTML = '<div class="warn-box"><b>命中 ' + hits.length + ' 类风险关键词：</b>' + hits.join("、") + "<br>替换建议：凡涉「贷款／担保／融资租赁」条款一律删除并改用纯租赁表述；「最终解释权」类条款无效化；收益承诺以书面租金数字为准。涉疑文本请报村两委与镇政府核实。</div>" +
+      '<div class="contract-text" style="display:block; margin-top:12px">' + shown + "</div>";
+  });
+
+  document.getElementById("hBtn").addEventListener("click", function () {
+    var stop = document.getElementById("hStop").value === "1", volt = document.getElementById("hVolt").value === "1", drop = +document.getElementById("hDrop").value;
+    var o = document.getElementById("hOut"), h;
+    if (stop) h = ['<div class="warn-box"><b>一级 · 停机电站。</b>红色工单，24 小时内响应；先判定类型（纠纷／故障／电网）：纠纷类联合村两委上门调解，原则上 7 日内调解复电；故障类一般 72 小时内恢复；电网类列入改造清单。</div>'];
+    else if (volt) h = ['<div class="note-box"><b>二级 · 超压电站。</b>黄色工单：台区电压越限导致限发，列入电网改造清单按月跟踪；按合同约定限发损失由企业承担，农户租金不受影响。</div>'];
+    else if (drop >= 10) h = ['<div class="note-box"><b>三级 · 亚健康电站。</b>蓝色工单：数据比对 → 现场排查（灰尘、遮挡、热斑、设备劣化）→ 清洗维修 → 复测发电量，纳入例行巡检排期逐户消缺。前端消缺投入 1 分，后端停机处置省 10 分。</div>'];
+    else h = ['<div class="note-box"><b style="color:#2e7d4f">健康电站。</b>保持例行巡检；雨季、雪季前参加季节特巡即可。</div>'];
+    o.innerHTML = h[0] + '<p class="caption" style="margin-top:8px">分级标准见手册第 83 条（健康度分级）与第 84 条（三级处置 SOP）。</p>';
+  });
+
+  var rpRows = [];
+  document.getElementById("rpAdd").addEventListener("click", function () {
+    var n = document.getElementById("rpName").value.trim() || "（未填）", b = +document.getElementById("rpN").value || 0, p = +document.getElementById("rpP").value || 0;
+    rpRows.push([n, b, p, b * p]);
+    document.getElementById("rpOut").innerHTML = '<table class="tbl" style="margin-top:8px"><tr><th>户主</th><th>板块数</th><th>单价（元/块/年）</th><th>年租金（元）</th></tr>' +
+      rpRows.map(function (r) { return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td><td>" + r[2] + "</td><td>" + r[3] + "</td></tr>"; }).join("") +
+      '</table><p class="caption" style="margin-top:8px">公示到户时隐去全名，保护隐私；按季度公示发放汇总。（手册第 104 条第 7 步、表 M-14）</p>';
+  });
+  document.getElementById("rpCsv").addEventListener("click", function () {
+    if (!rpRows.length) { alert("请先加入公示行。"); return; }
+    PV.csv("租金公示表", [["户主", "板块数", "单价", "年租金"]].concat(rpRows));
+  });
+
+  /* 明白纸（本页精简版，与村干部工作台同一套 6 段式文案） */
+  document.getElementById("tmzBtn").addEventListener("click", function () {
+    var v = document.getElementById("tmzV").value || "××村", r1 = document.getElementById("tmzR").value || "30",
+        r2 = document.getElementById("tmzR2").value || "15",
+        p = document.getElementById("tmzP").value || "（待填）", c = document.getElementById("tmzC").value || "（待填）";
+    document.getElementById("tmzOut").style.display = "block";
+    document.getElementById("tmzPrint").style.display = "inline-flex";
+    document.getElementById("tmzPreview").innerHTML =
+      "<h3>" + v + "屋顶光伏明白纸</h3>" +
+      "<p><b>一、这是什么：</b>政府统一招标引进正规企业，租用咱家屋顶建光伏电站，发电全部卖给电网。</p>" +
+      "<p><b>二、要咱出啥：</b>一分钱不用出，不贷款、不担保，只出租屋顶。</p>" +
+      "<p><b>三、咱能得啥：</b>一块板一年租金 " + r1 + " 元（人字坡 " + r2 + " 元），按合同 25 年固定，按期打到咱卡上。</p>" +
+      "<p><b>四、出了问题找谁：</b>电站坏了、房子漏了，打报修电话 " + p + "，或找村联系人 " + c + "；限发停发的损失企业承担，租金不少。</p>" +
+      "<p><b>五、防骗提醒：</b>不是本村统一项目的，催签字、要身份证、吹高收益的，一律不信，先找村两委核实。</p>" +
+      "<p><b>六、自愿原则：</b>装不装、什么时候签，自家商量定，任何人不得强迫。</p>" +
+      '<p class="sig">××镇人民政府、' + v + "村民委员会（盖章）　　年　月　日</p>" +
+      '<p class="caption" style="color:#8a95a1">明白纸限 1 页不超过 600 字；填写内容经镇政府审核后印制；与合同条款摘要不一致时以合同为准。（手册第 108 条）</p>';
+  });
+  document.getElementById("tmzPrint").addEventListener("click", function () {
+    PV.printZone("#tmzPreview");
+  });
+
+  document.querySelectorAll(".scam2:not(.none)").forEach(function (b) {
+    b.addEventListener("click", function () {
+      b.classList.toggle("hit");
+      document.getElementById("tscamOk").style.display = "none";
+      document.getElementById("tscamWarn").style.display =
+        document.querySelectorAll(".scam2.hit").length ? "block" : "none";
+    });
+  });
+  document.getElementById("tscamNone").addEventListener("click", function () {
+    if (document.querySelectorAll(".scam2.hit").length) {
+      document.getElementById("tscamWarn").style.display = "block";
+      document.getElementById("tscamOk").style.display = "none";
+    } else {
+      document.getElementById("tscamWarn").style.display = "none";
+      document.getElementById("tscamOk").style.display = "block";
+    }
+  });
+
+  var GD = {
+    "农户": [
+      ["想安装", ["第一步：到村两委登记排队（登记不等于签约，签不签自家商量定）", "第二步：企业上门勘测，在家等候、听勘测结论", "第三步：对照 5 大条款逐条看合同，拿不准的「回家商量 3 天」", "第四步：签约、配合施工、参与竣工验收（防水项必验）", "第五步：确认并网时间与租金起算时点，核对每期到账", "时限参考：以村级通知为准；容量不够的按登记顺序排队"]],
+      ["房屋漏水", ["第一步：打电表箱上的报修电话或找村联系人", "第二步：拍照留证，企业上门查因定责", "第三步：修复后试水验证", "时限参考：24 小时内响应，定责后 7 日内修复"]],
+      ["灾害理赔", ["第一步：报修电话＋村联系人，留证报案", "第二步：企业走保险流程，农户不用自己跑腿索赔", "第三步：修复赔付到位后确认销号", "时限参考：24 小时内报案受理"]],
+      ["电站拆改（翻建房）", ["第一步：通过村联系人向企业提出书面申请", "第二步：企业评估拆装方案与费用承担", "第三步：约定恢复责任后再动工，切勿自行上房拆板", "时限参考：提前 1 个月申请为宜"]],
+      ["户主去世（继承）", ["第一步：找村两委＋企业", "第二步：凭继承证明材料办理合同主体变更（表 M-20）", "第三步：租金权益随房屋依法继承，钱不会断、不会丢", "时限参考：材料齐全后及时办理"]],
+      ["卖房过户", ["第一步：找村两委＋企业", "第二步：买卖双方共同办理合同主体变更", "第三步：合同承接条款写进房屋买卖约定", "时限参考：过户前办妥，避免「房卖了租金说不清」"]],
+      ["拆迁征收", ["第一步：找镇政府＋村两委＋企业", "第二步：按征收政策与合同约定处理电站迁移或补偿", "第三步：征收损失不得转嫁农户", "时限参考：以征收公告与合同为准"]]
+    ],
+    "村干部": [
+      ["启动整村项目（7 步建设法）", ["第 1 步：前期摸排——逐户登记 5 项要素，公示 7 天（表 M-1）", "第 2 步：宣传动员——村民大会 8 步议程＋明白纸到户", "第 3 步：签约组织——逐户交底 5 大条款，台账当日登记、报镇备案", "第 4 步：安装配合——每日巡查，防水验收户户必验", "第 5 步：并网确认——书面告知租金起算时点", "第 6 步：运维协同——公示报修电话，报修当日转企业工单", "第 7 步：收益分配监督——逐户核对、按季公示、异议不过周"]],
+      ["变压器容量不够", ["第一步：暂停超容量部分签约", "第二步：候补登记排队（3 项要素，表 M-3），张榜公示", "第三步：函请电网企业出具容量核算书面意见与改造方案", "第四步：改造落实前，签约规模不得超出可开放容量", "第五步：分批释放名额，排序规则公开，杜绝插队"]],
+      ["调解纠纷", ["第一步：判类型——农户与企业／农户之间／农户与村集体／企业与电网／涉法涉诉", "第二步：按首选路径介入（村调解委员会调解或转企业限时处置）", "第三步：全程留痕（表 M-9），调解不成当日移交并标注「未结」", "纪律：不代替任何一方作承诺；涉企业责任的以书面工单移交"]]
+    ],
+    "企业": [
+      ["投资前尽调", ["第一步：政策合规与电网容量核查（权重最高的两项）", "第二步：屋顶资源台账与产权清晰度核查", "第三步：村庄治理能力、历史矛盾与农户意愿评估", "第四步：合同安排、成本测算、保险安排逐项取证", "第五步：退出与极端情形（征收、翻建、继承）预案", "第六步：10 项全部取证后召开尽调评审会，附条件事项写入投资协议先决条件"]],
+      ["建设施工（8 步流程）", ["勘测设计 → 备案与接入申请 → 材料集采 → 分批施工 → 质量安全管控 → 竣工验收（表 M-7）→ 并网验收 → 资料归档", "关键纪律：接入方案未落实前不开工；防水执行雨后复验；档案保存不少于 25 年"]],
+      ["运维工单处置", ["第一步：线上监测告警或农户报修触发工单", "第二步：分级派单——停机红色 24 小时响应、超压黄色、亚健康蓝色", "第三步：驿站上门处置，故障类一般 72 小时内恢复", "第四步：复测发电量，台账销号；限发损失按合同由企业承担"]]
+    ],
+    "政府": [
+      ["准入审查", ["第一步：对照 6 项要件逐项审查打分", "第二步：涉骗贷前科等一票否决情形的直接退回", "第三步：通过后纳入备案管理，合同范本县级备案", "第四步：公开举报电话，信息收集坚持最少必要"]],
+      ["整村推进 6 阶段", ["立项决策 → 资源摸排 → 招标选定 → 动员签约 → 建设并网 → 运营监管", "镇政府吃重环节：资源摸排、动员签约、运营监管（手册第五章）"]],
+      ["年度考核", ["第一步：收集签约率、发电完成率、分红兑现率、停机处置率、客诉办结率", "第二步：对照年度考核汇总表（表 M-18）逐项核实", "第三步：考核结果与奖惩挂钩，问题限期整改销号"]]
+    ]
+  };
+  function gdRender() {
+    var role = document.getElementById("gdRole").value;
+    var ms = GD[role];
+    var sel = document.getElementById("gdMatter");
+    sel.innerHTML = ms.map(function (m, i) { return "<option value='" + i + "'>" + m[0] + "</option>"; }).join("");
+    gdSteps();
+  }
+  function gdSteps() {
+    var role = document.getElementById("gdRole").value, i = +document.getElementById("gdMatter").value || 0;
+    var m = GD[role][i];
+    document.getElementById("gdSteps").innerHTML =
+      '<h3 style="color:var(--gold2)">' + role + " · " + m[0] + '</h3><ol style="padding-left:24px; line-height:2; font-size:15px; color:#c4cfda; margin-top:8px">' +
+      m[1].map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ol>";
+  }
+  document.getElementById("gdRole").addEventListener("change", gdRender);
+  document.getElementById("gdMatter").addEventListener("change", gdSteps);
+  gdRender();
+
+  function renderTerms() {
+    var kw = document.getElementById("termKw").value.trim();
+    var rows = PVDATA.terms.filter(function (t) { return !kw || (t.t + t.d).indexOf(kw) >= 0; });
+    document.getElementById("termList").innerHTML = rows.map(function (t) {
+      return '<div class="card rv in" style="padding:20px 22px"><b style="color:#a5832f">' + t.t + '</b><p style="font-size:13.5px; color:#5a6b7c; margin-top:6px; line-height:1.7">' + t.d + "</p></div>";
+    }).join("") || '<p class="caption">无匹配术语。</p>';
+  }
+  document.getElementById("termKw").addEventListener("input", renderTerms);
+  renderTerms();
+
+  var fg = "", fkw = "";
+  var gname = { G: "政府", E: "企业", V: "村集体", F: "农户" };
+  function renderFaq() {
+    var rows = PVDATA.faq.filter(function (f) {
+      return (!fg || f.g === fg) && (!fkw || (f.q + f.a).indexOf(fkw) >= 0);
+    });
+    document.getElementById("faqList").innerHTML = rows.map(function (f) {
+      return '<details class="acc"><summary><span><span class="pill mist" style="margin-right:8px">' + gname[f.g] + "</span>" + f.no + ". " + f.q + '</span></summary><div class="acc-body">' + f.a + '<br><span class="caption">详见：手册 ' + f.ref + "</span></div></details>";
+    }).join("") || '<p class="caption">无匹配问答。</p>';
+  }
+  document.getElementById("faqTags").addEventListener("click", function (e) {
+    var b = e.target.closest(".tag"); if (!b) return;
+    document.querySelectorAll("#faqTags .tag").forEach(function (t) { t.classList.remove("on"); });
+    b.classList.add("on"); fg = b.dataset.g; renderFaq();
+  });
+  document.getElementById("faqKw").addEventListener("input", function () { fkw = this.value.trim(); renderFaq(); });
+  renderFaq();
+});
+</script>
+</body>
+</html>

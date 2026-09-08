@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>五维评估 —— 屋顶上的共富路</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+#radarBall{width:100%; height:600px; cursor:grab}
+#radarBall:active{cursor:grabbing}
+#ballInfo{margin-top:10px}
+.dim-item{display:grid; grid-template-columns:120px 1fr; gap:20px; padding:20px 0; border-bottom:1px solid #e2e0d6}
+.dim-item .sc{font-family:var(--mono); font-size:36px; color:#a5832f; font-weight:700}
+.self-grid{display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:26px}
+@media(max-width:900px){.self-grid{grid-template-columns:1fr} .dim-item{grid-template-columns:1fr}}
+.ev-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-top:22px}
+@media(max-width:1000px){.ev-grid{grid-template-columns:1fr 1fr}}
+.ev-card{background:#fff; border:1px solid #e2e0d6; border-top:4px solid var(--gold); border-radius:12px; padding:16px 18px; color:#23303e}
+.ev-card .sc{font-family:var(--mono); font-size:30px; color:#a5832f; font-weight:700}
+.ev-card p{color:#5a6b7c; font-size:13.5px; margin-top:6px; line-height:1.65}
+.ev-card .basis{color:#8a95a1; font-size:12.5px; margin-top:8px}
+</style>
+</head>
+<body>
+<div data-crumb></div>
+
+<section class="section grain" style="padding-top:56px; padding-bottom:20px">
+  <div class="wrap">
+    <div class="kicker rv">通用评估框架</div>
+    <h1 class="rv">五维评估框架</h1>
+    <p class="lead rv" style="margin-top:14px">产业 · 生态 · 治理 · 文化 · 生活。可复用的通用框架，本页以东高垣村数据作示例填充；评分为主观评估（满分 5 分），不构成审计结论。</p>
+  </div>
+</section>
+
+<!-- 3D 雷达球 -->
+<section class="section grain" style="padding-top:10px">
+  <div class="wrap">
+    <canvas id="radarBall"></canvas>
+    <div id="ballInfo" class="note-box">拖拽旋转球体；悬停顶点查看维度详情。金色多边形为东高垣村示例数据。</div>
+  </div>
+</section>
+
+<!-- 维度详解 -->
+<section class="section light">
+  <div class="wrap">
+    <div class="kicker">每一分都有田野证据</div>
+    <h2>维度详解</h2>
+    <div style="margin-top:20px">
+      <div class="dim-item rv"><div class="sc">4.5</div><div><h3>产业 · 财产性收入新通道</h3><p style="color:#5a6b7c; font-size:15px">185 户农户零成本获得 25 年稳定租金，户均年租金约 1500—2000 元；村集体建筑光伏租金补充村内开支；企业属地化运营带动运维岗位。</p><p class="caption">2026 年 2 月入户访谈、企业访谈</p></div></div>
+      <div class="dim-item rv"><div class="sc">4.2</div><div><h3>生态 · 年减碳约 6500 吨（测算值）</h3><p style="color:#5a6b7c; font-size:15px">年发电约 805 万 kWh，按 0.8 kg/kWh 折算年减碳约 6440 吨（取整表述约 6500 吨）；村史馆广场光伏车棚、光伏路灯形成可见的绿色景观。</p><p class="caption">课题组测算（2026 年），发电量为企业访谈口径</p></div></div>
+      <div class="dim-item rv"><div class="sc">4.0</div><div><h3>治理 · 村企协同的治理增量</h3><p style="color:#5a6b7c; font-size:15px">村两委建立安装户数与增收统计台账；「农户—村两委—运维驿站」三方联络与工单机制让矛盾有了制度化出口；骗贷前科后重建的准入审查成为治理资产。</p><p class="caption">2026 年 2 月入户访谈（村主任 H 某）</p></div></div>
+      <div class="dim-item rv"><div class="sc">3.2</div><div><h3>文化 · 信任文化的重建（进行中）</h3><p style="color:#5a6b7c; font-size:15px">从「普遍抵触」到「争相签约」，村庄对现代契约制度的信任在修复；但租金期待差、朝向心结等仍需长期弥合。</p><p class="caption">课题组 2026 年 2 月驻点调研观察</p></div></div>
+      <div class="dim-item rv"><div class="sc">3.8</div><div><h3>生活 · 「光伏养老」的补充保障</h3><p style="color:#5a6b7c; font-size:15px">租金构成留守老人稳定补充性现金流；部分农户对租金水平存在更高期待；清洁能源替代散煤的取暖转型仍在路上。</p><p class="caption">2026 年 2 月入户访谈</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 自动评分工具 -->
+<section class="section light" style="padding-top:40px">
+  <div class="wrap">
+    <div class="kicker">迁移复用</div>
+    <h2>为你的村庄评估（客观数据自动评分）</h2>
+    <p class="lead" style="margin-top:12px">不用自己打分。填报 10 项可核实的客观数据，系统按手册规则自动计算五维得分、评语与扣分原因，并与东高垣村示例对比。</p>
+    <div class="self-grid">
+      <div class="card" id="selfForm">
+        <div class="grid2">
+          <div><label>1. 村庄总户数（户）</label><input type="number" id="evTotal" min="0" placeholder="如：185"></div>
+          <div><label>2. 已签约户数（户）</label><input type="number" id="evSigned" min="0" placeholder="如：120"></div>
+          <div><label>3. 户均年租金（元）</label><input type="number" id="evRent" min="0" placeholder="如：1800"></div>
+          <div><label>4. 村集体年新增收入（元）</label><input type="number" id="evVillage" min="0" placeholder="如：30000"></div>
+          <div><label>5. 年发电量估计（万 kWh，可空）</label><input type="number" id="evKwh" min="0" placeholder="如：805"></div>
+          <div><label>6. 台账与工单机制</label><select id="evLedger"><option value="run">已建立且运行</option><option value="idle">已建立未运行</option><option value="none">没有</option></select></div>
+          <div><label>7. 运维响应</label><select id="evOm"><option value="fast">小故障不过夜</option><option value="d3">3 天内</option><option value="slow">更慢</option><option value="none">没有渠道</option></select></div>
+          <div><label>8. 矛盾与客诉处置</label><select id="evComplaint"><option value="full">有登记有回访</option><option value="half">有登记无回访</option><option value="none">没有</option></select></div>
+          <div><label>9. 宣讲与公开</label><select id="evPublic"><option value="full">大会＋入户＋公示全覆盖</option><option value="meet">只开会</option><option value="none">基本没有</option></select></div>
+          <div><label>10. 村民信任度体感</label><select id="evTrust"><option value="high">主动咨询报名多</option><option value="wait">观望多</option><option value="low">抵触多</option></select></div>
+        </div>
+        <button class="btn btn-gold" style="margin-top:18px" id="evCalc">计算五维得分</button>
+      </div>
+      <div class="card" style="text-align:center">
+        <canvas id="selfRadar" style="width:100%; height:340px"></canvas>
+        <p class="caption">亮金为你的村庄，墨青为东高垣村示例（4.5 / 4.2 / 4.0 / 3.2 / 3.8）</p>
+      </div>
+    </div>
+    <div id="evOut" style="display:none">
+      <div class="ev-grid" id="evCards"></div>
+      <div class="note-box" id="evGrade" style="margin-top:18px"></div>
+      <div class="card" style="margin-top:18px">
+        <h3>提交评估存档</h3>
+        <div class="grid2" style="margin-top:14px">
+          <div><label>村庄名称</label><input type="text" id="evVillageName" placeholder="如：东高垣村"></div>
+          <div><label>联系方式（选填）</label><input type="text" id="evContact" placeholder="如：村两委 ×× 电话"></div>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:14px; flex-wrap:wrap; align-items:center">
+          <button class="btn btn-gold" id="evSubmit">提交评估存档</button>
+          <span class="caption" id="evSubmitMsg"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 评估说明 -->
+<section class="section grain">
+  <div class="wrap" style="max-width:860px">
+    <div class="card rv" style="border-color:rgba(212,168,75,.4)">
+      <h3 style="color:var(--gold2)">评估说明</h3>
+      <p style="color:#c4cfda; font-size:15.5px; margin-top:10px">五维评分为课题组在田野证据基础上的<b>结构化主观评估</b>，满分 5 分，用于呈现整村光伏赋能乡村振兴的整体轮廓，<b>不构成对项目的审计或鉴定结论</b>。文化维度得分相对偏低，反映信任重建的长期性；生活维度受租金期待差影响留有提升空间；生态维度减碳量为折算测算值（系数 0.8 kg/kWh）。所有证据条目均来自访谈、台账与实地观察，并逐条标注来源与时点。</p>
+    </div>
+  </div>
+</section>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var dims = [
+    { name: "产业", score: 4.5, info: "185 户零成本获得 25 年稳定租金；村集体建筑租金补充村内开支；属地化运维带动岗位。" },
+    { name: "生态", score: 4.2, info: "年发电约 805 万 kWh，按 0.8 kg/kWh 折算年减碳约 6500 吨（测算值）。" },
+    { name: "治理", score: 4.0, info: "台账、三方联络与工单机制；准入审查成为治理资产。" },
+    { name: "文化", score: 3.2, info: "契约信任修复中；租金期待差与朝向心结需长期弥合。" },
+    { name: "生活", score: 3.8, info: "「光伏养老」补充保障；部分农户对租金存在更高期待。" }
+  ];
+  FX.radarBall(document.getElementById("radarBall"), dims, function (i) {
+    var el = document.getElementById("ballInfo");
+    el.innerHTML = i < 0 ? "拖拽旋转球体；悬停顶点查看维度详情。金色多边形为东高垣村示例数据。"
+      : "<b>" + dims[i].name + " · " + dims[i].score + " 分：</b>" + dims[i].info;
+  });
+
+  /* 五维自动评分：客观数据 → 规则映射（评分依据来自手册），不同数据产出不同得分 */
+  /* 评分规则（写死，满分 5 分、保留 1 位小数）：
+     产业 = 签约率分（0—3）＋ 户均租金分（0—2）＋ 村集体增收加分（0／0.3），封顶 5
+       签约率=已签约/总户数：≥70%→3.0；≥50%→2.5；≥30%→2.0；>0→1.5；=0→1.0
+       户均年租金：≥1500→2.0；≥1000→1.5；≥500→1.0；>0→0.5；=0→0
+     治理 = 台账工单（0—1.8）＋ 运维响应（0—1.6）＋ 矛盾处置（0—1.6）
+       台账工单：已建立且运行→1.8；已建立未运行→1.0；没有→0.3
+       运维响应：小故障不过夜→1.6；3 天内→1.2；更慢→0.6；没有渠道→0.2
+       矛盾处置：有登记有回访→1.6；有登记无回访→0.9；没有→0.3
+     文化 = 宣讲公开（0—2.6）＋ 信任度（0—2.4）
+       宣讲公开：全覆盖→2.6；只开会→1.6；基本没有→0.6
+       信任度：主动咨询报名多→2.4；观望多→1.4；抵触多→0.4
+     生活 = 户均年租金 / 1800 元（农村基础养老金参考线）映射：
+       ≥100%→4.5；≥70%→3.8；≥50%→3.0；≥30%→2.2；>0→1.5；=0→1.0
+     生态 = 年发电量（万 kWh）× 0.8 kg/kWh 折算减碳量（吨）= 万 kWh × 8：
+       ≥5000 吨→4.5；≥2000→3.8；≥800→3.0；≥200→2.2；>0→1.5；=0→1.0
+       发电量留空时按 已签约户数 × 40 块 × 0.635 kW × 1350 h 估算 */
+  var names = ["产业", "生态", "治理", "文化", "生活"];
+  var cv = document.getElementById("selfRadar");
+  var mineScores = null, lastEval = null;
+  function gv(id) { return document.getElementById(id).value; }
+  function gn(id) { return +document.getElementById(id).value || 0; }
+  function drawSelf() {
+    var r = cv.getBoundingClientRect(), d = devicePixelRatio || 1;
+    cv.width = r.width * d; cv.height = 340 * d;
+    var ctx = cv.getContext("2d"); ctx.setTransform(d, 0, 0, d, 0, 0);
+    var cx = r.width / 2, cy = 175, R = 130;
+    ctx.clearRect(0, 0, r.width, 340);
+    for (var ring = 1; ring <= 5; ring++) {
+      ctx.beginPath();
+      for (var i = 0; i <= 5; i++) {
+        var a = -Math.PI / 2 + i * 2 * Math.PI / 5, rr = R * ring / 5;
+        var x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr;
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      }
+      ctx.strokeStyle = "rgba(61,90,117,.35)"; ctx.stroke();
+    }
+    names.forEach(function (n, i) {
+      var a = -Math.PI / 2 + i * 2 * Math.PI / 5;
+      ctx.fillStyle = "#5a6b7c"; ctx.font = "13px sans-serif"; ctx.textAlign = "center";
+      ctx.fillText(n, cx + Math.cos(a) * (R + 22), cy + Math.sin(a) * (R + 22) + 4);
+    });
+    function poly(vals, fill, stroke) {
+      ctx.beginPath();
+      vals.forEach(function (v, i) {
+        var a = -Math.PI / 2 + i * 2 * Math.PI / 5, rr = R * v / 5;
+        var x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr;
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      });
+      ctx.closePath(); ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.stroke();
+    }
+    poly(dims.map(function (d) { return d.score; }), "rgba(61,90,117,.2)", "#3D5A75");
+    if (mineScores) poly(mineScores, "rgba(212,168,75,.3)", "#D4A84B");
+  }
+  function calcScores() {
+    var total = gn("evTotal"), signed = gn("evSigned"), rent = gn("evRent"), vInc = gn("evVillage"),
+        kwhWan = gn("evKwh"), ledger = gv("evLedger"), om = gv("evOm"), comp = gv("evComplaint"),
+        pub = gv("evPublic"), trust = gv("evTrust");
+    /* 产业 */
+    var rate = total > 0 ? signed / total : 0;
+    var rateS = rate >= .7 ? 3 : rate >= .5 ? 2.5 : rate >= .3 ? 2 : rate > 0 ? 1.5 : 1;
+    var rentS = rent >= 1500 ? 2 : rent >= 1000 ? 1.5 : rent >= 500 ? 1 : rent > 0 ? .5 : 0;
+    var ind = Math.min(5, rateS + rentS + (vInc > 0 ? .3 : 0));
+    var indNote = "签约率 " + Math.round(rate * 100) + "%（" + rateS + " 分）＋户均租金 " + rent + " 元（" + rentS + " 分）" + (vInc > 0 ? "＋村集体增收加分" : "；村集体无新增收入，不加分");
+    /* 生态 */
+    var est = kwhWan > 0 ? kwhWan : signed * 40 * 0.635 * 1350 / 10000;
+    var co2 = est * 8;
+    var eco = co2 >= 5000 ? 4.5 : co2 >= 2000 ? 3.8 : co2 >= 800 ? 3 : co2 >= 200 ? 2.2 : co2 > 0 ? 1.5 : 1;
+    var ecoNote = "年发电约 " + Math.round(est) + " 万 kWh" + (kwhWan > 0 ? "" : "（按签约户数估算）") + "，折算减碳约 " + Math.round(co2) + " 吨";
+    /* 治理 */
+    var ledS = ledger === "run" ? 1.8 : ledger === "idle" ? 1 : .3;
+    var omS = om === "fast" ? 1.6 : om === "d3" ? 1.2 : om === "slow" ? .6 : .2;
+    var compS = comp === "full" ? 1.6 : comp === "half" ? .9 : .3;
+    var gov = Math.max(1, ledS + omS + compS);
+    var govNote = "台账工单 " + ledS + " 分＋运维响应 " + omS + " 分＋矛盾处置 " + compS + " 分";
+    /* 文化 */
+    var pubS = pub === "full" ? 2.6 : pub === "meet" ? 1.6 : .6;
+    var truS = trust === "high" ? 2.4 : trust === "wait" ? 1.4 : .4;
+    var cul = pubS + truS;
+    var culNote = "宣讲公开 " + pubS + " 分＋信任度 " + truS + " 分";
+    /* 生活 */
+    var ratio = rent / 1800;
+    var life = ratio >= 1 ? 4.5 : ratio >= .7 ? 3.8 : ratio >= .5 ? 3 : ratio >= .3 ? 2.2 : ratio > 0 ? 1.5 : 1;
+    var lifeNote = "户均租金相当于农村基础养老金参考线（1800 元）的 " + Math.round(ratio * 100) + "%";
+    function cmt(s) { return s >= 4.2 ? "优势明显" : s >= 3.4 ? "基础良好" : s >= 2.6 ? "仍有短板" : "需重点提升"; }
+    return {
+      inputs: { 总户数: total, 已签约户数: signed, 户均年租金: rent, 村集体年新增收入: vInc, 年发电量万kWh: kwhWan || "（估算）", 台账工单: ledger, 运维响应: om, 矛盾处置: comp, 宣讲公开: pub, 信任度: trust },
+      cards: [
+        { name: "产业", s: ind, note: indNote },
+        { name: "生态", s: eco, note: ecoNote },
+        { name: "治理", s: gov, note: govNote },
+        { name: "文化", s: cul, note: culNote },
+        { name: "生活", s: life, note: lifeNote }
+      ].map(function (c) { c.cmt = cmt(c.s); c.s = Math.round(c.s * 10) / 10; return c; })
+    };
+  }
+  document.getElementById("evCalc").addEventListener("click", function () {
+    var r = calcScores();
+    lastEval = r;
+    mineScores = names.map(function (n) { return r.cards.filter(function (c) { return c.name === n; })[0].s; });
+    var avg = mineScores.reduce(function (a, b) { return a + b; }, 0) / 5;
+    var grade = avg >= 4 ? "示范型" : avg >= 2.8 ? "提升型" : "起步型";
+    document.getElementById("evOut").style.display = "block";
+    document.getElementById("evCards").innerHTML = r.cards.map(function (c) {
+      return '<div class="ev-card rv"><b>' + c.name + '</b><div class="sc">' + c.s.toFixed(1) + '</div><p><b>' + c.cmt + '。</b>' + c.note + '</p><p class="basis">依据：手册五维评分口径，满分 5 分</p></div>';
+    }).join("");
+    document.getElementById("evGrade").innerHTML = "<b>总体等级：" + grade + "（五维均值 " + avg.toFixed(1) + " 分）。</b>" +
+      (grade === "示范型" ? "五维均衡发展，可作为整村光伏示范样板总结推广。" :
+       grade === "提升型" ? "整体可行但存在短板维度，对照上表扣分原因逐项补齐。" :
+       "多项基础条件薄弱，建议先夯实组织动员与运维机制再推进。") +
+      "评分为规则化测算，不构成审计结论。";
+    document.getElementById("evSubmitMsg").textContent = "";
+    lastEval.grade = grade;
+    drawSelf();
+  });
+  document.getElementById("evSubmit").addEventListener("click", function () {
+    var msg = document.getElementById("evSubmitMsg");
+    if (!lastEval) { msg.textContent = "请先点击「计算五维得分」。"; return; }
+    var village = gv("evVillageName").trim(), contact = gv("evContact").trim();
+    var scores = {};
+    lastEval.cards.forEach(function (c) { scores[c.name] = c.s; });
+    if (!(window.MG && typeof MG.evalSubmit === "function")) {
+      msg.textContent = "提交失败，请稍后重试。";
+      return;
+    }
+    msg.textContent = "正在提交……";
+    /* evalSubmit 内部不抛错：写入失败（含离线未配置）resolve null，只有拿到响应才算成功 */
+    MG.evalSubmit("gongfulu", "five_dim", village, contact, lastEval.inputs, scores, lastEval.grade)
+      .then(function (res) {
+        msg.textContent = res ? "已提交存档。" : "提交失败，请稍后重试。";
+      });
+  });
+  addEventListener("resize", drawSelf);
+  drawSelf();
+});
+</script>
+</body>
+</html>
