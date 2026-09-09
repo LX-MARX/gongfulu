@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数据管理台 —— 屋顶上的共富路</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+.ad-head{text-align:center; padding:150px 0 50px}
+.toast{position:fixed; top:86px; left:50%; transform:translateX(-50%); z-index:1200; max-width:min(560px,90vw); padding:12px 24px; border-radius:12px; font-size:15px; display:none; backdrop-filter:blur(8px); box-shadow:0 10px 34px rgba(0,0,0,.4)}
+.toast.ok{display:block; background:rgba(22,101,52,.92); color:#d1fae5; border:1px solid rgba(110,231,183,.5)}
+.toast.err{display:block; background:rgba(90,32,27,.94); color:#f3c2bb; border:1px solid rgba(200,75,63,.6)}
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:30px}
+@media(max-width:860px){.stat-grid{grid-template-columns:1fr 1fr}}
+.stat-grid .glass{text-align:center; padding:24px 12px}
+.stat-grid .v{font-family:var(--mono); font-size:40px; font-weight:700; color:var(--gold2); text-shadow:0 0 18px rgba(240,215,140,.45)}
+.stat-grid .l{font-size:13px; color:#9fb0c0; margin-top:4px; letter-spacing:.08em}
+.ad-tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:22px}
+.ad-tabs button{padding:10px 20px; border-radius:var(--r-tag); border:1px solid rgba(212,168,75,.4); background:transparent; color:var(--paper); font-size:14.5px; transition:all .25s}
+.ad-tabs button.on{background:linear-gradient(135deg,#8a6a2a,var(--gold) 45%,var(--gold2)); color:var(--ink); font-weight:700; border-color:transparent}
+.ad-tabs.sub button{font-size:13px; padding:7px 16px}
+.panel{display:none}
+.panel.on{display:block}
+.tbl-wrap{overflow-x:auto; border:1px solid rgba(212,168,75,.25); border-radius:var(--r-card); background:rgba(18,35,58,.45)}
+table.adm{width:100%; border-collapse:collapse; font-size:14px; min-width:760px}
+table.adm th{background:rgba(212,168,75,.12); color:var(--gold2); text-align:left; padding:11px 14px; border-bottom:1px solid rgba(212,168,75,.3); white-space:nowrap; font-weight:600}
+table.adm td{padding:10px 14px; border-bottom:1px solid rgba(240,242,245,.07); color:#dfe6ec; vertical-align:top; max-width:280px}
+table.adm tr:last-child td{border-bottom:none}
+table.adm tr.clickable{cursor:pointer}
+table.adm tr.clickable:hover td{background:rgba(212,168,75,.07)}
+.cell-clip{display:inline-block; max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:bottom}
+.chips{display:flex; gap:8px; flex-wrap:wrap; margin:0 0 16px}
+.chips button{padding:6px 16px; border-radius:var(--r-tag); border:1px solid var(--mist); background:transparent; color:#cfd8e0; font-size:13px}
+.chips button.on{border-color:var(--gold); color:var(--gold2); background:rgba(212,168,75,.14)}
+.mini-btn{padding:6px 14px; font-size:13px; border-radius:var(--r-tag); margin-right:6px}
+.badge{display:inline-block; padding:3px 12px; border-radius:var(--r-tag); font-size:12.5px}
+.badge-admin{background:linear-gradient(135deg,#8a6a2a,var(--gold) 45%,var(--gold2)); color:var(--ink); font-weight:700}
+.badge-user{background:rgba(240,242,245,.12); color:#cfd8e0; border:1px solid rgba(240,242,245,.25)}
+.detail-kv{display:grid; grid-template-columns:1fr 1fr; gap:6px 26px; padding:12px 6px}
+@media(max-width:700px){.detail-kv{grid-template-columns:1fr}}
+.detail-kv .kv{font-size:13.5px; line-height:1.7}
+.detail-kv .kv b{color:var(--gold2); font-weight:600; margin-right:8px}
+.detail-h{font-size:13px; color:var(--gold2); letter-spacing:.14em; margin:12px 6px 4px}
+.empty{padding:34px; text-align:center; color:#8a95a1; font-size:14.5px}
+/* 模态框 */
+.mdl-mask{position:fixed; inset:0; background:rgba(6,12,22,.72); backdrop-filter:blur(4px); z-index:1100; display:none; align-items:flex-start; justify-content:center; overflow-y:auto; padding:60px 16px}
+.mdl-mask.on{display:flex}
+.mdl{width:min(680px,94vw); background:var(--ink2); border:1px solid rgba(212,168,75,.4); border-radius:16px; padding:30px 30px 24px}
+.mdl h3{color:var(--gold2); margin-bottom:16px}
+.mdl .f{margin-bottom:13px}
+.mdl .f label{display:block; font-size:13px; color:#9fb0c0; margin-bottom:5px}
+.mdl .f input,.mdl .f textarea{width:100%; background:rgba(10,22,40,.6); border:1px solid var(--mist); border-radius:var(--r-input); color:var(--paper); padding:10px 14px; font-size:14.5px; font-family:inherit; outline:none}
+.mdl .f input:focus,.mdl .f textarea:focus{border-color:var(--gold)}
+.mdl .f input[readonly]{opacity:.55; cursor:not-allowed}
+.mdl .f textarea{min-height:74px; resize:vertical; font-family:var(--mono); font-size:13px}
+.mdl .acts{display:flex; gap:12px; justify-content:flex-end; margin-top:18px}
+</style>
+</head>
+<body>
+
+<section class="ad-head grain">
+  <div class="wrap">
+    <div class="kicker rv">项目管理员专属</div>
+    <h1 class="rv">数据管理台</h1>
+    <p class="lead rv" style="margin:14px auto 0">预约登记 · 村庄评估 · 表格存档 · 政策项目库 · 用户列表 · 管理员审批，一站管理。</p>
+  </div>
+</section>
+
+<section class="section grain" style="padding-top:26px">
+  <div class="wrap">
+    <div class="toast" id="toast"></div>
+
+    <div id="guardLoading" class="glass rv" style="padding:40px; text-align:center; color:#9fb0c0">正在校验管理权限……</div>
+    <div id="guardDenied" class="glass rv" style="display:none; padding:44px; text-align:center">
+      <h3 style="color:var(--gold2); margin-bottom:10px" id="denyTitle">请先登录</h3>
+      <p style="color:#9fb0c0; font-size:15px" id="denyDesc">管理台仅对已登录的项目管理员开放。</p>
+      <a class="btn btn-gold" href="account.html" style="margin-top:22px; display:inline-block">去登录 / 注册 →</a>
+    </div>
+
+    <div id="adminApp" style="display:none">
+      <!-- 统计条 -->
+      <div class="stat-grid rv">
+        <div class="glass"><div class="v" id="stBookings">—</div><div class="l">预约登记</div></div>
+        <div class="glass"><div class="v" id="stEvals">—</div><div class="l">评估提交</div></div>
+        <div class="glass"><div class="v" id="stForms">—</div><div class="l">表格存档</div></div>
+        <div class="glass"><div class="v" id="stUsers">—</div><div class="l">注册用户</div></div>
+      </div>
+
+      <!-- 主选项卡 -->
+      <div class="ad-tabs rv" id="mainTabs">
+        <button data-tab="bookings" class="on" type="button">预约登记</button>
+        <button data-tab="evals" type="button">村庄评估</button>
+        <button data-tab="forms" type="button">表格存档</button>
+        <button data-tab="lib" type="button">政策与项目库维护</button>
+        <button data-tab="users" type="button">用户列表</button>
+        <button data-tab="apps" type="button">管理员审批</button>
+      </div>
+
+      <!-- 预约登记 -->
+      <div class="panel on" id="p-bookings">
+        <div class="chips" id="siteChips"></div>
+        <div style="margin-bottom:16px"><button class="btn btn-line mini-btn" id="btnCsv" type="button">导出 CSV</button></div>
+        <div class="tbl-wrap" id="bkWrap"><div class="empty">读取中……</div></div>
+      </div>
+
+      <!-- 村庄评估 -->
+      <div class="panel" id="p-evals">
+        <div class="tbl-wrap" id="evWrap"><div class="empty">读取中……</div></div>
+      </div>
+
+      <!-- 表格存档 -->
+      <div class="panel" id="p-forms">
+        <div class="tbl-wrap" id="fmWrap"><div class="empty">读取中……</div></div>
+      </div>
+
+      <!-- 政策与项目库维护 -->
+      <div class="panel" id="p-lib">
+        <div class="ad-tabs sub" id="libTabs">
+          <button data-lib="gf_policies" class="on" type="button">共富路政策库</button>
+          <button data-lib="gf_projects" type="button">共富路项目库</button>
+          <button data-lib="ws_policies" type="button">工作站政策库</button>
+          <button data-lib="ws_projects" type="button">工作站项目库</button>
+        </div>
+        <div style="margin-bottom:16px"><button class="btn btn-gold mini-btn" id="btnNew" type="button">＋ 新增记录</button></div>
+        <div class="tbl-wrap" id="libWrap"><div class="empty">读取中……</div></div>
+      </div>
+
+      <!-- 用户列表 -->
+      <div class="panel" id="p-users">
+        <div class="tbl-wrap" id="usWrap"><div class="empty">读取中……</div></div>
+      </div>
+
+      <!-- 管理员审批 -->
+      <div class="panel" id="p-apps">
+        <div class="detail-h" style="margin-top:0">待审核申请</div>
+        <div class="tbl-wrap" id="appsPending" style="margin-bottom:22px"><div class="empty">读取中……</div></div>
+        <div class="detail-h">历史记录</div>
+        <div class="tbl-wrap" id="appsHistory"><div class="empty">读取中……</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 编辑/新增模态框 -->
+<div class="mdl-mask" id="mdlMask">
+  <div class="mdl">
+    <h3 id="mdlTitle">编辑记录</h3>
+    <div id="mdlFields"></div>
+    <div class="acts">
+      <button class="btn btn-line mini-btn" id="mdlCancel" type="button">取消</button>
+      <button class="btn btn-gold mini-btn" id="mdlSave" type="button">保存</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(function () {
+  "use strict";
+  function $(id) { return document.getElementById(id); }
+  var esc = window.mgEsc;
+  function fmtTime(iso) {
+    if (!iso) return "—";
+    var d = new Date(iso);
+    if (isNaN(d)) return "—";
+    function p(n) { return ("0" + n).slice(-2); }
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+  }
+  var toastTimer = null;
+  function toast(msg, ok) {
+    var t = $("toast");
+    t.textContent = msg;
+    t.className = "toast " + (ok ? "ok" : "err");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.className = "toast"; }, 3600);
+  }
+  function cellText(v) {
+    if (v == null) return "";
+    if (typeof v === "object") return JSON.stringify(v);
+    return String(v);
+  }
+  function clip(v) {
+    var s = cellText(v);
+    return '<span class="cell-clip" title="' + esc(s) + '">' + esc(s) + "</span>";
+  }
+  /* adminList 失败（如排序列不存在被 RLS/数据库拒绝）时按 id 重试一次 */
+  function listTable(table, order) {
+    return MG.adminList(table, order).then(function (rows) {
+      if (rows) return rows;
+      return MG.adminList(table, "id.asc").then(function (r2) { return r2 || []; });
+    }).catch(function () { return []; });
+  }
+  function csvDL(name, head, rows) {
+    var s = [head].concat(rows).map(function (r) {
+      return r.map(function (c) { return '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"'; }).join(",");
+    }).join("\r\n");
+    var blob = new Blob(["﻿" + s], { type: "text/csv;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+  }
+
+  var KIND = { five_dim: "五维评估", gate: "适配自评", farmer_check: "农户自查" };
+  var HEAD = {
+    id: "编号", site: "站点", village: "村庄", contact: "联系人", phone: "电话", households: "户数",
+    needs: "需求", created_at: "时间", form_no: "表格编号", title: "标题", email: "邮箱",
+    display_name: "显示名", role: "角色", kind: "类型", verdict: "结论", user_id: "用户 ID",
+    no: "编号", name: "名称", level: "级别", org: "发布机关", year: "年份", date: "日期",
+    summary: "摘要", url: "链接", type: "类型", dept: "主管部门", subsidy: "补贴",
+    deadline: "截止时间", conditions: "申报条件", materials: "材料清单", basis: "政策依据", roles: "适用主体"
+  };
+  function head(k) { return HEAD[k] || k; }
+
+  /* ================= 权限守卫 ================= */
+  function deny(title, desc, showLink) {
+    $("guardLoading").style.display = "none";
+    $("guardDenied").style.display = "block";
+    $("denyTitle").textContent = title;
+    $("denyDesc").textContent = desc;
+    $("guardDenied").querySelector("a").style.display = showLink ? "inline-block" : "none";
+  }
+  function guard() {
+    if (!MG.auth.session()) { deny("请先登录", "管理台仅对已登录的项目管理员开放，请先登录或注册。", true); return; }
+    MG.auth.isAdmin().then(function (ok) {
+      if (!ok) { deny("无管理台权限", "当前账号为普通用户，无管理台权限。如需管理员身份，请联系项目组开通。", false); return; }
+      $("guardLoading").style.display = "none";
+      $("adminApp").style.display = "block";
+      loadStats();
+      loadBookings();
+    }).catch(function () {
+      deny("权限校验失败", "网络异常或权限服务暂不可用，请稍后刷新重试。", true);
+    });
+  }
+
+  /* ================= 统计条 ================= */
+  function loadStats() {
+    listTable("bookings", "created_at.desc").then(function (r) { $("stBookings").textContent = r.length; });
+    listTable("eval_submissions", "created_at.desc").then(function (r) { $("stEvals").textContent = r.length; });
+    listTable("form_records", "created_at.desc").then(function (r) { $("stForms").textContent = r.length; });
+    listTable("profiles", "created_at.desc").then(function (r) { $("stUsers").textContent = r.length; });
+  }
+
+  /* ================= 主选项卡 ================= */
+  var loaded = {};
+  document.querySelectorAll("#mainTabs button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#mainTabs button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      var t = b.getAttribute("data-tab");
+      document.querySelectorAll(".panel").forEach(function (p) { p.classList.toggle("on", p.id === "p-" + t); });
+      if (!loaded[t]) {
+        loaded[t] = true;
+        if (t === "bookings") loadBookings();
+        else if (t === "evals") loadEvals();
+        else if (t === "forms") loadForms();
+        else if (t === "lib") loadLib(curLib);
+        else if (t === "users") loadUsers();
+        else if (t === "apps") loadApps();
+      }
+    });
+  });
+
+  /* ================= 预约登记 ================= */
+  var bkRows = [], bkSite = "";
+  function loadBookings() {
+    $("bkWrap").innerHTML = '<div class="empty">读取中……</div>';
+    listTable("bookings", "created_at.desc").then(function (rows) {
+      bkRows = rows;
+      var sites = [];
+      rows.forEach(function (r) { if (r.site && sites.indexOf(r.site) < 0) sites.push(r.site); });
+      var chips = ['<button data-site="" class="' + (bkSite ? "" : "on") + '" type="button">全部站点</button>'];
+      sites.forEach(function (s) {
+        chips.push('<button data-site="' + esc(s) + '" class="' + (bkSite === s ? "on" : "") + '" type="button">' + esc(s) + "</button>");
+      });
+      $("siteChips").innerHTML = chips.join("");
+      $("siteChips").querySelectorAll("button").forEach(function (c) {
+        c.addEventListener("click", function () { bkSite = c.getAttribute("data-site"); renderBookings(); markChips(); });
+      });
+      renderBookings();
+    });
+  }
+  function markChips() {
+    $("siteChips").querySelectorAll("button").forEach(function (c) {
+      c.classList.toggle("on", c.getAttribute("data-site") === bkSite);
+    });
+  }
+  function bkFiltered() {
+    return bkSite ? bkRows.filter(function (r) { return r.site === bkSite; }) : bkRows;
+  }
+  function renderBookings() {
+    var rows = bkFiltered();
+    if (!rows.length) { $("bkWrap").innerHTML = '<div class="empty">暂无预约登记记录。</div>'; return; }
+    var html = '<table class="adm"><tr><th>编号</th><th>站点</th><th>村庄</th><th>联系人</th><th>电话</th><th>户数</th><th>需求</th><th>时间</th><th>操作</th></tr>';
+    rows.forEach(function (r) {
+      html += "<tr><td>" + esc(r.id) + "</td><td>" + clip(r.site) + "</td><td>" + clip(r.village) + "</td><td>" + clip(r.contact) +
+        "</td><td>" + clip(r.phone) + "</td><td>" + esc(r.households == null ? "—" : r.households) + "</td><td>" + clip(r.needs) +
+        "</td><td>" + esc(fmtTime(r.created_at)) + '</td><td><button class="btn btn-red mini-btn" data-del="' + esc(r.id) + '" type="button">删除</button></td></tr>';
+    });
+    $("bkWrap").innerHTML = html + "</table>";
+    $("bkWrap").querySelectorAll("[data-del]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-del");
+        if (!confirm("确定删除预约记录 #" + id + " 吗？删除后不可恢复。")) return;
+        MG.adminWrite("bookings", "DELETE", "?id=eq." + id).then(function () {
+          toast("预约记录已删除。", true);
+          loadBookings(); loadStats();
+        }).catch(function (e) { toast("删除失败：" + (e && e.message ? e.message : "网络异常"), false); });
+      });
+    });
+  }
+  $("btnCsv").addEventListener("click", function () {
+    var rows = bkFiltered();
+    if (!rows.length) { toast("当前没有可导出的记录。", false); return; }
+    csvDL("预约登记_" + (bkSite || "全部") + ".csv",
+      ["编号", "站点", "村庄", "联系人", "电话", "户数", "需求", "时间"],
+      rows.map(function (r) { return [r.id, r.site, r.village, r.contact, r.phone, r.households, r.needs, fmtTime(r.created_at)]; }));
+    toast("已导出 " + rows.length + " 条记录。", true);
+  });
+
+  /* ================= 村庄评估 ================= */
+  function kvRender(obj) {
+    if (!obj || typeof obj !== "object") return '<div class="kv">—</div>';
+    var keys = Object.keys(obj);
+    if (!keys.length) return '<div class="kv">—</div>';
+    return keys.map(function (k) {
+      var v = obj[k];
+      if (v && typeof v === "object") v = Object.keys(v).map(function (k2) { return k2 + "：" + cellText(v[k2]); }).join("；");
+      return '<div class="kv"><b>' + esc(head(k)) + "</b>" + esc(cellText(v)) + "</div>";
+    }).join("");
+  }
+  function loadEvals() {
+    $("evWrap").innerHTML = '<div class="empty">读取中……</div>';
+    listTable("eval_submissions", "created_at.desc").then(function (rows) {
+      if (!rows.length) { $("evWrap").innerHTML = '<div class="empty">暂无评估提交记录。</div>'; return; }
+      var html = '<table class="adm"><tr><th>编号</th><th>类型</th><th>村庄</th><th>联系方式</th><th>结论</th><th>时间</th></tr>';
+      rows.forEach(function (r, i) {
+        html += '<tr class="clickable" data-ix="' + i + '"><td>' + esc(r.id) + "</td><td>" + esc(KIND[r.kind] || r.kind || "—") +
+          "</td><td>" + clip(r.village) + "</td><td>" + clip(r.contact) + "</td><td>" + clip(r.verdict) + "</td><td>" + esc(fmtTime(r.created_at)) + "</td></tr>" +
+          '<tr class="detail-row" data-dt="' + i + '" style="display:none"><td colspan="6">' +
+          '<div class="detail-h">输入参数</div><div class="detail-kv">' + kvRender(r.inputs) + "</div>" +
+          '<div class="detail-h">评分结果</div><div class="detail-kv">' + kvRender(r.scores) + "</div>" +
+          "</td></tr>";
+      });
+      $("evWrap").innerHTML = html + "</table>";
+      $("evWrap").querySelectorAll("tr.clickable").forEach(function (tr) {
+        tr.addEventListener("click", function () {
+          var d = $("evWrap").querySelector('tr[data-dt="' + tr.getAttribute("data-ix") + '"]');
+          if (d) d.style.display = d.style.display === "none" ? "" : "none";
+        });
+      });
+    });
+  }
+
+  /* ================= 表格存档 ================= */
+  function loadForms() {
+    $("fmWrap").innerHTML = '<div class="empty">读取中……</div>';
+    Promise.all([listTable("form_records", "created_at.desc"), listTable("profiles", "created_at.desc")]).then(function (rs) {
+      var rows = rs[0], profiles = rs[1];
+      var emailOf = {};
+      profiles.forEach(function (p) { emailOf[p.id] = p.email; });
+      if (!rows.length) { $("fmWrap").innerHTML = '<div class="empty">暂无表格存档。</div>'; return; }
+      var html = '<table class="adm"><tr><th>编号</th><th>用户邮箱</th><th>站点</th><th>表格编号</th><th>标题</th><th>时间</th><th>操作</th></tr>';
+      rows.forEach(function (r) {
+        html += "<tr><td>" + esc(r.id) + "</td><td>" + clip(emailOf[r.user_id] || r.user_id) + "</td><td>" + clip(r.site) +
+          "</td><td>" + clip(r.form_no) + "</td><td>" + clip(r.title) + "</td><td>" + esc(fmtTime(r.created_at)) +
+          '</td><td><button class="btn btn-red mini-btn" data-del="' + esc(r.id) + '" type="button">删除</button></td></tr>';
+      });
+      $("fmWrap").innerHTML = html + "</table>";
+      $("fmWrap").querySelectorAll("[data-del]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var id = b.getAttribute("data-del");
+          if (!confirm("确定删除存档 #" + id + " 吗？删除后不可恢复。")) return;
+          MG.adminWrite("form_records", "DELETE", "?id=eq." + id).then(function () {
+            toast("存档已删除。", true);
+            loadForms(); loadStats();
+          }).catch(function (e) { toast("删除失败：" + (e && e.message ? e.message : "网络异常"), false); });
+        });
+      });
+    });
+  }
+
+  /* ================= 政策与项目库维护 ================= */
+  var LIB = {
+    gf_policies: { label: "共富路政策库", order: "id.asc", dft: ["title", "level", "org", "year", "date", "summary", "url"] },
+    gf_projects: { label: "共富路项目库", order: "no.asc", dft: ["no", "name", "level", "type", "dept", "subsidy", "deadline", "conditions", "materials", "basis", "roles"] },
+    ws_policies: { label: "工作站政策库", order: "id.asc", dft: ["title", "level", "org", "year", "date", "summary", "url"] },
+    ws_projects: { label: "工作站项目库", order: "no.asc", dft: ["no", "name", "level", "type", "dept", "subsidy", "deadline", "conditions", "materials", "basis", "roles"] }
+  };
+  var curLib = "gf_policies", libRows = [], libFields = [];
+  document.querySelectorAll("#libTabs button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#libTabs button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      curLib = b.getAttribute("data-lib");
+      loadLib(curLib);
+    });
+  });
+  function fieldsOf(rows, dft) {
+    if (rows.length) {
+      var keys = Object.keys(rows[0]);
+      rows.slice(1, 20).forEach(function (r) {
+        Object.keys(r).forEach(function (k) { if (keys.indexOf(k) < 0) keys.push(k); });
+      });
+      return keys;
+    }
+    return ["id"].concat(dft);
+  }
+  function loadLib(table) {
+    $("libWrap").innerHTML = '<div class="empty">读取中……</div>';
+    listTable(table, LIB[table].order).then(function (rows) {
+      libRows = rows;
+      libFields = fieldsOf(rows, LIB[table].dft);
+      renderLib();
+    });
+  }
+  function renderLib() {
+    if (!libRows.length) {
+      $("libWrap").innerHTML = '<div class="empty">「' + esc(LIB[curLib].label) + "」暂无数据，可点击「新增记录」录入第一条。</div>";
+      return;
+    }
+    var showCols = libFields.filter(function (f) { return f !== "data"; }).slice(0, 6);
+    var html = '<table class="adm"><tr>' + showCols.map(function (f) { return "<th>" + esc(head(f)) + "</th>"; }).join("") + "<th>操作</th></tr>";
+    libRows.forEach(function (r, i) {
+      html += "<tr>" + showCols.map(function (f) { return "<td>" + (f === "id" ? esc(r[f]) : clip(r[f])) + "</td>"; }).join("") +
+        '<td><button class="btn btn-line mini-btn" data-edit="' + i + '" type="button">编辑</button>' +
+        '<button class="btn btn-red mini-btn" data-del="' + esc(r.id) + '" type="button">删除</button></td></tr>';
+    });
+    $("libWrap").innerHTML = html + "</table>";
+    $("libWrap").querySelectorAll("[data-edit]").forEach(function (b) {
+      b.addEventListener("click", function () { openModal(libRows[+b.getAttribute("data-edit")]); });
+    });
+    $("libWrap").querySelectorAll("[data-del]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-del");
+        if (!confirm("确定删除「" + LIB[curLib].label + "」记录 #" + id + " 吗？删除后不可恢复。")) return;
+        MG.adminWrite(curLib, "DELETE", "?id=eq." + id).then(function () {
+          toast("记录已删除。", true);
+          loadLib(curLib);
+        }).catch(function (e) { toast("删除失败：" + (e && e.message ? e.message : "网络异常"), false); });
+      });
+    });
+  }
+
+  /* ---------- 动态表单模态框 ---------- */
+  var mdlRow = null; /* null = 新增 */
+  function openModal(row) {
+    mdlRow = row || null;
+    $("mdlTitle").textContent = (row ? "编辑记录 · " : "新增记录 · ") + LIB[curLib].label;
+    var fields = row ? fieldsOf([row], LIB[curLib].dft) : libFields;
+    $("mdlFields").innerHTML = fields.map(function (f) {
+      var ro = (f === "id" || f === "created_at");
+      var v = row ? row[f] : "";
+      if (v && typeof v === "object") {
+        return '<div class="f"><label>' + esc(head(f)) + "（" + esc(f) + " · JSON）" + (ro ? " · 只读" : "") + '</label>' +
+          '<textarea data-f="' + esc(f) + '" data-type="json"' + (ro ? " readonly" : "") + ">" + esc(JSON.stringify(v, null, 2)) + "</textarea></div>";
+      }
+      return '<div class="f"><label>' + esc(head(f)) + "（" + esc(f) + (ro ? " · 只读" : "") + "）" + "</label>" +
+        '<input type="text" data-f="' + esc(f) + '" data-type="' + (typeof v === "number" ? "number" : "text") + '" value="' + esc(v == null ? "" : v) + '"' + (ro ? " readonly" : "") + "></div>";
+    }).join("");
+    $("mdlMask").classList.add("on");
+  }
+  function closeModal() { $("mdlMask").classList.remove("on"); mdlRow = null; }
+  $("mdlCancel").addEventListener("click", closeModal);
+  $("mdlMask").addEventListener("click", function (e) { if (e.target === $("mdlMask")) closeModal(); });
+  $("btnNew").addEventListener("click", function () { openModal(null); });
+
+  $("mdlSave").addEventListener("click", function () {
+    var body = {}, bad = null;
+    $("mdlFields").querySelectorAll("[data-f]").forEach(function (el) {
+      var f = el.getAttribute("data-f");
+      if (f === "id" || f === "created_at") return;
+      var v = el.value.trim();
+      var t = el.getAttribute("data-type");
+      if (t === "json") {
+        if (!v) { body[f] = null; return; }
+        try { body[f] = JSON.parse(v); } catch (e) { bad = "字段「" + f + "」的 JSON 格式有误，请检查。"; }
+      } else if (t === "number") {
+        body[f] = v === "" ? null : Number(v);
+        if (v !== "" && isNaN(body[f])) bad = "字段「" + f + "」应为数字。";
+      } else {
+        body[f] = v === "" ? null : v;
+      }
+    });
+    if (bad) { toast(bad, false); return; }
+    var btn = $("mdlSave"); btn.disabled = true; btn.textContent = "保存中……";
+    var p = mdlRow && mdlRow.id != null
+      ? MG.adminWrite(curLib, "PATCH", "?id=eq." + mdlRow.id, body)
+      : MG.adminWrite(curLib, "POST", "", body);
+    p.then(function () {
+      toast(mdlRow ? "记录已更新。" : "记录已新增。", true);
+      closeModal();
+      loadLib(curLib);
+    }).catch(function (e) {
+      toast("保存失败：" + (e && e.message ? e.message : "网络异常"), false);
+    }).then(function () { btn.disabled = false; btn.textContent = "保存"; });
+  });
+
+  /* ================= 用户列表 ================= */
+  function loadUsers() {
+    $("usWrap").innerHTML = '<div class="empty">读取中……</div>';
+    listTable("profiles", "created_at.desc").then(function (rows) {
+      if (!rows.length) { $("usWrap").innerHTML = '<div class="empty">暂无注册用户。</div>'; return; }
+      var html = '<table class="adm"><tr><th>邮箱</th><th>显示名</th><th>角色</th><th>注册时间</th></tr>';
+      rows.forEach(function (r) {
+        var adm = r.role === "admin";
+        html += "<tr><td>" + clip(r.email) + "</td><td>" + clip(r.display_name) +
+          '</td><td><span class="badge ' + (adm ? "badge-admin" : "badge-user") + '">' + (adm ? "项目管理员" : "普通用户") + "</span></td>" +
+          "<td>" + esc(fmtTime(r.created_at)) + "</td></tr>";
+      });
+      $("usWrap").innerHTML = html + "</table>";
+    });
+  }
+
+  /* ================= 管理员审批 ================= */
+  function loadApps() {
+    $("appsPending").innerHTML = '<div class="empty">读取中……</div>';
+    $("appsHistory").innerHTML = '<div class="empty">读取中……</div>';
+    MG.auth.adminApplications().then(function (rows) {
+      rows = rows || [];
+      renderAppsPending(rows.filter(function (r) { return r.status === "pending"; }));
+      renderAppsHistory(rows.filter(function (r) { return r.status === "approved" || r.status === "rejected"; }));
+    });
+  }
+  function renderAppsPending(rows) {
+    if (!rows.length) { $("appsPending").innerHTML = '<div class="empty">暂无待审核申请。</div>'; return; }
+    var html = '<table class="adm"><tr><th>显示名</th><th>邮箱</th><th>申请理由</th><th>申请时间</th><th>操作</th></tr>';
+    rows.forEach(function (r) {
+      var nm = r.display_name || (r.email ? r.email.split("@")[0] : "—");
+      html += "<tr><td>" + clip(nm) + "</td><td>" + clip(r.email) + "</td><td>" + clip(r.reason) + "</td><td>" + esc(fmtTime(r.created_at)) +
+        '</td><td style="white-space:nowrap"><button class="btn btn-gold mini-btn" data-ok="' + esc(r.id) + '" type="button">同意</button>' +
+        '<button class="btn btn-red mini-btn" data-no="' + esc(r.id) + '" type="button">拒绝</button></td></tr>';
+    });
+    $("appsPending").innerHTML = html + "</table>";
+    $("appsPending").querySelectorAll("[data-ok]").forEach(function (b) {
+      b.addEventListener("click", function () { reviewApp(b.getAttribute("data-ok"), true); });
+    });
+    $("appsPending").querySelectorAll("[data-no]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (!confirm("确定拒绝该申请吗？")) return;
+        reviewApp(b.getAttribute("data-no"), false);
+      });
+    });
+  }
+  function renderAppsHistory(rows) {
+    if (!rows.length) { $("appsHistory").innerHTML = '<div class="empty">暂无历史记录。</div>'; return; }
+    var html = '<table class="adm"><tr><th>邮箱</th><th>结果</th><th>审核时间</th></tr>';
+    rows.forEach(function (r) {
+      html += "<tr><td>" + clip(r.email) + "</td><td>" + (r.status === "approved" ? "已通过" : "已拒绝") +
+        "</td><td>" + esc(fmtTime(r.reviewed_at)) + "</td></tr>";
+    });
+    $("appsHistory").innerHTML = html + "</table>";
+  }
+  function reviewApp(id, approve) {
+    MG.auth.reviewAdminApplication(id, approve).then(function () {
+      toast(approve ? "已同意该申请，对方已开通管理员权限。" : "已拒绝该申请。", true);
+      loadApps();
+      loadStats();
+    }).catch(function (e) {
+      toast("操作失败：" + (e && e.message ? e.message : "网络异常"), false);
+    });
+  }
+
+  /* ================= 入口 ================= */
+  guard();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我的账号 —— 屋顶上的共富路</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+.ac-head{text-align:center; padding:150px 0 56px}
+.ac-box{max-width:920px; margin:0 auto}
+.ac-tabs{display:flex; gap:10px; margin-bottom:26px}
+.ac-tabs button{flex:1; padding:13px 10px; border-radius:var(--r-tag); border:1px solid rgba(212,168,75,.4); background:transparent; color:var(--paper); font-size:16px; letter-spacing:.08em; transition:all .25s}
+.ac-tabs button.on{background:linear-gradient(135deg,#8a6a2a,var(--gold) 45%,var(--gold2)); color:var(--ink); font-weight:700; border-color:transparent}
+.ac-panel{padding:36px 34px}
+.ac-panel label{display:block; margin-top:16px; font-size:14px; color:#b8c4d0}
+.ac-panel input[type=text],.ac-panel input[type=email],.ac-panel input[type=password]{width:100%; margin-top:6px; background:rgba(18,35,58,.6); border:1px solid var(--mist); border-radius:var(--r-input); color:var(--paper); padding:12px 16px; font-size:16px; font-family:inherit; outline:none}
+.ac-panel input:focus{border-color:var(--gold)}
+.ac-panel textarea{width:100%; margin-top:6px; background:rgba(18,35,58,.6); border:1px solid var(--mist); border-radius:var(--r-input); color:var(--paper); padding:12px 16px; font-size:16px; font-family:inherit; outline:none; resize:vertical}
+.ac-panel textarea:focus{border-color:var(--gold)}
+.ac-err{display:none; margin-top:14px; padding:11px 16px; border-radius:10px; background:rgba(200,75,63,.14); border:1px solid rgba(200,75,63,.5); color:#e8a49c; font-size:14.5px}
+.role-opts{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px}
+@media(max-width:680px){.role-opts{grid-template-columns:1fr}}
+.role-opt{display:block; cursor:pointer; border:1px solid var(--mist); border-radius:var(--r-card); padding:16px 18px; transition:all .25s}
+.role-opt input{position:absolute; opacity:0; pointer-events:none}
+.role-opt b{display:block; font-size:16px; color:var(--paper)}
+.role-opt span{display:block; font-size:13px; color:#9fb0c0; margin-top:5px; line-height:1.65}
+.role-opt.sel{border-color:var(--gold); background:rgba(212,168,75,.1); box-shadow:0 0 0 1px var(--gold) inset}
+.agree{display:flex; gap:10px; align-items:flex-start; margin-top:18px; font-size:13.5px; color:#9fb0c0}
+.agree input{margin-top:5px; accent-color:var(--gold)}
+.avatar{width:74px; height:74px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:32px; font-weight:900; color:var(--ink); background:linear-gradient(135deg,#8a6a2a,var(--gold) 45%,var(--gold2)); flex:none}
+.badge{display:inline-block; padding:4px 14px; border-radius:var(--r-tag); font-size:13px; letter-spacing:.06em}
+.badge-admin{background:linear-gradient(135deg,#8a6a2a,var(--gold) 45%,var(--gold2)); color:var(--ink); font-weight:700}
+.badge-user{background:rgba(240,242,245,.12); color:#cfd8e0; border:1px solid rgba(240,242,245,.25)}
+.arch-row{display:flex; align-items:center; gap:14px; padding:14px 4px; border-bottom:1px solid rgba(240,242,245,.08); flex-wrap:wrap}
+.arch-row:last-child{border-bottom:none}
+.arch-row .no{font-family:var(--mono); color:var(--gold2); font-size:14px; background:rgba(212,168,75,.12); border:1px solid rgba(212,168,75,.35); border-radius:8px; padding:2px 10px}
+.arch-row .tt{flex:1; min-width:200px; font-size:15.5px}
+.arch-row .tm{font-size:13px; color:#8a95a1}
+.toast{position:fixed; top:86px; left:50%; transform:translateX(-50%); z-index:1000; max-width:min(560px,90vw); padding:12px 24px; border-radius:12px; font-size:15px; display:none; backdrop-filter:blur(8px); box-shadow:0 10px 34px rgba(0,0,0,.4)}
+.toast.ok{display:block; background:rgba(22,101,52,.92); color:#d1fae5; border:1px solid rgba(110,231,183,.5)}
+.toast.err{display:block; background:rgba(90,32,27,.94); color:#f3c2bb; border:1px solid rgba(200,75,63,.6)}
+.ac-note{font-size:13.5px; color:#9fb0c0; line-height:1.8}
+.mini-btn{padding:7px 16px; font-size:13.5px; border-radius:var(--r-tag)}
+</style>
+</head>
+<body>
+
+<section class="ac-head grain">
+  <div class="wrap">
+    <div class="kicker rv">账号中心</div>
+    <h1 class="rv">我的账号</h1>
+    <p class="lead rv" style="margin:14px auto 0">登录后可把测算结果、村庄评估与 23 张工作表存档保存到云端，随时回填续填。</p>
+  </div>
+</section>
+
+<section class="section grain" style="padding-top:26px">
+  <div class="wrap ac-box">
+    <div class="toast" id="toast"></div>
+
+    <!-- 加载态 -->
+    <div id="viewLoading" class="glass ac-panel rv" style="text-align:center; color:#9fb0c0">正在读取登录状态……</div>
+
+    <!-- 未登录视图 -->
+    <div id="viewGuest" style="display:none">
+      <div class="ac-tabs rv">
+        <button id="tabLogin" class="on" type="button">登录</button>
+        <button id="tabReg" type="button">注册</button>
+      </div>
+
+      <div class="glass ac-panel rv" id="panelLogin">
+        <label>邮箱</label><input type="email" id="liEmail" placeholder="you@example.com" autocomplete="email">
+        <label>密码</label><input type="password" id="liPwd" placeholder="请输入密码" autocomplete="current-password">
+        <div class="ac-err" id="liErr"></div>
+        <button class="btn btn-gold" id="btnLogin" style="margin-top:22px; width:100%">登 录</button>
+      </div>
+
+      <div class="glass ac-panel rv" id="panelReg" style="display:none">
+        <label>显示名</label><input type="text" id="rgName" placeholder="如：东高垣村两委 · 王建国">
+        <label>邮箱</label><input type="email" id="rgEmail" placeholder="you@example.com" autocomplete="email">
+        <label>密码（至少 6 位）</label><input type="password" id="rgPwd" placeholder="至少 6 位" autocomplete="new-password">
+        <label>再次输入密码</label><input type="password" id="rgPwd2" placeholder="与上方密码保持一致" autocomplete="new-password">
+        <p class="ac-note" style="margin:16px 0 0">注册即为普通用户，可云端保存测算、评估与表格存档。如需管理员权限，注册登录后可在本页提交申请，由项目组审核开通。</p>
+        <label class="agree"><input type="checkbox" id="rgAgree"><span>我已知晓：注册信息仅用于本项目服务，不会用于其他用途。</span></label>
+        <div class="ac-err" id="rgErr"></div>
+        <button class="btn btn-gold" id="btnReg" style="margin-top:22px; width:100%">注册并登录</button>
+      </div>
+
+      <div class="glass ac-panel rv" style="margin-top:22px">
+        <p class="ac-note" style="margin:0">说明：账号数据保存在云端加密数据库，仅本人（及项目管理员）可见，用于方案测算、村庄评估与表格存档的云端保存与回填。</p>
+      </div>
+    </div>
+
+    <!-- 已登录视图 -->
+    <div id="viewUser" style="display:none">
+      <div class="glass ac-panel rv" style="display:flex; gap:22px; align-items:center; flex-wrap:wrap">
+        <div class="avatar" id="uAvatar">—</div>
+        <div style="flex:1; min-width:220px">
+          <div style="font-size:22px; font-family:var(--serif); font-weight:700" id="uName">—</div>
+          <div style="font-size:14.5px; color:#9fb0c0; margin-top:2px" id="uEmail">—</div>
+          <div style="margin-top:8px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <span class="badge badge-user" id="uRole">普通用户</span>
+            <span style="font-size:13px; color:#8a95a1" id="uSince"></span>
+          </div>
+        </div>
+        <button class="btn btn-line mini-btn" id="btnOut">退出登录</button>
+      </div>
+
+      <div class="glass ac-panel rv" id="adminCard" style="display:none; margin-top:22px; border-color:var(--gold)">
+        <h3 style="color:var(--gold2); margin-bottom:6px">项目管理员</h3>
+        <p class="ac-note" style="margin:0 0 14px">可查看预约登记、村庄评估提交与表格存档，并维护政策库与项目库数据。</p>
+        <a class="btn btn-gold mini-btn" href="admin.html">进入管理台 →</a>
+      </div>
+
+      <div class="glass ac-panel rv" id="applyCard" style="display:none; margin-top:22px">
+        <h3 style="color:var(--gold2); margin-bottom:6px">申请管理员权限</h3>
+        <p class="ac-note" style="margin:0 0 14px">管理员可进入管理台查看预约登记、评估提交与表格存档，并维护政策库与项目库数据。请说明您的身份与申请理由，项目组审核通过后自动开通。</p>
+        <textarea id="apReason" rows="4" placeholder="如：东高垣村两委成员，负责光伏项目台账管理……"></textarea>
+        <div style="margin-top:14px"><button class="btn btn-gold mini-btn" id="btnApply" type="button">提交申请</button></div>
+        <p class="ac-note" id="apStatus" style="margin:12px 0 0"></p>
+      </div>
+
+      <div class="glass ac-panel rv" style="margin-top:22px">
+        <h3 style="color:var(--gold2); margin-bottom:4px">我的存档</h3>
+        <p class="ac-note" style="margin:0 0 8px">您在「23 张工作表」中暂存的全部表格，可随时回填续填或删除。</p>
+        <div id="archList"><p class="ac-note">读取中……</p></div>
+      </div>
+
+      <div class="glass ac-panel rv" style="margin-top:22px">
+        <p class="ac-note" style="margin:0">说明：账号数据保存在云端加密数据库，仅本人（及项目管理员）可见，仅用于项目服务。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(function () {
+  "use strict";
+  function $(id) { return document.getElementById(id); }
+  var esc = window.mgEsc;
+  function fmtTime(iso) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    if (isNaN(d)) return "";
+    function p(n) { return ("0" + n).slice(-2); }
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+  }
+  var toastTimer = null;
+  function toast(msg, ok) {
+    var t = $("toast");
+    t.textContent = msg;
+    t.className = "toast " + (ok ? "ok" : "err");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.className = "toast"; }, 3600);
+  }
+  function showErr(el, msg) { el.textContent = msg; el.style.display = msg ? "block" : "none"; }
+
+  /* ---------- 视图切换 ---------- */
+  function show(id) {
+    ["viewLoading", "viewGuest", "viewUser"].forEach(function (v) { $(v).style.display = v === id ? "block" : "none"; });
+  }
+  function switchTab(login) {
+    $("tabLogin").classList.toggle("on", login);
+    $("tabReg").classList.toggle("on", !login);
+    $("panelLogin").style.display = login ? "block" : "none";
+    $("panelReg").style.display = login ? "none" : "block";
+  }
+  $("tabLogin").addEventListener("click", function () { switchTab(true); });
+  $("tabReg").addEventListener("click", function () { switchTab(false); });
+
+  /* 登录 */
+  $("btnLogin").addEventListener("click", function () {
+    var email = $("liEmail").value.trim(), pwd = $("liPwd").value;
+    showErr($("liErr"), "");
+    if (!email || !pwd) { showErr($("liErr"), "请填写邮箱和密码。"); return; }
+    var btn = $("btnLogin"); btn.disabled = true; btn.textContent = "登录中……";
+    MG.auth.signIn(email, pwd).then(function () {
+      toast("登录成功，欢迎回来。", true);
+      renderUser();
+    }).catch(function (e) {
+      if (e && (e.status === 400 || e.status === 401)) showErr($("liErr"), "邮箱或密码不正确，请检查后重试。");
+      else showErr($("liErr"), "登录失败：" + (e && e.message ? e.message : "网络异常") + "，请稍后重试。");
+    }).then(function () { btn.disabled = false; btn.textContent = "登 录"; });
+  });
+  $("liPwd").addEventListener("keydown", function (e) { if (e.key === "Enter") $("btnLogin").click(); });
+
+  /* ---------- 注册 ---------- */
+  $("btnReg").addEventListener("click", function () {
+    var name = $("rgName").value.trim(), email = $("rgEmail").value.trim();
+    var p1 = $("rgPwd").value, p2 = $("rgPwd2").value;
+    showErr($("rgErr"), "");
+    if (!name) { showErr($("rgErr"), "请填写显示名。"); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr($("rgErr"), "请填写正确的邮箱地址。"); return; }
+    if (p1.length < 6) { showErr($("rgErr"), "密码至少 6 位。"); return; }
+    if (p1 !== p2) { showErr($("rgErr"), "两次输入的密码不一致。"); return; }
+    if (!$("rgAgree").checked) { showErr($("rgErr"), "请勾选「信息仅用于项目服务」后再注册。"); return; }
+    var btn = $("btnReg"); btn.disabled = true; btn.textContent = "注册中……";
+    MG.auth.signUp(email, p1, name).then(function () {
+      if (MG.auth.session()) {
+        toast("注册成功，已自动登录。", true);
+        renderUser();
+      } else {
+        toast("注册成功，请登录。", true);
+        switchTab(true);
+      }
+    }).catch(function (e) {
+      var m = e && e.message ? e.message : "网络异常";
+      if (/already|registered|exists/i.test(m)) m = "该邮箱已注册，请直接登录。";
+      showErr($("rgErr"), "注册失败：" + m);
+    }).then(function () { btn.disabled = false; btn.textContent = "注册并登录"; });
+  });
+
+  /* ---------- 已登录视图 ---------- */
+  function renderUser() {
+    var s = MG.auth.session();
+    if (!s || !s.user) { show("viewGuest"); return; }
+    var u = s.user;
+    var meta = u.user_metadata || {};
+    var name = meta.display_name || (u.email ? u.email.split("@")[0] : "用户");
+    $("uAvatar").textContent = (name[0] || "用").toUpperCase();
+    $("uName").textContent = name;
+    $("uEmail").textContent = u.email || "";
+    $("uSince").textContent = u.created_at ? "注册时间：" + fmtTime(u.created_at) : "";
+    show("viewUser");
+    MG.auth.profile().then(function (p) {
+      if (p && p.display_name) { $("uName").textContent = p.display_name; $("uAvatar").textContent = p.display_name[0].toUpperCase(); }
+      var isAdm = p && p.role === "admin";
+      var badge = $("uRole");
+      badge.textContent = isAdm ? "项目管理员" : "普通用户";
+      badge.className = "badge " + (isAdm ? "badge-admin" : "badge-user");
+      $("adminCard").style.display = isAdm ? "block" : "none";
+      $("applyCard").style.display = isAdm ? "none" : "block";
+      if (!isAdm) renderApplyStatus();
+    }).catch(function () { });
+    loadArchives();
+  }
+
+  function loadArchives() {
+    var box = $("archList");
+    box.innerHTML = '<p class="ac-note">读取中……</p>';
+    MG.formList().then(function (rows) {
+      rows = rows || [];
+      if (!rows.length) { box.innerHTML = '<p class="ac-note">暂无存档。去「数智工具箱 → 23 张工作表」填写并暂存后，会显示在这里。</p>'; return; }
+      box.innerHTML = rows.map(function (r) {
+        return '<div class="arch-row">' +
+          '<span class="no">' + esc(r.form_no || "—") + "</span>" +
+          '<span class="tt">' + esc(r.title || "（未命名）") + "</span>" +
+          '<span class="tm">' + esc(fmtTime(r.created_at)) + "</span>" +
+          '<a class="btn btn-line mini-btn" href="forms.html">去 forms.html 继续编辑</a>' +
+          '<button class="btn btn-red mini-btn" data-del="' + esc(r.id) + '" type="button">删除</button>' +
+          "</div>";
+      }).join("");
+      box.querySelectorAll("[data-del]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          if (!confirm("确定删除这条存档吗？删除后不可恢复。")) return;
+          MG.formDelete(b.getAttribute("data-del")).then(function () {
+            toast("存档已删除。", true);
+            loadArchives();
+          }).catch(function (e) {
+            toast("删除失败：" + (e && e.message ? e.message : "网络异常"), false);
+          });
+        });
+      });
+    }).catch(function () {
+      box.innerHTML = '<p class="ac-note">存档读取失败，请稍后刷新重试。</p>';
+    });
+  }
+
+  /* ---------- 管理员申请 ---------- */
+  function renderApplyStatus() {
+    var st = $("apStatus"), btn = $("btnApply");
+    st.textContent = "正在查询申请状态……";
+    btn.disabled = true;
+    MG.auth.myAdminApplication().then(function (a) {
+      if (!a) {
+        st.textContent = "尚未提交申请。";
+        btn.disabled = false;
+        btn.textContent = "提交申请";
+      } else if (a.status === "pending") {
+        st.textContent = "已于 " + fmtTime(a.created_at) + " 提交申请，项目组审核中，请耐心等待。";
+        btn.disabled = true;
+      } else if (a.status === "approved") {
+        st.textContent = "申请已通过，重新登录后生效。";
+        btn.disabled = true;
+      } else {
+        st.textContent = "最近一次申请未通过（" + fmtTime(a.reviewed_at) + "）。可修改理由后重新提交。";
+        btn.disabled = false;
+        btn.textContent = "重新提交申请";
+      }
+    });
+  }
+  $("btnApply").addEventListener("click", function () {
+    var reason = $("apReason").value.trim();
+    if (!reason) { toast("请填写申请理由。", false); return; }
+    var btn = $("btnApply"), prev = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "提交中……";
+    MG.auth.applyAdmin(reason).then(function () {
+      toast("申请已提交，项目组审核通过后将为您开通管理员权限。", true);
+      $("apStatus").textContent = "已于 " + fmtTime(new Date().toISOString()) + " 提交申请，项目组审核中，请耐心等待。";
+      btn.textContent = "提交申请";
+    }).catch(function (e) {
+      toast("提交失败：" + (e && e.message ? e.message : "网络异常"), false);
+      btn.disabled = false;
+      btn.textContent = prev;
+    });
+  });
+
+  $("btnOut").addEventListener("click", function () {
+    MG.auth.signOut().then(function () {
+      toast("已退出登录。", true);
+      show("viewGuest");
+      switchTab(true);
+    }).catch(function () { show("viewGuest"); });
+  });
+
+  // == 入口
+  if (MG.auth.session()) renderUser(); else show("viewGuest");
+})();
+</script>
+</body>
+</html>
