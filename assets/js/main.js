@@ -439,11 +439,11 @@
   function mgBootAddons() {
     var base = "assets/js/", chain = [];
     if (!(window.MG && MG.auth)) {
-      if (!window.MG_CONFIG) chain.push(base + "config.js" + "?v=20260910");
-      if (!(window.MG && MG.book)) chain.push(base + "api.js" + "?v=20260910");
-      chain.push(base + "auth.js" + "?v=20260910");
+      if (!window.MG_CONFIG) chain.push(base + "config.js" + "?v=20260910b");
+      if (!(window.MG && MG.book)) chain.push(base + "api.js" + "?v=20260910b");
+      chain.push(base + "auth.js" + "?v=20260910b");
     }
-    chain.push(base + "chat.js" + "?v=20260910", base + "tour.js" + "?v=20260910");
+    chain.push(base + "chat.js" + "?v=20260910b", base + "tour.js" + "?v=20260910b");
     mgLoadChain(chain, mgRenderAccount);
     document.addEventListener("mg-auth-change", mgRenderAccount);
   }

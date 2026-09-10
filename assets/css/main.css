@@ -87,8 +87,8 @@ h3{font-size:22px; font-weight:600; line-height:1.4}
 #nav .bar{max-width:1400px; margin:0 auto; padding:0 28px; height:64px; display:flex; align-items:center; gap:24px}
 #nav .brand{display:flex; align-items:center; gap:10px; color:var(--paper); font-weight:700; font-size:17px; white-space:nowrap}
 #nav .brand img{width:30px; height:30px; border-radius:6px}
-#nav .links{display:flex; gap:2px; flex:1; justify-content:center; overflow-x:auto; scrollbar-width:none}
-#nav .links::-webkit-scrollbar{display:none}
+/* 不能再加 overflow-x:auto——溢出裁剪会把绝对定位的下拉菜单整个切掉（2026-09-10 踩过） */
+#nav .links{display:flex; gap:2px; flex:1; justify-content:center}
 #nav .links a{
   color:#b8c4d0; font-size:13.5px; padding:6px 10px; white-space:nowrap; position:relative; transition:color .25s;
 }
