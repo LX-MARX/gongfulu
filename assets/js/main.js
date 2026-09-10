@@ -443,7 +443,7 @@
       if (!(window.MG && MG.book)) chain.push(base + "api.js");
       chain.push(base + "auth.js");
     }
-    chain.push(base + "chat.js", base + "tour.js");
+    chain.push(base + "chat.js" + "?v=20260910", base + "tour.js" + "?v=20260910");
     mgLoadChain(chain, mgRenderAccount);
     document.addEventListener("mg-auth-change", mgRenderAccount);
   }
