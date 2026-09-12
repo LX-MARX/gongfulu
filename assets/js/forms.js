@@ -286,15 +286,71 @@
     if (Array.isArray(v)) return "——";
     return v ? esc(v) : "——";
   }
+  /* 红描边定位未填的必填控件；用户一动手补填就当场撤掉，不用等下次点生成 */
+  function markEl(el) {
+    if (!el) return;
+    el.setAttribute("data-miss", "1");
+    el.style.boxShadow = "0 0 0 2px #C0392B";
+    el.style.borderColor = "#C0392B";
+    el.addEventListener("input", function h() {
+      el.style.boxShadow = "";
+      el.style.borderColor = "";
+      el.removeAttribute("data-miss");
+      el.removeEventListener("input", h);
+    });
+  }
+  function clearMarks() {
+    document.querySelectorAll("#viewFill [data-miss]").forEach(function (el) {
+      el.style.boxShadow = "";
+      el.style.borderColor = "";
+      el.removeAttribute("data-miss");
+    });
+  }
+  function markMissing(data) {
+    if (cur.kind === "single") {
+      cur.fields.forEach(function (fd) {
+        if (!fd.star) return;
+        var v = data.values[fd.key];
+        var empty = fd.type === "checkboxes" ? !(Array.isArray(v) && v.length) : !v;
+        if (!empty) return;
+        if (fd.type === "checkboxes") {
+          /* 复选组没有单一输入框，描边框住整个选项容器 */
+          var any = document.querySelector('input[name="f_' + fd.key + '"]');
+          if (any) markEl(any.parentElement.parentElement);
+        } else {
+          markEl($("f_" + fd.key));
+        }
+      });
+      return;
+    }
+    /* 台账表：逐行找出空着的必填格描边 */
+    $("mtbl").querySelectorAll("tbody tr").forEach(function (tr) {
+      cur.columns.forEach(function (cd) {
+        if (!cd.star) return;
+        var el = tr.querySelector("[data-k='" + cd.key + "']");
+        if (el && !el.value.trim()) markEl(el);
+      });
+    });
+  }
   function genPrint() {
     var msg = $("fillMsg");
     var data = collect();
+    clearMarks();
     var miss = missingStar(data);
     if (miss.length) {
-      toast(msg, "<b>必填栏目（★）尚未填齐，请先补填：</b>" + miss.map(esc).join("；") + "。确无内容的栏目请按手册要求填「无」。", true);
-      msg.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      /* 拦截逻辑不变（必填未齐不能出打印版），但提示要醒目到没法忽略：
+         加大字号、加粗红框、脉冲光圈，并把缺失的必填框逐个描红定位 */
+      markMissing(data);
+      toast(msg, '<b style="font-size:19px">⚠ 必填栏目（★）尚未填齐，无法生成打印版。</b><br>' +
+        '<span style="font-size:15.5px">请先补填：' + miss.map(esc).join("；") +
+        "。确无内容的栏目请按手册要求填「无」。缺失栏目已用红框标出。</span>", true);
+      msg.classList.remove("miss-pulse");
+      void msg.offsetWidth; /* 重新触发动画，连续点生成也会再次脉冲 */
+      msg.classList.add("miss-pulse");
+      msg.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
+    msg.classList.remove("miss-pulse");
     var f = cur, date = todayCN();
     var html = '<div class="gov-doc">' +
       '<h1 class="gov-title">表 ' + esc(f.no) + "　" + esc(f.name) + "</h1>" +

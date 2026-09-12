@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>企业工作台 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260910b">
+<link rel="stylesheet" href="assets/css/main.css?v=20260912">
+<link rel="stylesheet" href="assets/css/gov-print.css?v=20260912">
 <style>
 .calc-grid{display:grid; grid-template-columns:2fr 3fr; gap:30px; margin-top:34px}
 @media(max-width:960px){.calc-grid{grid-template-columns:1fr}}
@@ -47,7 +48,7 @@
 </section>
 
 <!-- 收益测算引擎 -->
-<section class="section light">
+<section class="section light" id="calc" data-nav="收益测算">
   <div class="wrap">
     <div class="kicker rv">投资决策 · 工具</div>
     <h2 class="rv">收益测算引擎</h2>
@@ -111,14 +112,16 @@
           <svg id="cmpSvg" viewBox="0 0 560 150" style="width:100%; margin-top:10px"></svg>
           <p class="caption">基础养老金取全国农村居民基础养老金常见量级示意（约 200 元/月），仅作对比参照；农户租金按上方参数测算。</p>
         </div>
-        <div style="margin-top:20px"><button class="btn btn-gold" onclick="PV.print()">生成《投资可行性测算报告》PDF（打印）</button></div>
+        <div style="margin-top:20px"><button class="btn btn-gold" id="invPrint">生成《投资可行性测算报告》PDF（打印）</button></div>
+        <!-- 公文打印版容器：只承载测算报告，打印时经 PV.printZone 隔离输出 -->
+        <div id="invDoc" style="display:none"></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- 3D 回收期环 -->
-<section class="section grain">
+<section class="section grain" id="ring" data-nav="回收期样本">
   <div class="wrap ring-wrap">
     <div>
       <div class="kicker rv">东高垣样本 · 静态面板</div>
@@ -131,7 +134,7 @@
 </section>
 
 <!-- 尽调 10 项 -->
-<section class="section grain" style="padding-top:40px">
+<section class="section grain" style="padding-top:40px" id="dd" data-nav="投前尽调">
   <div class="wrap">
     <div class="kicker rv">投前必查</div>
     <h2 class="rv">投前尽调 10 项清单</h2>
@@ -139,14 +142,16 @@
     <div class="card rv" style="margin-top:28px" id="ddList"></div>
     <div style="margin-top:20px; display:flex; gap:16px; flex-wrap:wrap">
       <button class="btn btn-gold" id="ddBtn">生成《投前尽调报告》</button>
-      <button class="btn btn-line" id="ddPrint" style="display:none" onclick="PV.print()">导出 PDF（打印）</button>
+      <button class="btn btn-line" id="ddPrint" style="display:none">导出 PDF（打印）</button>
     </div>
     <div id="ddResult" class="note-box" style="margin-top:16px; display:none"></div>
+    <!-- 公文打印版容器：只承载尽调报告，打印时经 PV.printZone 隔离输出 -->
+    <div id="ddDoc" style="display:none"></div>
   </div>
 </section>
 
 <!-- 8 步建设向导 -->
-<section class="section light">
+<section class="section light" id="flow" data-nav="建设流程">
   <div class="wrap">
     <div class="kicker rv">建设实施</div>
     <h2 class="rv">8 步建设流程向导</h2>
@@ -155,7 +160,7 @@
 </section>
 
 <!-- 运维工单模拟器 -->
-<section class="section grain">
+<section class="section grain" id="sim" data-nav="运维工单">
   <div class="wrap">
     <div class="kicker rv">培训工具</div>
     <h2 class="rv">运维工单模拟器</h2>
@@ -183,14 +188,16 @@
           <button class="sim-opt" data-i="3">电网限发（台区超压降载）</button>
         </div>
         <div id="simResult" class="note-box" style="display:none; margin-top:6px"></div>
-        <button class="btn btn-line" id="simPdf" style="display:none; margin-top:14px" onclick="PV.print()">生成工单记录（打印 PDF）</button>
+        <button class="btn btn-line" id="simPdf" style="display:none; margin-top:14px">生成工单记录（打印 PDF）</button>
+        <!-- 公文打印版容器：只承载工单记录，打印时经 PV.printZone 隔离输出 -->
+        <div id="simDoc" style="display:none"></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- 25 年生命周期 -->
-<section class="section light">
+<section class="section light" id="lifeSec" data-nav="生命周期">
   <div class="wrap">
     <div class="kicker rv">全生命周期</div>
     <h2 class="rv">25 年，5 个阶段</h2>
@@ -206,9 +213,10 @@
   </div>
 </section>
 
-<script src="assets/js/data.js?v=20260910b"></script>
-<script src="assets/js/effects.js?v=20260910b"></script>
-<script src="assets/js/main.js?v=20260910b"></script>
+<script src="assets/js/data.js?v=20260912"></script>
+<script src="assets/js/effects.js?v=20260912"></script>
+<script src="assets/js/main.js?v=20260912"></script>
+<script src="assets/js/sidenav.js?v=20260912" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   /* 测算引擎 */
@@ -283,6 +291,53 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   calc();
 
+  function entDateCN() {
+    var d = new Date();
+    return d.getFullYear() + " 年 " + (d.getMonth() + 1) + " 月 " + d.getDate() + " 日";
+  }
+
+  /* 《投资可行性测算报告》：打印前先把当前参数与测算结果固化进公文容器，
+     避免打印对话框打开期间用户继续调参导致纸面与屏幕不一致 */
+  document.getElementById("invPrint").addEventListener("click", function () {
+    calc(); /* 先重算一遍，保证报告取的是最新参数的结果 */
+    var date = entDateCN();
+    var params = [
+      ["项目区位", v("cProv") + " · " + v("cCity") + " · " + v("cCounty")],
+      ["可装机农户数", v("cN") + " 户"],
+      ["户均屋顶可用面积", v("cArea") + " ㎡"],
+      ["一字坡占比", v("cSlope") + " %"],
+      ["上网电价", v("cPrice") + " 元/kWh"],
+      ["年等效利用小时", v("cHours") + " h"],
+      ["组件功率", v("cWatt") + " W"],
+      ["系统成本", v("cCost") + " 元/W"],
+      ["技术路线", document.getElementById("cTech").options[document.getElementById("cTech").selectedIndex].text],
+      ["融资方案", document.getElementById("cFin").options[document.getElementById("cFin").selectedIndex].text],
+      ["碳交易收益", document.getElementById("cCarbon").checked ? "计入（60 元/吨示意）" : "未计入"],
+      ["限发率模拟", v("cCurt") + " %"]
+    ];
+    var results = [
+      ["总投资", document.getElementById("rInv").textContent + " 万元"],
+      ["年净收益", document.getElementById("rRev").textContent + " 万元"],
+      ["回收期", document.getElementById("rPb").textContent + " 年"],
+      ["25 年净收益", document.getElementById("rNet25").textContent + " 万元"],
+      ["农户户均年租金", document.getElementById("rRent").textContent + " 元"]
+    ];
+    document.getElementById("invDoc").innerHTML = '<div class="gov-doc">' +
+      '<h1 class="gov-title">投资可行性测算报告</h1>' +
+      '<p class="gov-meta"><span>测算区域：' + window.mgEsc(v("cProv") + v("cCity") + v("cCounty")) + "</span><span>测算日期：" + date + "</span></p>" +
+      '<h2 class="gov-h1">一、输入参数</h2>' +
+      '<table class="gov-tbl"><thead><tr><th style="width:32%">参数</th><th>取值</th></tr></thead><tbody>' +
+      params.map(function (p) { return '<tr><td class="gov-k">' + p[0] + "</td><td>" + window.mgEsc(p[1]) + "</td></tr>"; }).join("") +
+      "</tbody></table>" +
+      '<h2 class="gov-h1">二、测算结果</h2>' +
+      '<table class="gov-tbl"><thead><tr><th style="width:32%">指标</th><th>测算值</th></tr></thead><tbody>' +
+      results.map(function (p) { return '<tr><td class="gov-k">' + p[0] + "</td><td>" + p[1] + "</td></tr>"; }).join("") +
+      "</tbody></table>" +
+      '<p class="gov-note">本报告全部计算在前端完成，参数默认值取东高垣村样本口径，输出为课题组测算参考值，不构成投资结论。「531 新政」后新增项目须按市场化电价重算。敏感性提示：发电量每下浮 5%，年收益约减 14 万元；电价每下浮 0.01 元/kWh，年收益约减 8 万元（以 805 万 kWh 为基准）。</p>' +
+      '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
+    PV.printZone("#invDoc", "投资可行性测算报告");
+  });
+
   /* 3D 回收期环 */
   FX.ring(document.getElementById("ringStage"), 7.5 / 25,
     '<div class="din num-glow">7—8</div><div class="label" style="color:#a9bccf">年 · 简化口径回收期</div><div class="caption">25 年租期 · 净收益窗口约 17 年+</div>');
@@ -301,6 +356,28 @@ document.addEventListener("DOMContentLoaded", function () {
     r.style.display = "block";
     document.getElementById("ddPrint").style.display = "inline-flex";
     r.innerHTML = "<b>尽调进度：" + done + " / 10。</b>" + (done === 10 ? "10 项全部完成取证，可召开尽调评审会，逐项给出「通过、附条件通过、不通过」结论；附条件事项在投资协议中转化为先决条件。底稿归档，保存期不短于合同期限。" : "尚有 " + (10 - done) + " 项未完成。提醒：电网容量与村庄治理是东高垣经验中权重最高的 2 项；退出与极端情形最易被忽略，而 25 年周期内征收、翻建、继承是确定性事件。");
+  });
+  /* 《投前尽调报告》公文版：逐项列明取证状态，证据文件名一并留痕 */
+  document.getElementById("ddPrint").addEventListener("click", function () {
+    var date = entDateCN();
+    var rows = dd.map(function (d, i) {
+      var c = document.getElementById("dd" + i);
+      var f = document.querySelectorAll(".dd-f")[i];
+      return "<tr><td class=\"gov-c\">" + (i + 1) + "</td><td>" + window.mgEsc(d) + "</td>" +
+        '<td class="gov-c">' + (c && c.checked ? "已取证" : "未完成") + "</td>" +
+        "<td>" + (f && f.files.length ? window.mgEsc(f.files[0].name) : "——") + "</td></tr>";
+    }).join("");
+    var done = document.querySelectorAll(".dd-c:checked").length;
+    document.getElementById("ddDoc").innerHTML = '<div class="gov-doc">' +
+      '<h1 class="gov-title">投前尽调报告</h1>' +
+      '<p class="gov-meta"><span>尽调进度：' + done + " / 10 项</span><span>报告日期：" + date + "</span></p>" +
+      '<table class="gov-tbl"><thead><tr><th style="width:7%">序号</th><th>尽调事项</th><th style="width:12%">状态</th><th style="width:22%">证据材料</th></tr></thead><tbody>' +
+      rows + "</tbody></table>" +
+      "<p>" + (done === 10 ? "10 项全部完成取证，可召开尽调评审会，逐项给出「通过、附条件通过、不通过」结论；附条件事项在投资协议中转化为先决条件。" :
+        "尚有 " + (10 - done) + " 项未完成取证，暂不召开尽调评审会；电网容量与村庄治理为权重最高的 2 项，应优先补齐。") + "</p>" +
+      '<p class="gov-note">依据《整村光伏建设手册》第 75—76 条逐项取证并留存底稿；底稿归档，保存期不短于合同期限。</p>' +
+      '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
+    PV.printZone("#ddDoc", "投前尽调报告");
   });
 
   /* 8 步向导 */
@@ -329,14 +406,33 @@ document.addEventListener("DOMContentLoaded", function () {
     ["线路故障", "处置方案：断电排查接头与线缆，更换破损段，做绝缘复测。预计修复：48 小时内。成本：材料与人工小额列支。提醒：农户切勿自行上房拆装。"],
     ["电网限发", "处置方案：核实台区电压曲线，列入电网改造清单按月跟踪；按合同约定限发损失由企业承担，农户租金分文不少。预计修复：依赖台区改造时序。成本：限发损失按发电量计提。"]
   ];
+  var simSel = -1;
   document.getElementById("simOpts").addEventListener("click", function (e) {
     var b = e.target.closest(".sim-opt"); if (!b) return;
     document.querySelectorAll(".sim-opt").forEach(function (x) { x.classList.remove("sel"); });
     b.classList.add("sel");
-    var s = sims[+b.dataset.i], r = document.getElementById("simResult");
+    simSel = +b.dataset.i;
+    var s = sims[simSel], r = document.getElementById("simResult");
     r.style.display = "block";
     r.innerHTML = "<b>" + s[0] + "。</b>" + s[1];
     document.getElementById("simPdf").style.display = "inline-flex";
+  });
+  /* 工单记录公文版：把模拟排查过程固化成可归档的处置记录单 */
+  document.getElementById("simPdf").addEventListener("click", function () {
+    if (simSel < 0) return;
+    var s = sims[simSel], date = entDateCN();
+    document.getElementById("simDoc").innerHTML = '<div class="gov-doc">' +
+      '<h1 class="gov-title">运维工单处置记录单</h1>' +
+      '<p class="gov-meta"><span>工单来源：农户报修（发电量下降 30%）</span><span>记录日期：' + date + "</span></p>" +
+      '<table class="gov-tbl"><thead><tr><th style="width:28%">栏目</th><th>内容</th></tr></thead><tbody>' +
+      '<tr><td class="gov-k">报修现象</td><td>近 7 日发电曲线第 5 日起骤降约 30%；近 3 日晴、无降水；台区电压未越限。</td></tr>' +
+      '<tr><td class="gov-k">排查方向</td><td>' + window.mgEsc(s[0]) + "</td></tr>" +
+      '<tr><td class="gov-k">处置方案</td><td>' + window.mgEsc(s[1]) + "</td></tr>" +
+      '<tr><td class="gov-k">工单级别</td><td>' + window.mgEsc(simSel === 1 ? "红色工单（24 小时内响应）" : simSel === 3 ? "黄色工单（列入电网改造清单按月跟踪）" : "蓝色工单（纳入例行巡检排期）") + "</td></tr>" +
+      "</tbody></table>" +
+      '<p class="gov-note">处置完成后复测发电量并在台账销号；本记录单为 25 年履约期证据链环节之一，归档保存。分级处置标准见手册第 83—84 条。</p>' +
+      '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
+    PV.printZone("#simDoc", "运维工单处置记录单");
   });
 
   /* 生命周期滚动生长 */

@@ -4,11 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>光伏养老 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260910b">
+<link rel="stylesheet" href="assets/css/main.css?v=20260912">
 <style>
 .dual{display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:34px}
 @media(max-width:900px){.dual{grid-template-columns:1fr}}
-.pipe-wrap{margin-top:26px}
 .pension-out{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:20px 0}
 @media(max-width:800px){.pension-out{grid-template-columns:1fr 1fr}}
 .ledger3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:22px; margin-top:26px}
@@ -24,7 +23,7 @@
 <body>
 <div data-crumb></div>
 
-<section class="section grain" style="padding-top:56px">
+<section class="section grain" style="padding-top:56px" id="overview" data-nav="光伏养老">
   <div class="wrap">
     <div class="kicker rv">新发现 · 新机制</div>
     <h1 class="display rv" style="font-size:56px">光伏养老</h1>
@@ -33,7 +32,7 @@
 </section>
 
 <!-- 双轨阐释 -->
-<section class="section grain" style="padding-top:20px">
+<section class="section grain" style="padding-top:20px" id="mechanism" data-nav="双轨阐释">
   <div class="wrap">
     <div class="dual">
       <div class="card rv">
@@ -75,19 +74,11 @@
         <p class="caption" style="margin-top:10px">手册第 128 条（3 层道理）、第 36 条（边界）</p>
       </div>
     </div>
-
-    <!-- 3D 现金流管道 -->
-    <div class="card rv pipe-wrap" style="border-color:rgba(212,168,75,.4)">
-      <b style="color:var(--gold2)">3D 现金流管道：一束阳光的旅程</b>
-      <p style="font-size:14px; color:#b8c4d0; margin:6px 0 4px">金色光球沿玻璃管道流动：屋顶 → 电站 → 电网 → 农户。点击节点放大脉冲；拖动滑块调节流速。</p>
-      <div id="pipeline"></div>
-      <div style="max-width:340px"><label>光球流速</label><input type="range" id="pipeSpeed" min="1" max="30" value="10"></div>
-    </div>
   </div>
 </section>
 
 <!-- 计算器 -->
-<section class="section light">
+<section class="section light" id="calculator" data-nav="养老计算器">
   <div class="wrap">
     <div class="kicker">算给你看</div>
     <h2>光伏养老计算器</h2>
@@ -118,15 +109,11 @@
         </div>
       </div>
     </div>
-    <div class="card" style="margin-top:18px; overflow-x:auto">
-      <b>月度现金流表（第 1—25 年，年均口径）</b>
-      <div id="pTable" style="margin-top:10px"></div>
-    </div>
   </div>
 </section>
 
 <!-- 25 年面积图 -->
-<section class="section grain">
+<section class="section grain" id="timeline" data-nav="25 年时间轴">
   <div class="wrap">
     <div class="kicker">时间看得见</div>
     <h2>25 年租金时间轴</h2>
@@ -137,7 +124,7 @@
 </section>
 
 <!-- 账本可视化 -->
-<section class="section light">
+<section class="section light" id="ledger" data-nav="农户账本">
   <div class="wrap">
     <div class="kicker">一本明白账</div>
     <h2>农户账本可视化</h2>
@@ -165,7 +152,7 @@
 </section>
 
 <!-- H 某家案例卡 -->
-<section class="section grain">
+<section class="section grain" id="case" data-nav="个案测算">
   <div class="wrap">
     <div class="kicker rv">个案测算</div>
     <h2 class="rv" style="text-align:center">村主任 H 某家的「光伏养老」账</h2>
@@ -182,14 +169,12 @@
   </div>
 </section>
 
-<script src="assets/js/data.js?v=20260910b"></script>
-<script src="assets/js/effects.js?v=20260910b"></script>
-<script src="assets/js/main.js?v=20260910b"></script>
+<script src="assets/js/data.js?v=20260912"></script>
+<script src="assets/js/effects.js?v=20260912"></script>
+<script src="assets/js/main.js?v=20260912"></script>
+<script src="assets/js/sidenav.js?v=20260912" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  var pipe = FX.pipeline(document.getElementById("pipeline"));
-  document.getElementById("pipeSpeed").addEventListener("input", function () { pipe.setSpeed(this.value / 10); });
-
   function t(id, s) { document.getElementById(id).textContent = s; }
   function calc() {
     var age = +document.getElementById("pAge").value, fam = +document.getElementById("pFam").value,
@@ -211,10 +196,6 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "土地流转", v: 150, color: "#6b7f92" },
       { name: "子女赡养", v: 300, color: "#8a95a1" },
       { name: "零工", v: 400, color: "#5a6b7c" }]);
-    // 现金流表
-    var html = '<table class="tbl"><tr><th>年份</th><th>当年租金（元）</th><th>累计（元）</th></tr>';
-    for (var y = 1; y <= PVCONST.YEARS; y++) html += "<tr><td>第 " + y + " 年</td><td>" + year + "</td><td>" + year * y + "</td></tr>";
-    document.getElementById("pTable").innerHTML = html + "</table>";
     drawArea(year);
   }
   function drawArea(year) {

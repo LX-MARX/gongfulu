@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>我的账号 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260910b">
+<link rel="stylesheet" href="assets/css/main.css?v=20260912">
 <style>
 .ac-head{text-align:center; padding:150px 0 56px}
 .ac-box{max-width:920px; margin:0 auto}
@@ -68,7 +68,7 @@
       </div>
 
       <div class="glass ac-panel rv" id="panelLogin">
-        <label>邮箱</label><input type="email" id="liEmail" placeholder="you@example.com" autocomplete="email">
+        <label>邮箱或手机号</label><input type="text" id="liEmail" placeholder="you@example.com 或 11 位手机号" autocomplete="username">
         <label>密码</label><input type="password" id="liPwd" placeholder="请输入密码" autocomplete="current-password">
         <div class="ac-err" id="liErr"></div>
         <button class="btn btn-gold" id="btnLogin" style="margin-top:22px; width:100%">登 录</button>
@@ -76,10 +76,10 @@
 
       <div class="glass ac-panel rv" id="panelReg" style="display:none">
         <label>显示名</label><input type="text" id="rgName" placeholder="如：东高垣村两委 · 王建国">
-        <label>邮箱</label><input type="email" id="rgEmail" placeholder="you@example.com" autocomplete="email">
+        <label>邮箱或手机号</label><input type="text" id="rgEmail" placeholder="you@example.com 或 11 位手机号" autocomplete="username">
         <label>密码（至少 6 位）</label><input type="password" id="rgPwd" placeholder="至少 6 位" autocomplete="new-password">
         <label>再次输入密码</label><input type="password" id="rgPwd2" placeholder="与上方密码保持一致" autocomplete="new-password">
-        <p class="ac-note" style="margin:16px 0 0">注册即为普通用户，可云端保存测算、评估与表格存档。如需管理员权限，注册登录后可在本页提交申请，由项目组审核开通。</p>
+        <p class="ac-note" style="margin:16px 0 0">支持手机号或邮箱注册。注册即为普通用户，可云端保存测算、评估与表格存档。如需管理员权限，注册登录后可在本页提交申请，由项目组审核开通。</p>
         <label class="agree"><input type="checkbox" id="rgAgree"><span>我已知晓：注册信息仅用于本项目服务，不会用于其他用途。</span></label>
         <div class="ac-err" id="rgErr"></div>
         <button class="btn btn-gold" id="btnReg" style="margin-top:22px; width:100%">注册并登录</button>
@@ -132,12 +132,12 @@
   </div>
 </section>
 
-<script src="assets/js/config.js?v=20260910b"></script>
-<script src="assets/js/api.js?v=20260910b"></script>
-<script src="assets/js/auth.js?v=20260910b"></script>
-<script src="assets/js/data.js?v=20260910b"></script>
-<script src="assets/js/effects.js?v=20260910b"></script>
-<script src="assets/js/main.js?v=20260910b"></script>
+<script src="assets/js/config.js?v=20260912"></script>
+<script src="assets/js/api.js?v=20260912"></script>
+<script src="assets/js/auth.js?v=20260912"></script>
+<script src="assets/js/data.js?v=20260912"></script>
+<script src="assets/js/effects.js?v=20260912"></script>
+<script src="assets/js/main.js?v=20260912"></script>
 <script>
 (function () {
   "use strict";
@@ -177,25 +177,28 @@
   $("btnLogin").addEventListener("click", function () {
     var email = $("liEmail").value.trim(), pwd = $("liPwd").value;
     showErr($("liErr"), "");
-    if (!email || !pwd) { showErr($("liErr"), "请填写邮箱和密码。"); return; }
+    if (!email || !pwd) { showErr($("liErr"), "请填写邮箱（或手机号）和密码。"); return; }
     var btn = $("btnLogin"); btn.disabled = true; btn.textContent = "登录中……";
     MG.auth.signIn(email, pwd).then(function () {
       toast("登录成功，欢迎回来。", true);
       renderUser();
     }).catch(function (e) {
-      if (e && (e.status === 400 || e.status === 401)) showErr($("liErr"), "邮箱或密码不正确，请检查后重试。");
+      if (e && (e.status === 400 || e.status === 401)) showErr($("liErr"), "账号或密码不正确，请检查后重试。");
       else showErr($("liErr"), "登录失败：" + (e && e.message ? e.message : "网络异常") + "，请稍后重试。");
     }).then(function () { btn.disabled = false; btn.textContent = "登 录"; });
   });
   $("liPwd").addEventListener("keydown", function (e) { if (e.key === "Enter") $("btnLogin").click(); });
 
   /* ---------- 注册 ---------- */
+  // 邮箱或手机号二选一：1 开头的 11 位数字按手机号走（auth.js 内部映射伪邮箱）
+  function isPhoneNo(s) { return /^1\d{10}$/.test(s); }
+  function isEmailOk(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
   $("btnReg").addEventListener("click", function () {
     var name = $("rgName").value.trim(), email = $("rgEmail").value.trim();
     var p1 = $("rgPwd").value, p2 = $("rgPwd2").value;
     showErr($("rgErr"), "");
     if (!name) { showErr($("rgErr"), "请填写显示名。"); return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr($("rgErr"), "请填写正确的邮箱地址。"); return; }
+    if (!isPhoneNo(email) && !isEmailOk(email)) { showErr($("rgErr"), "请填写正确的邮箱地址或 11 位手机号。"); return; }
     if (p1.length < 6) { showErr($("rgErr"), "密码至少 6 位。"); return; }
     if (p1 !== p2) { showErr($("rgErr"), "两次输入的密码不一致。"); return; }
     if (!$("rgAgree").checked) { showErr($("rgErr"), "请勾选「信息仅用于项目服务」后再注册。"); return; }
@@ -210,10 +213,19 @@
       }
     }).catch(function (e) {
       var m = e && e.message ? e.message : "网络异常";
-      if (/already|registered|exists/i.test(m)) m = "该邮箱已注册，请直接登录。";
+      if (/already|registered|exists/i.test(m)) m = "该账号已注册，请直接登录。";
       showErr($("rgErr"), "注册失败：" + m);
     }).then(function () { btn.disabled = false; btn.textContent = "注册并登录"; });
   });
+
+  /* 伪邮箱账号（手机号注册）不展示那串内部地址，直接显示手机号 */
+  var PHONE_MAIL = "@phone.muguang";
+  function contactLine(email, phone) {
+    if (email && email.indexOf(PHONE_MAIL) > -1) return "手机号：" + email.split("@")[0];
+    var s = email || "";
+    if (phone) s += (s ? "　丨　" : "") + "手机号：" + phone;
+    return s;
+  }
 
   /* ---------- 已登录视图 ---------- */
   function renderUser() {
@@ -224,11 +236,12 @@
     var name = meta.display_name || (u.email ? u.email.split("@")[0] : "用户");
     $("uAvatar").textContent = (name[0] || "用").toUpperCase();
     $("uName").textContent = name;
-    $("uEmail").textContent = u.email || "";
+    $("uEmail").textContent = contactLine(u.email, null);
     $("uSince").textContent = u.created_at ? "注册时间：" + fmtTime(u.created_at) : "";
     show("viewUser");
     MG.auth.profile().then(function (p) {
       if (p && p.display_name) { $("uName").textContent = p.display_name; $("uAvatar").textContent = p.display_name[0].toUpperCase(); }
+      if (p && p.phone) $("uEmail").textContent = contactLine(u.email, p.phone);
       var isAdm = p && p.role === "admin";
       var badge = $("uRole");
       badge.textContent = isAdm ? "项目管理员" : "普通用户";
@@ -251,7 +264,9 @@
           '<span class="no">' + esc(r.form_no || "—") + "</span>" +
           '<span class="tt">' + esc(r.title || "（未命名）") + "</span>" +
           '<span class="tm">' + esc(fmtTime(r.created_at)) + "</span>" +
-          '<a class="btn btn-line mini-btn" href="forms.html">去 forms.html 继续编辑</a>' +
+          // 带上表格编号与存档 id，forms.html 拿到参数就能直接定位到这条存档
+          '<a class="btn btn-line mini-btn" href="forms.html?form=' + encodeURIComponent(r.form_no || "") +
+          "&arch=" + encodeURIComponent(r.id) + '">去 forms.html 继续编辑</a>' +
           '<button class="btn btn-red mini-btn" data-del="' + esc(r.id) + '" type="button">删除</button>' +
           "</div>";
       }).join("");

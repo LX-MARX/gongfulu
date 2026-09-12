@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>政府工作台 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260910b">
+<link rel="stylesheet" href="assets/css/main.css?v=20260912">
+<link rel="stylesheet" href="assets/css/gov-print.css?v=20260912">
 <style>
 .search-panel{padding:34px; margin-top:30px}
 #polSearch{font-size:18px; padding:16px 22px}
@@ -27,8 +28,6 @@
 .raci td[data-v]{cursor:pointer}
 .raci td[data-v]:hover{background:rgba(212,168,75,.2) !important; outline:1px solid var(--gold)}
 .rv-badge{font-weight:700; font-family:var(--mono)}
-.audit-row{display:grid; grid-template-columns:34px 200px 1fr 120px; gap:14px; align-items:center; padding:13px 0; border-bottom:1px dashed #ddd6c2}
-@media(max-width:760px){.audit-row{grid-template-columns:34px 1fr}}
 .ledger{display:grid; grid-template-columns:repeat(5,1fr); gap:18px; margin-top:30px}
 @media(max-width:1100px){.ledger{grid-template-columns:1fr 1fr}}
 .lg-card input{padding:8px 10px; font-size:15px}
@@ -48,7 +47,7 @@
 </section>
 
 <!-- 政策检索库 -->
-<section class="section grain" style="padding-top:30px">
+<section class="section grain" style="padding-top:30px" id="policy" data-nav="政策检索">
   <div class="wrap">
     <div class="kicker rv">政策工具 · 五级政策库</div>
     <h2 class="rv">政策检索库（119 条）</h2>
@@ -70,7 +69,7 @@
 </section>
 
 <!-- 6 阶段甘特 -->
-<section class="section light">
+<section class="section light" id="ganttSec" data-nav="进度管理">
   <div class="wrap">
     <div class="kicker rv">进度管理</div>
     <h2 class="rv">6 阶段项目进度管理器</h2>
@@ -82,7 +81,7 @@
 </section>
 
 <!-- RACI -->
-<section class="section grain">
+<section class="section grain" id="raci" data-nav="责任矩阵">
   <div class="wrap">
     <div class="kicker rv">责任分工</div>
     <h2 class="rv">RACI 责任矩阵</h2>
@@ -95,34 +94,51 @@
 </section>
 
 <!-- 准入审查 -->
-<section class="section light">
+<section class="section light" id="access" data-nav="准入审查">
   <div class="wrap">
     <div class="kicker rv">风险防控</div>
-    <h2 class="rv">准入审查 6 项打分器</h2>
-    <p class="lead rv">对投资运营主体逐项审查。命中「一票否决」情形（农户出资举债、名义融资、重大失信、显失公平租金）即直接否决（手册第 56—58 条）。</p>
-    <div class="card rv" style="margin-top:30px" id="auditBox">
-      <div class="audit-row"><b>#</b><b>审查项</b><b>审查要点</b><b>结论</b></div>
-      <div id="auditRows"></div>
-      <div class="warn-box" style="margin-top:20px">
-        <b>一票否决情形（勾选任一即否决）：</b>
-        <div id="vetoBox" style="margin-top:10px; display:grid; grid-template-columns:1fr 1fr; gap:6px 20px">
-          <label style="margin:0; color:#eec5bf"><input type="checkbox" class="veto"> 要求农户以任何形式出资或举债</label>
-          <label style="margin:0; color:#eec5bf"><input type="checkbox" class="veto"> 合同含以农户名义融资的安排</label>
-          <label style="margin:0; color:#eec5bf"><input type="checkbox" class="veto"> 企业资信存在重大不良记录</label>
-          <label style="margin:0; color:#eec5bf"><input type="checkbox" class="veto"> 租金条款显失公平（显著低于当地合理水平）</label>
-        </div>
+    <h2 class="rv">准入审查：填客观事实，系统按规则判定</h2>
+    <p class="lead rv">审查者不再人工勾选「通过／不通过」，只需填报可核验的客观信息并上传证明材料，系统按手册第 56—58 条规则自动给出 6 项逐项判定与一票否决判定，并生成《准入审查结论书》。</p>
+    <div class="card rv" style="margin-top:30px">
+      <h3>第一步 · 填报客观信息</h3>
+      <div class="grid2" style="margin-top:14px">
+        <div><label>企业名称</label><input type="text" id="arOrg" placeholder="如：××新能源有限公司"></div>
+        <div><label>统一社会信用代码</label><input type="text" id="arCode" placeholder="18 位统一社会信用代码"></div>
+        <div><label>注册资本（万元）</label><input type="number" id="arCapital" min="0" placeholder="如：5000"></div>
+        <div><label>成立时间</label><input type="date" id="arFounded"></div>
+        <div><label>经营范围是否含光伏／电力</label><select id="arScope"><option value="yes">含光伏或电力业务</option><option value="no">不含</option></select></div>
+        <div><label>可验证同类项目业绩（个）</label><input type="number" id="arPerf" min="0" value="0"></div>
+        <div><label>是否有重大失信记录</label><select id="arDishonor"><option value="no">无</option><option value="yes">有</option></select></div>
+        <div><label>是否要求农户出资或举债</label><select id="arFund"><option value="no">否</option><option value="yes">是</option></select></div>
+        <div><label>是否以农户名义融资贷款</label><select id="arLoan"><option value="no">否</option><option value="yes">是</option></select></div>
+        <div><label>是否使用县级备案合同范本</label><select id="arTemplate"><option value="yes">是</option><option value="no">否</option></select></div>
+        <div><label>农户证件信息是否仅限签约与结算用途</label><select id="arIduse"><option value="yes">是</option><option value="no">否</option></select></div>
+        <div><label>限发、灾损等损失是否由企业承担</label><select id="arLoss"><option value="yes">是</option><option value="no">否</option></select></div>
+        <div><label>约定租金水平（元/块/年）</label><input type="number" id="arRent" min="0" placeholder="如：30"></div>
+        <div><label>当地市场租金参考（元/块/年）</label><input type="number" id="arRentRef" min="0" placeholder="如：30"></div>
       </div>
-      <div style="margin-top:22px; display:flex; gap:16px; flex-wrap:wrap">
-        <button class="btn btn-gold" id="auditBtn">生成审查结论书</button>
-        <button class="btn btn-line" id="auditPrint" style="display:none" onclick="PV.print()">导出 PDF（打印）</button>
+      <h3 style="margin-top:26px">第二步 · 上传证明材料（图片／PDF，可多选）</h3>
+      <input type="file" id="arFiles" multiple accept="image/*,.pdf" style="margin-top:12px">
+      <p class="caption" style="margin-top:8px">营业执照、资信证明、业绩合同、备案范本等。上传与存档需登录；未登录不影响系统判定与打印。</p>
+      <div class="grid2" style="margin-top:14px">
+        <div><label>拟进驻村庄</label><input type="text" id="arVillage" placeholder="如：东高垣村"></div>
+        <div><label>审查联系人</label><input type="text" id="arContact" placeholder="如：镇经济发展办 ××"></div>
       </div>
-      <div id="auditResult" class="note-box" style="margin-top:18px; display:none"></div>
+      <div style="margin-top:24px; display:flex; gap:16px; flex-wrap:wrap">
+        <button class="btn btn-gold" id="arJudge">系统判定并生成《准入审查结论书》</button>
+        <button class="btn btn-line" id="arPrint" style="display:none">导出 PDF（打印）</button>
+        <button class="btn btn-line" id="arSubmit" style="display:none">提交审查记录存档</button>
+      </div>
+      <div id="arMsg" style="display:none; margin-top:16px"></div>
+      <div id="arResult" class="note-box" style="margin-top:16px; display:none"></div>
     </div>
+    <!-- 公文打印版容器：只承载《准入审查结论书》，打印时经 PV.printZone 隔离输出 -->
+    <div id="arDoc" style="display:none"></div>
   </div>
 </section>
 
 <!-- 考核台账 -->
-<section class="section grain">
+<section class="section grain" id="ledgerSec" data-nav="考核台账">
   <div class="wrap">
     <div class="kicker rv">盯住 25 年</div>
     <h2 class="rv">考核台账在线模板（5 项指标）</h2>
@@ -130,14 +146,16 @@
     <div class="ledger" id="ledger"></div>
     <div style="margin-top:26px; display:flex; gap:16px; flex-wrap:wrap">
       <button class="btn btn-gold" id="lgCsv">导出 Excel（CSV）</button>
-      <button class="btn btn-line" onclick="PV.print()">导出 PDF（打印）</button>
+      <button class="btn btn-line" id="lgPrint">导出 PDF（打印）</button>
     </div>
     <p class="caption" style="margin-top:14px">全县基准来源：大荔县全县（含东高垣村），截至 2025 年 7—8 月企业台账。</p>
+    <!-- 公文打印版容器：只承载年度考核台账，打印时经 PV.printZone 隔离输出 -->
+    <div id="ledgerDoc" style="display:none"></div>
   </div>
 </section>
 
 <!-- 531 应对 -->
-<section class="section light">
+<section class="section light" id="p531" data-nav="政策应对">
   <div class="wrap">
     <div class="kicker rv">政策变化应对</div>
     <h2 class="rv">「531 新政」之后，政府做什么</h2>
@@ -176,24 +194,12 @@
   </div>
 </section>
 
-<!-- 政府侧答疑 -->
-<section class="section grain">
-  <div class="wrap">
-    <div class="kicker rv">常见 3 问</div>
-    <h2 class="rv">政府侧答疑</h2>
-    <div style="margin-top:26px" class="rv">
-      <details class="acc"><summary>县级政策文件网上查不到，如何核验真伪？</summary><div class="acc-body">东高垣村实践中的政策文件为县级发展改革部门下发的红头文件，逐级下发到镇，不下发到村、不对外公开。核验路径：通过镇、村两级逐级向发文机关核实文号与内容。（2026 年 2 月入户访谈）</div></details>
-      <details class="acc"><summary>电网容量不够，新增装机批不下来怎么办？</summary><div class="acc-body">东高垣村即出现过「村民想装但装不了」的情况，电网已为该村投入数千万元改造线路、加装变压器，仍存在拉闸限发。建议把台区容量摸底前置于签约环节，容量不足的区域暂缓签约、列入电网改造计划分批释放。（2026 年 2 月入户访谈）</div></details>
-      <details class="acc"><summary>租金水平农户不满意，政府要不要管？</summary><div class="acc-body">租金属市场契约，政府不宜直接定价，但可发布区域租金参考区间、组织供需双方公开协商，并把「分红兑现率」纳入对企业的考核。调研中部分农户对租金水平存在更高期待，应通过透明化测算回应而非行政干预。（课题组 2026 年 2 月驻点调研建议）</div></details>
-    </div>
-  </div>
-</section>
-
-<script src="assets/js/data.js?v=20260910b"></script>
-<script src="assets/js/effects.js?v=20260910b"></script>
-<script src="assets/js/config.js?v=20260910b"></script>
-<script src="assets/js/api.js?v=20260910b"></script>
-<script src="assets/js/main.js?v=20260910b"></script>
+<script src="assets/js/data.js?v=20260912"></script>
+<script src="assets/js/effects.js?v=20260912"></script>
+<script src="assets/js/config.js?v=20260912"></script>
+<script src="assets/js/api.js?v=20260912"></script>
+<script src="assets/js/main.js?v=20260912"></script>
+<script src="assets/js/sidenav.js?v=20260912" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   /* 政策检索（云端政策库优先，连接失败或未配置时回退本地缓存） */
@@ -298,31 +304,170 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("raciDetail").innerHTML = "<b>" + item + " × " + depts[+td.dataset.d] + "（" + td.dataset.v + "）：</b>" + rmap[td.dataset.v] + "。要领：每一行必须有且仅有 1 个「A」，防止多头负责演变为无人负责；「C」的协商应在事项启动前完成并留痕，事后补协商视为程序瑕疵。（手册第 50 条）";
   });
 
-  /* 准入审查 */
-  var auditItems = [
-    ["主体资信", "注册资本、股权结构、经营年限；国有企业或资信良好企业优先"],
-    ["资金来源", "是否自有或合规融资；是否要求农户出资、贷款、担保"],
-    ["合同文本", "是否使用备案范本；有无隐藏贷款、担保、融资租赁条款"],
-    ["业绩与能力", "同类项目业绩可验证；运维网点、人员配置与响应时限明确"],
-    ["农户信息使用", "身份证、银行卡用途仅限签约与结算（最少必要原则）"],
-    ["风险兜底", "限发、灾损、征收损失分担明确且不转嫁农户"]
-  ];
-  document.getElementById("auditRows").innerHTML = auditItems.map(function (a, i) {
-    return '<div class="audit-row"><b>' + (i + 1) + '</b><b>' + a[0] + '</b><span style="font-size:14.5px; color:#5a6b7c">' + a[1] + '</span>' +
-      '<select class="audit-sel"><option value="">未审</option><option value="1">通过</option><option value="0">不通过</option></select></div>';
-  }).join("");
-  document.getElementById("auditBtn").addEventListener("click", function () {
-    var sels = document.querySelectorAll(".audit-sel");
-    var fails = [], unchk = [];
-    sels.forEach(function (s, i) { if (s.value === "0") fails.push(auditItems[i][0]); else if (!s.value) unchk.push(auditItems[i][0]); });
-    var vetoed = Array.prototype.some.call(document.querySelectorAll(".veto"), function (v) { return v.checked; });
-    var r = document.getElementById("auditResult");
+  /* 准入审查：审查者只填报客观事实，系统按手册第 56—58 条规则自动判定。
+     规则设计原则：能取证的客观指标才进规则（注册资本、成立年限、业绩个数、租金比价），
+     原 6 项审查维度一项不少，但「是否通过」不再由人勾选，防止审查者拍脑袋放行。 */
+  function arV(id) { return document.getElementById(id).value; }
+  function arN(id) { return +arV(id) || 0; }
+  function arDateCN() {
+    var d = new Date();
+    return d.getFullYear() + " 年 " + (d.getMonth() + 1) + " 月 " + d.getDate() + " 日";
+  }
+  var arInfo = null, arVerdict = null;
+  function arJudge() {
+    var info = {
+      org: arV("arOrg").trim(), code: arV("arCode").trim(),
+      capital: arN("arCapital"), founded: arV("arFounded"),
+      scope: arV("arScope"), perf: arN("arPerf"),
+      dishonor: arV("arDishonor"), fund: arV("arFund"), loan: arV("arLoan"),
+      template: arV("arTemplate"), iduse: arV("arIduse"), loss: arV("arLoss"),
+      rent: arN("arRent"), rentRef: arN("arRentRef")
+    };
+    var years = info.founded ? Math.max(0, (Date.now() - new Date(info.founded).getTime()) / (365.25 * 864e5)) : 0;
+    /* 6 项逐项判定：每项给出 通过／不通过＋理由，理由必须落到填报的具体数值上 */
+    var items = [];
+    /* 1 主体资信：注册资本 ≥500 万、成立满 2 年、无重大失信 */
+    var w1 = [];
+    if (info.capital < 500) w1.push("注册资本 " + info.capital + " 万元，不足 500 万元");
+    if (years < 2) w1.push(info.founded ? "成立约 " + years.toFixed(1) + " 年，未满 2 年" : "未填成立时间，经营年限无法核验");
+    if (info.dishonor === "yes") w1.push("存在重大失信记录");
+    items.push({ name: "主体资信", pass: !w1.length, why: w1.length ? w1.join("；") + "。" :
+      "注册资本 " + info.capital + " 万元、成立约 " + years.toFixed(1) + " 年、无重大失信记录，资信要件齐备。" });
+    /* 2 资金来源：不得要求农户出资举债、不得以农户名义融资 */
+    var w2 = [];
+    if (info.fund === "yes") w2.push("要求农户出资或举债");
+    if (info.loan === "yes") w2.push("以农户名义融资贷款");
+    items.push({ name: "资金来源", pass: !w2.length, why: w2.length ? w2.join("；") + "，触碰资金来源红线。" :
+      "不要求农户出资、举债，也不以农户名义融资，资金来源为企业自有或合规融资。" });
+    /* 3 合同文本：使用县级备案范本且不含名义融资安排 */
+    var w3 = [];
+    if (info.template !== "yes") w3.push("未使用县级备案合同范本");
+    if (info.loan === "yes") w3.push("合同含以农户名义融资的安排");
+    items.push({ name: "合同文本", pass: !w3.length, why: w3.length ? w3.join("；") + "。" :
+      "使用县级备案合同范本，无隐藏贷款、担保、融资租赁条款。" });
+    /* 4 业绩与能力：经营范围含光伏／电力且有可验证业绩 */
+    var w4 = [];
+    if (info.scope !== "yes") w4.push("经营范围不含光伏／电力业务");
+    if (info.perf < 1) w4.push("无可验证的同类项目业绩");
+    items.push({ name: "业绩与能力", pass: !w4.length, why: w4.length ? w4.join("；") + "。" :
+      "经营范围含光伏／电力业务，同类项目业绩 " + info.perf + " 个可验证。" });
+    /* 5 农户信息使用：最少必要原则 */
+    items.push({ name: "农户信息使用", pass: info.iduse === "yes",
+      why: info.iduse === "yes" ? "身份证、银行卡信息仅限签约备案与租金结算用途，符合最少必要原则。" :
+      "农户证件信息用途超出签约与结算范围，违反最少必要原则。" });
+    /* 6 风险兜底：损失不转嫁农户 */
+    items.push({ name: "风险兜底", pass: info.loss === "yes",
+      why: info.loss === "yes" ? "限发、灾损等损失由企业承担，不转嫁农户，分担安排明确。" :
+      "限发、灾损等损失分担不明或转嫁农户，兜底安排缺失。" });
+    /* 一票否决：4 类情形由客观填报直接触发，无需人工勾选；
+       租金显失公平按「约定租金低于当地市场参考 70%」的客观阈值判定 */
+    var vetoes = [];
+    if (info.fund === "yes") vetoes.push("要求农户以任何形式出资或举债");
+    if (info.loan === "yes") vetoes.push("合同含以农户名义融资的安排");
+    if (info.dishonor === "yes") vetoes.push("企业资信存在重大不良记录");
+    if (info.rent > 0 && info.rentRef > 0 && info.rent < info.rentRef * 0.7)
+      vetoes.push("租金条款显失公平（约定 " + info.rent + " 元/块/年，低于当地参考 " + info.rentRef + " 元的 70%）");
+    var fails = items.filter(function (x) { return !x.pass; }).map(function (x) { return x.name; });
+    var verdict = vetoes.length ? { level: "veto", text: "一票否决" } :
+      fails.length ? { level: "fail", text: "不通过" } : { level: "pass", text: "通过" };
+    arInfo = info; arVerdict = { items: items, vetoes: vetoes, verdict: verdict };
+
+    /* 屏幕结论 */
+    var r = document.getElementById("arResult");
     r.style.display = "block";
-    document.getElementById("auditPrint").style.display = "inline-flex";
-    if (vetoed) r.innerHTML = '<b style="color:var(--red)">审查结论：一票否决。</b>命中一票否决情形，否决结论应书面作出并载明依据条款；被否决企业享有陈述申辩权，但申辩期间不得入村签约；否决信息在县域内通报，防止改换名头异地再进。（手册第 58 条）';
-    else if (fails.length) r.innerHTML = '<b style="color:var(--red)">审查结论：不通过。</b>未通过项：' + fails.join("、") + "。逐项留痕后退回补正，补正前不得进入签约环节。";
-    else if (unchk.length) r.innerHTML = "<b>审查结论：待补审。</b>未完成审查项：" + unchk.join("、") + "。6 项逐项留痕后方可出具备案意见。";
-    else r.innerHTML = '<b style="color:#2e7d4f">审查结论：通过。</b>6 项审查全部通过且无一票否决情形，可进入签约备案环节。审查底稿归档，保存期不短于合同期限。';
+    document.getElementById("arPrint").style.display = "inline-flex";
+    document.getElementById("arSubmit").style.display = "inline-flex";
+    var headHtml = vetoes.length ?
+      '<b style="color:var(--red)">审查结论：一票否决。</b>命中一票否决情形：' + vetoes.join("；") + "。否决结论应书面作出并载明依据条款；被否决企业享有陈述申辩权，但申辩期间不得入村签约；否决信息在县域内通报，防止改换名头异地再进。（手册第 58 条）" :
+      fails.length ? '<b style="color:var(--red)">审查结论：不通过。</b>未通过项：' + fails.join("、") + "。逐项留痕后退回补正，补正前不得进入签约环节。" :
+      '<b style="color:#2e7d4f">审查结论：通过。</b>6 项审查全部通过且无一票否决情形，可进入签约备案环节。审查底稿归档，保存期不短于合同期限。';
+    r.innerHTML = items.map(function (x, i) {
+      return '<div style="display:flex; gap:10px; padding:7px 0; border-bottom:1px dashed rgba(90,107,124,.3); font-size:15px"><b style="min-width:88px">' + (i + 1) + ". " + x.name + "</b>" +
+        (x.pass ? '<b style="color:#2e7d4f; flex:none">✓ 通过</b>' : '<b style="color:#c0392b; flex:none">✗ 不通过</b>') +
+        '<span style="color:#44525f">' + x.why + "</span></div>";
+    }).join("") + '<p style="margin-top:12px; font-size:16px">' + headHtml + "</p>";
+
+    /* 公文打印版：《准入审查结论书》 */
+    var date = arDateCN(), esc = window.mgEsc;
+    document.getElementById("arDoc").innerHTML = '<div class="gov-doc">' +
+      '<h1 class="gov-title">整村屋顶光伏投资运营主体准入审查结论书</h1>' +
+      '<p class="gov-meta"><span>被审查主体：' + esc(info.org || "＿＿＿＿＿＿") + "</span><span>统一社会信用代码：" + esc(info.code || "＿＿＿＿＿＿") + "</span><span>审查日期：" + date + "</span></p>" +
+      '<h2 class="gov-h1">一、逐项审查结论</h2>' +
+      '<table class="gov-tbl"><thead><tr><th style="width:7%">序号</th><th style="width:16%">审查项</th><th style="width:13%">结论</th><th>判定理由</th></tr></thead><tbody>' +
+      items.map(function (x, i) {
+        return '<tr><td class="gov-c">' + (i + 1) + "</td><td>" + x.name + "</td><td class=\"gov-c\">" + (x.pass ? "通过" : "不通过") + "</td><td>" + esc(x.why) + "</td></tr>";
+      }).join("") + "</tbody></table>" +
+      '<h2 class="gov-h1">二、一票否决情形核查</h2>' +
+      "<p>" + (vetoes.length ? "经核查，命中下列一票否决情形：" + esc(vetoes.join("；")) + "。" :
+        "经核查，未命中农户出资举债、以农户名义融资、重大失信记录、租金显失公平四类一票否决情形。") + "</p>" +
+      '<h2 class="gov-h1">三、审查结论</h2>' +
+      "<p><b>审查结论：" + verdict.text + "。</b>" +
+      (verdict.level === "veto" ? "依据手册第 58 条，本结论书面作出并载明依据条款；被否决主体享有陈述申辩权，申辩期间不得入村签约；否决信息在县域内通报。" :
+       verdict.level === "fail" ? "未通过项：" + fails.join("、") + "。逐项留痕后退回补正，补正前不得进入签约环节。" :
+       "6 项审查全部通过且无一票否决情形，可进入签约备案环节；审查底稿归档，保存期不短于合同期限。") + "</p>" +
+      '<p class="gov-note">本结论书由系统依据《整村光伏建设手册》第 56—58 条规则，按审查者填报的客观信息自动判定生成；所附证明材料与审查记录一并存档备查。</p>' +
+      '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
+    document.getElementById("arMsg").style.display = "none";
+  }
+  document.getElementById("arJudge").addEventListener("click", arJudge);
+  document.getElementById("arPrint").addEventListener("click", function () {
+    PV.printZone("#arDoc", "准入审查结论书");
+  });
+
+  /* 材料上传 + 审查记录存档：都要登录；上传失败不阻塞记录提交，更不阻塞判定与打印 */
+  function arSession() {
+    return (window.MG && MG.auth && MG.auth.session) ? MG.auth.session() : null;
+  }
+  function arToast(html, warn) {
+    var m = document.getElementById("arMsg");
+    m.className = warn ? "warn-box" : "note-box";
+    m.innerHTML = html;
+    m.style.display = "block";
+  }
+  function arUploadFiles(sess) {
+    var fl = document.getElementById("arFiles").files, paths = [], fails = [], chain = Promise.resolve();
+    Array.prototype.forEach.call(fl, function (f) {
+      chain = chain.then(function () {
+        /* 文件名逐段编码，中文名直接拼 URL 会被网关拒绝 */
+        var path = sess.user.id + "/" + Date.now() + "_" + encodeURIComponent(f.name);
+        return fetch(MG_CONFIG.url + "/storage/v1/object/review-files/" + path, {
+          method: "POST",
+          headers: { apikey: MG_CONFIG.anonKey, Authorization: "Bearer " + sess.access_token, "x-upsert": "true", "Content-Type": f.type || "application/octet-stream" },
+          body: f
+        }).then(function (res) {
+          if (res.ok) paths.push(path); else fails.push(f.name);
+        }).catch(function () { fails.push(f.name); });
+      });
+    });
+    return chain.then(function () { return { paths: paths, fails: fails }; });
+  }
+  document.getElementById("arSubmit").addEventListener("click", function () {
+    var sess = arSession();
+    if (!sess || !sess.access_token) {
+      arToast('<b>登录后才能提交存档。</b>系统判定与结论书打印不受登录状态影响，可正常使用。<a href="account.html" style="font-weight:600">去登录 / 注册 →</a>', true);
+      return;
+    }
+    if (!arInfo || !arVerdict) { arToast("<b>请先点击「系统判定」再提交存档。</b>", true); return; }
+    arToast("正在上传证明材料……", false);
+    arUploadFiles(sess).then(function (up) {
+      arToast("材料已传 " + up.paths.length + " 份" + (up.fails.length ? "，" + up.fails.length + " 份失败（" + up.fails.join("、") + "），稍后可重新提交重试" : "") + "；正在提交审查记录……", up.fails.length > 0);
+      return fetch(MG_CONFIG.url + "/rest/v1/access_reviews", {
+        method: "POST",
+        headers: { apikey: MG_CONFIG.anonKey, Authorization: "Bearer " + sess.access_token, "Content-Type": "application/json", Prefer: "return=representation" },
+        body: JSON.stringify({
+          org: arInfo.org, village: arV("arVillage").trim(), contact: arV("arContact").trim(),
+          info: arInfo, verdict: arVerdict, files: up.paths
+        })
+      }).then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      }).then(function () {
+        arToast("<b>审查记录已存档。</b>结论：" + arVerdict.verdict.text + "；材料 " + up.paths.length + " 份已上传" +
+          (up.fails.length ? "；" + up.fails.length + " 份材料上传失败（" + up.fails.join("、") + "），可稍后重新提交" : "") + "。", false);
+      });
+    }).catch(function (e) {
+      arToast("<b>提交失败：</b>" + (e && e.message || "网络异常") + "。判定结果与本页填写内容不受影响，可稍后重试；结论书仍可正常打印。", true);
+    });
   });
 
   /* 考核台账 */
@@ -355,6 +500,22 @@ document.addEventListener("DOMContentLoaded", function () {
       rows.push([L[0], document.getElementById("lg" + i + "a").value, document.getElementById("lg" + i + "b").value, document.getElementById("lg" + i + "p").textContent, L[3]]);
     });
     PV.csv("整村光伏考核台账", rows);
+  });
+  /* 考核台账公文打印版：把在线填的分子分母渲染成三线表，只打印结论区而不是整页 */
+  document.getElementById("lgPrint").addEventListener("click", function () {
+    var date = arDateCN();
+    document.getElementById("ledgerDoc").innerHTML = '<div class="gov-doc">' +
+      '<h1 class="gov-title">整村屋顶光伏项目年度考核台账</h1>' +
+      '<p class="gov-meta"><span>考核年度：' + new Date().getFullYear() + " 年度</span><span>填表日期：" + date + "</span></p>" +
+      '<table class="gov-tbl"><thead><tr><th>考核指标</th><th>分子</th><th>分母</th><th>百分比</th><th style="width:34%">参考基准</th></tr></thead><tbody>' +
+      ledgers.map(function (L, i) {
+        return "<tr><td>" + L[0] + '</td><td class="gov-c">' + (document.getElementById("lg" + i + "a").value || "——") +
+          '</td><td class="gov-c">' + (document.getElementById("lg" + i + "b").value || "——") +
+          '</td><td class="gov-c">' + document.getElementById("lg" + i + "p").textContent + "</td><td>" + L[3] + "</td></tr>";
+      }).join("") + "</tbody></table>" +
+      '<p class="gov-note">基准值取东高垣村与大荔县全县口径，仅作参考，不得直接套用为考核标准（手册第 65 条）。全县基准来源：大荔县全县（含东高垣村），截至 2025 年 7—8 月企业台账。</p>' +
+      '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
+    PV.printZone("#ledgerDoc", "整村光伏年度考核台账");
   });
 });
 </script>

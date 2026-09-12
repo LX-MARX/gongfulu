@@ -160,7 +160,9 @@
         var r = b.getBoundingClientRect();
         b.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100) + "%");
         b.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100) + "%");
-        b.style.backgroundPosition = ((e.clientX - r.left) / r.width * 60) + "% 50%";
+        /* 这里原来还跟着鼠标挪 backgroundPosition，金色渐变的暗端会被扫到
+           按钮文字底下，对比度忽高忽低；液态高光靠 .shine 已经够了，
+           背景位置就让它固定，别为了动效牺牲可读性 */
       });
     });
   }
@@ -439,11 +441,11 @@
   function mgBootAddons() {
     var base = "assets/js/", chain = [];
     if (!(window.MG && MG.auth)) {
-      if (!window.MG_CONFIG) chain.push(base + "config.js" + "?v=20260910b");
-      if (!(window.MG && MG.book)) chain.push(base + "api.js" + "?v=20260910b");
-      chain.push(base + "auth.js" + "?v=20260910b");
+      if (!window.MG_CONFIG) chain.push(base + "config.js" + "?v=20260912");
+      if (!(window.MG && MG.book)) chain.push(base + "api.js" + "?v=20260912");
+      chain.push(base + "auth.js" + "?v=20260912");
     }
-    chain.push(base + "chat.js" + "?v=20260910b", base + "tour.js" + "?v=20260910b");
+    chain.push(base + "chat.js" + "?v=20260912", base + "tour.js" + "?v=20260912");
     mgLoadChain(chain, mgRenderAccount);
     document.addEventListener("mg-auth-change", mgRenderAccount);
   }

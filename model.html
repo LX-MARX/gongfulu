@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>通用范式 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260910b">
+<link rel="stylesheet" href="assets/css/main.css?v=20260912">
 <style>
 .masthead{min-height:60vh; display:grid; grid-template-columns:1.1fr .9fr; gap:48px; align-items:center;
   background-image:linear-gradient(rgba(61,90,117,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(61,90,117,.14) 1px,transparent 1px);
@@ -76,7 +76,7 @@
 </section>
 
 <!-- 3D 四方协同星系 -->
-<section class="section grain" style="padding-top:40px">
+<section class="section grain" style="padding-top:40px" id="cosmosSec" data-nav="四方协同">
   <div class="wrap">
     <div class="kicker rv">3D 交互模型</div>
     <h2 class="rv">四方协同星系</h2>
@@ -93,7 +93,7 @@
 </section>
 
 <!-- 学理阐释区 -->
-<section class="section light">
+<section class="section light" id="theory" data-nav="学理阐释">
   <div class="wrap">
     <div class="kicker rv">学理阐释</div>
     <h2 class="rv">4 个角色，4 套机理</h2>
@@ -123,7 +123,7 @@
 </section>
 
 <!-- 价值运动流程图 -->
-<section class="section grain">
+<section class="section grain" id="vflow" data-nav="价值运动">
   <div class="wrap">
     <div class="kicker rv">政治经济学视角</div>
     <h2 class="rv">价值运动：一束阳光的资本循环</h2>
@@ -142,7 +142,7 @@
 </section>
 
 <!-- 村庄适配自评 -->
-<section class="section light">
+<section class="section light" id="fit" data-nav="适配判定">
   <div class="wrap">
     <div class="kicker rv">交互面板</div>
     <h2 class="rv">村庄适配判定：4 项门槛客观核验</h2>
@@ -185,7 +185,7 @@
 </section>
 
 <!-- 复制条件与适用边界 -->
-<section class="section grain" style="padding:0">
+<section class="section grain" style="padding:0" id="cond" data-nav="复制边界">
   <div class="split">
     <div class="cond rv" style="background:var(--ink2); border-left:4px solid var(--gold)">
       <h2 style="color:var(--gold2)">4 项复制条件</h2>
@@ -222,9 +222,10 @@
   </div>
 </div>
 
-<script src="assets/js/data.js?v=20260910b"></script>
-<script src="assets/js/effects.js?v=20260910b"></script>
-<script src="assets/js/main.js?v=20260910b"></script>
+<script src="assets/js/data.js?v=20260912"></script>
+<script src="assets/js/effects.js?v=20260912"></script>
+<script src="assets/js/main.js?v=20260912"></script>
+<script src="assets/js/sidenav.js?v=20260912" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   var faces = [

@@ -1,7 +1,9 @@
 /* 「屋顶上的共富路」v3.2 Final 全局视觉系统
    深空青 #0A1628 体系 · 纯 CSS 零框架 · 离线 */
 :root{
-  --ink:#0A1628; --ink2:#12233A; --mist:#3D5A75;
+  /* --mist 原来 #3D5A75，压深藏青底只有 2.4:1，.lead/.caption 全都看不清；
+     调亮到 #7A93AA 后约 5.8:1。边框类引用跟着变亮一点，无伤大雅 */
+  --ink:#0A1628; --ink2:#12233A; --mist:#7A93AA;
   --gold:#D4A84B; --gold2:#F0D78C;
   --paper:#F0F2F5; --paper2:#F5F5F0; --red:#C84B3F;
   --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
@@ -160,9 +162,13 @@ h3{font-size:22px; font-weight:600; line-height:1.4}
 }
 .btn-gold{
   color:var(--ink);
-  background:linear-gradient(135deg,#8a6a2a,var(--gold) 35%,var(--gold2) 50%,var(--gold) 65%,#8a6a2a);
+  /* 渐变暗端从 #8a6a2a 提到 #a8842f：深色按钮文字压在暗端上只有 3.7:1，
+     提亮后暗端也有 5.3:1，整条渐变任意位置都过 4.5:1 */
+  background:linear-gradient(135deg,#a8842f,var(--gold) 35%,var(--gold2) 50%,var(--gold) 65%,#a8842f);
   background-size:220% 220%; box-shadow:0 4px 22px rgba(212,168,75,.35), inset 0 1px 0 rgba(255,255,255,.4);
 }
+/* hero 区给整块文字加了深色 text-shadow，按钮文字继承下来会糊在金色渐变上 */
+.hero .btn,.hero-inner .btn{text-shadow:none}
 .btn-gold:hover{box-shadow:0 8px 30px rgba(240,215,140,.5), inset 0 1px 0 rgba(255,255,255,.5); transform:translateY(-2px)}
 .btn-line{border-color:var(--gold); color:var(--gold2); background:transparent}
 .btn-line:hover{background:rgba(212,168,75,.12)}
@@ -339,13 +345,19 @@ body.leaving{opacity:0; transition:opacity .3s}
 
 /* ===== 打印 ===== */
 @media print{
-  #nav,#footer,.no-print,#spot,.tool-nav{display:none !important}
+  #nav,#footer,.no-print,#spot,.tool-nav,#sideNav{display:none !important}
   html{scroll-behavior:auto}
   body{background:#fff; color:#000; animation:none}
   .section{padding:24px 0; background:#fff !important}
   .card,.acc,.glass,.res-cell,.match-item,.tl-node,.clause,.scam-opt,.scam2,.dsp-btn,.sim-opt,.tn-item,.cosmos-face{box-shadow:none; border:1px solid #999; background:#fff}
   *{color:#000 !important; text-shadow:none !important; box-shadow:none !important; background-image:none !important; -webkit-print-color-adjust:economy; print-color-adjust:economy}
   .grain::before,.grain::after{display:none}
+  /* 屏幕表格是全框线网格，印出来又重又脏；打印统一收成三线表口径，
+     与 gov-print.css 的公文表格保持一致 */
+  table.tbl{border-top:1.5pt solid #000; border-bottom:1.5pt solid #000}
+  .tbl th,.tbl td{border:none !important; background:#fff !important}
+  .tbl tr:first-child th{border-bottom:.75pt solid #000 !important}
+  .tbl thead th{border-bottom:.75pt solid #000 !important}
   /* 未滚动入场的区块打印时必须可见；3D 变换在纸上无意义，全部摊平 */
   .rv{opacity:1 !important; transform:none !important; filter:none !important}
   .bars3d,.ring3d,.cosmos-inner{transform:none !important}

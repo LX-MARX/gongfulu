@@ -1,35 +1,73 @@
-/* 「屋顶上的共富路」公文打印样式
- * 依据党政机关公文格式惯例：A4 纵向，页边距上 2.54cm 下 2.54cm 左 3.17cm 右 3.17cm；
- * 表题方正小标宋简体二号（22pt），表头信息仿宋_GB2312 三号（16pt），
- * 表格本体宋体四号（14pt）三线表，表尾说明仿宋_GB2312 小四（12pt），行距固定值 28 磅。
- * 仅作用于打印隔离区内的 .gov-doc，不影响站点屏幕样式。
+/* 「屋顶上的共富路」全站公文打印样式
+ * 原来只服务 forms.html 的表格打印，现在各角色页生成的公文都包在
+ * .gov-doc 里走 PV.printZone 输出，所以这份样式按党政机关公文格式
+ * 惯例做成全站共用：正文仿宋_GB2312 三号、标题方正小标宋二号、
+ * 表格一律三线表。屏幕上 .gov-doc 也套用同样的字体口径，所见即所得，
+ * 免得打印出来和预览对不上。
+ * 类名（.gov-doc/.gov-title/.gov-meta/.gov-tbl/.gov-k/.gov-note/.gov-sign）
+ * 是 forms.js 生成 HTML 时写死的，一个都不能动，只能改样式、加新类。
  */
 
-@page { size: A4 portrait; margin: 2.54cm 3.17cm; }
+@page { size: A4; margin: 20mm 18mm; }
 
+/* 正文：仿宋_GB2312 三号（16pt），行距固定值 28 磅。
+ * Times New Roman 放栈首不是笔误——它没有中文字形，中文自然落到仿宋，
+ * 数字和英文则吃上 Times，正是公文「数字用阿拉伯数字、Times 字体」的要求。 */
 .gov-doc {
   color: #000;
   background: #fff;
-  line-height: 28pt; /* 行距固定值 28 磅 */
-  font-size: 14pt;
-  font-family: SimSun, "宋体", serif;
+  font-size: 16pt;
+  line-height: 28pt;
+  font-family: "Times New Roman", "仿宋_GB2312", "FangSong_GB2312", "仿宋", FangSong, serif;
   text-align: left;
 }
 
-/* 表题：方正小标宋简体二号（22pt）居中 */
+/* 标题：方正小标宋简体二号（22pt）居中，行距固定值 35 磅 */
 .gov-title {
-  font-family: "方正小标宋简体", "FZXiaoBiaoSong-B05S", "STZhongsong", SimSun, serif;
+  font-family: "方正小标宋简体", "FZXiaoBiaoSong-B05S", "小标宋体", "宋体", SimSun, serif;
   font-size: 22pt;
-  line-height: 34pt;
-  font-weight: 400;
+  line-height: 35pt;
+  font-weight: 400; /* 小标宋本身就粗，再加 bold 会糊成一团 */
   text-align: center;
   margin: 0 0 12pt;
 }
 
+/* 公文四级小标题的字体分工是硬性约定：
+ * 一级黑体、二级楷体、三级四级仿宋（三级加粗、四级不加重），别图省事统一用黑体 */
+.gov-h1 {
+  font-family: "Times New Roman", "黑体", SimHei, sans-serif;
+  font-size: 16pt;
+  line-height: 28pt;
+  font-weight: 400;
+  margin: 0;
+}
+.gov-h2 {
+  font-family: "Times New Roman", "楷体_GB2312", "KaiTi_GB2312", "楷体", KaiTi, serif;
+  font-size: 16pt;
+  line-height: 28pt;
+  font-weight: 700;
+  margin: 0;
+}
+.gov-h3 {
+  font-family: "Times New Roman", "仿宋_GB2312", "FangSong_GB2312", "仿宋", FangSong, serif;
+  font-size: 16pt;
+  line-height: 28pt;
+  font-weight: 700;
+  margin: 0;
+}
+.gov-h4 {
+  font-family: "Times New Roman", "仿宋_GB2312", "FangSong_GB2312", "仿宋", FangSong, serif;
+  font-size: 16pt;
+  line-height: 28pt;
+  font-weight: 400;
+  margin: 0;
+}
+
 /* 表头信息行：仿宋_GB2312 三号（16pt） */
 .gov-meta {
-  font-family: "仿宋_GB2312", "FangSong_GB2312", FangSong, STFangsong, serif;
+  font-family: "Times New Roman", "仿宋_GB2312", "FangSong_GB2312", "仿宋", FangSong, serif;
   font-size: 16pt;
+  line-height: 28pt;
   margin: 0 0 10pt;
   display: flex;
   justify-content: space-between;
@@ -37,16 +75,18 @@
   gap: 0 24pt;
 }
 
-/* 表格本体：三线表（顶线、栏目线、底线，无竖线、无其余横线），宋体四号（14pt） */
+/* 表格本体：三线表——顶线 1.5pt、栏目线 0.75pt、底线 1.5pt，
+ * 除此之外一条线都不能有（无竖线、无行线），宋体四号（14pt）。
+ * 早先顶底线画了 2.25pt，印出来比正文还抢，改回规范粗细。 */
 .gov-tbl {
   width: 100%;
   border-collapse: collapse;
   border: none;
-  border-top: 2.25pt solid #000;
-  border-bottom: 2.25pt solid #000;
-  font-family: SimSun, "宋体", serif;
+  border-top: 1.5pt solid #000;
+  border-bottom: 1.5pt solid #000;
+  font-family: "Times New Roman", "宋体", SimSun, serif;
   font-size: 14pt;
-  line-height: 28pt;
+  line-height: 1.5;
   table-layout: auto;
 }
 .gov-tbl th,
@@ -61,34 +101,46 @@
 /* 栏目线：表头下唯一一条细分隔线 */
 .gov-tbl thead th {
   border-bottom: 0.75pt solid #000;
-  font-family: SimHei, "黑体", sans-serif;
   text-align: center;
 }
 /* single 表两列：栏目标题列用楷体_GB2312 */
 .gov-tbl .gov-k {
-  font-family: "楷体_GB2312", "KaiTi_GB2312", KaiTi, serif;
+  font-family: "楷体_GB2312", "KaiTi_GB2312", "楷体", KaiTi, serif;
   width: 32%;
   white-space: normal;
 }
 .gov-tbl .gov-c { text-align: center; }
 
-/* 表尾：填表说明摘要，仿宋_GB2312 小四（12pt） */
+/* 表尾说明：仿宋_GB2312 小四（12pt）。
+ * 行距原来 22pt，和正文 28 磅脱节，打印出来明显两截，统一提到 26 磅 */
 .gov-note {
-  font-family: "仿宋_GB2312", "FangSong_GB2312", FangSong, STFangsong, serif;
+  font-family: "Times New Roman", "仿宋_GB2312", "FangSong_GB2312", "仿宋", FangSong, serif;
   font-size: 12pt;
-  line-height: 22pt;
+  line-height: 26pt;
   margin: 14pt 0 0;
   text-align: justify;
 }
 
 /* 落款区：右对齐两行（单位＋成文日期），仿宋_GB2312 三号 */
 .gov-sign {
-  font-family: "仿宋_GB2312", "FangSong_GB2312", FangSong, STFangsong, serif;
+  font-family: "Times New Roman", "仿宋_GB2312", "FangSong_GB2312", "仿宋", FangSong, serif;
   font-size: 16pt;
+  line-height: 28pt;
   text-align: right;
   margin-top: 22pt;
 }
 .gov-sign p { margin: 0; }
+
+/* 屏幕预览时给 .gov-doc 一个纸面感，但只在直接展示时生效；
+ * 走 printZone 打印时这些外观会被 main.css 的打印兜底清掉，互不干扰 */
+@media screen {
+  .gov-doc {
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20mm 18mm;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, .25);
+  }
+}
 
 @media print {
   .gov-doc { width: 100%; }

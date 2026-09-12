@@ -1,6 +1,8 @@
 /* 沐光共富 · Kimi 智能问答悬浮组件（「屋顶上的共富路」站）
  * 左下角金色「问」按钮 → 聊天面板；由 main.js 动态加载，全站每页生效。
- * 依赖 auth.js 提供的 MG.chat(messages) → {reply}；缺失或异常时自动兜底。
+ * 回答分两层：先在本地 FAQ 语料（faq.js，63 条常见问题）里做关键词计分匹配，
+ * 命中就直接答，省一次云端往返、断网也能用；不命中再走 auth.js 的 MG.chat
+ * （Kimi 边缘函数代理）。云端失败时再做一次放宽阈值的本地尝试，最后才兜底话术。
  */
 (function () {
   "use strict";
@@ -9,8 +11,69 @@
 
   var GOLD = "#a5832f", GOLD2 = "#c9a04c";
   var FALLBACK = "暂时无法连接智能助手，请稍后再试，或拨打 13721171245 咨询项目组。";
-  var WELCOME = "您好！我是沐光共富智能助手。关于整村光伏共富模式、政策申报、防骗识别、驻村调研等问题，都可以直接问我。";
-  var CHIPS = ["这个项目是干什么的？", "农户装光伏要出钱吗？", "怎么识别光伏骗局？", "怎么预约驻村调研？"];
+  var WELCOME = "您好！我是沐光共富智能助手，已内置 63 条常见问题（政府、企业、村集体、农户四类），租金、电网容量、防骗识别、申报流程等都能直接答；答不了的会转云端 Kimi 接着答，也可直接向我提问。";
+  var CHIPS = ["农户装光伏要出钱吗？", "租金怎么算？", "怎么识别光伏骗局？", "电网容量不够怎么办？"];
+
+  /* ---------- 本地 FAQ 匹配 ----------
+   * 计分思路：命中的关键词按字数加权（词越长越特异，权重越高）×3，
+   * 再加上用户问句与候选问题之间的二字重合数（捕捉语序相近的问法）。
+   * 要求至少命中一个真实关键词（kw>=2）且总分过线，避免「怎么办」这类
+   * 万能碎片造成误命中——宁可转给 Kimi，也不要答非所问。 */
+  var FAQ_MIN_KW = 2, FAQ_MIN_SCORE = 9;
+
+  function faqNorm(t) {
+    return String(t || "").replace(/[？?！!，,。．.、；;：:\s「」『』"'“”‘’（）()]/g, "");
+  }
+  function faqScore(it, t) {
+    var kw = 0;
+    for (var j = 0; j < it.k.length; j++) {
+      var w = it.k[j];
+      if (w && t.indexOf(w) > -1) kw += w.length;
+    }
+    var q = faqNorm(it.q), bi = 0;
+    for (var p = 0; p < q.length - 1; p++) {
+      if (t.indexOf(q.substr(p, 2)) > -1) bi++;
+    }
+    return { kw: kw, score: kw * 3 + bi };
+  }
+  /* relaxed=true 用于云端失败后的最后一搏：阈值放低，但仍要求有真实关键词命中 */
+  function faqMatch(text, relaxed) {
+    var list = window.MGFAQ;
+    if (!list || !list.length) return null;
+    var t = faqNorm(text);
+    if (!t) return null;
+    var best = null, bestKw = 0, bestScore = 0;
+    for (var i = 0; i < list.length; i++) {
+      var r = faqScore(list[i], t);
+      if (r.score > bestScore) { best = list[i]; bestKw = r.kw; bestScore = r.score; }
+    }
+    var needScore = relaxed ? 6 : FAQ_MIN_SCORE;
+    if (best && bestKw >= FAQ_MIN_KW && bestScore >= needScore) return best;
+    return null;
+  }
+  function faqReply(it) {
+    var tail = "";
+    if (it.ref) tail = it.ref.indexOf("第") === 0 ? "\n（详见手册 " + it.ref + "）" : "\n（来源：" + it.ref + "）";
+    return "【常见问题解答 · " + it.g + "】\n" + it.a + tail;
+  }
+
+  /* faq.js 未必已加载（本组件由 main.js 动态挂，各页脚本清单不一），
+   * 缺了就在第一次提问前补上；并发调用挂队列，脚本只插一次 */
+  var faqCbs = null;
+  function ensureFaq(cb) {
+    if (window.MGFAQ) { cb(); return; }
+    if (faqCbs) { faqCbs.push(cb); return; }
+    faqCbs = [cb];
+    var s = document.createElement("script");
+    s.src = "assets/js/faq.js?v=20260912";
+    function done() {
+      var cbs = faqCbs; faqCbs = null;
+      cbs.forEach(function (f) { f(); });
+    }
+    s.onload = done;
+    s.onerror = function () { console.warn("[共富路] faq.js 加载失败，本地问答不可用"); done(); };
+    document.body.appendChild(s);
+  }
 
   /* ---------- 样式注入（mgc- 前缀，避免冲突） ---------- */
   var css =
@@ -63,7 +126,7 @@
   var panel = document.createElement("div");
   panel.className = "mgc-panel";
   panel.innerHTML =
-    '<div class="mgc-head"><div><b>沐光共富智能助手</b><span>政策、模式、申报、手册，有问必答</span></div>' +
+    '<div class="mgc-head"><div><b>沐光共富智能助手</b><span>已内置 63 条常见问题，也可直接向我提问</span></div>' +
     '<button class="mgc-close" aria-label="关闭">×</button></div>' +
     '<div class="mgc-body"></div>' +
     '<div class="mgc-input"><input type="text" placeholder="请输入您的问题…" maxlength="500">' +
@@ -139,11 +202,20 @@
       hist = hist.slice(-10);
       input.focus();
     };
+    /* 云端不通时的最后一步：放宽阈值再捞一次本地语料，捞不到才亮兜底话术 */
+    var localOrFallback = function () {
+      var hit = faqMatch(text, true);
+      finish(hit ? faqReply(hit) : FALLBACK);
+    };
     try {
-      if (!window.MG || typeof MG.chat !== "function") { finish(FALLBACK); return; }
-      Promise.resolve(MG.chat(hist.slice(-10))).then(function (r) {
-        finish(r && r.reply);
-      }, function () { finish(FALLBACK); });
+      ensureFaq(function () {
+        var hit = faqMatch(text, false);
+        if (hit) { finish(faqReply(hit)); return; }
+        if (!window.MG || typeof MG.chat !== "function") { localOrFallback(); return; }
+        Promise.resolve(MG.chat(hist.slice(-10))).then(function (r) {
+          if (r && r.reply) finish(r.reply); else localOrFallback();
+        }, localOrFallback);
+      });
     } catch (e) { finish(FALLBACK); }
   }
 
@@ -158,4 +230,7 @@
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.isComposing) { e.preventDefault(); send(input.value); }
   });
+
+  /* 语料提前预热：首次提问时不用等网络往返 */
+  ensureFaq(function () { });
 })();

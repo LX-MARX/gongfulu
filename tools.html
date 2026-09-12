@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>数智工具箱 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260910b">
+<link rel="stylesheet" href="assets/css/main.css?v=20260912">
 <style>
 .tool-nav{position:sticky; top:64px; z-index:50; padding:14px 0; background:#0A1628; box-shadow:0 10px 28px rgba(0,0,0,.4)}
-.tool-nav .grid{display:grid; grid-template-columns:repeat(8,1fr); gap:10px}
-@media(max-width:980px){.tool-nav .grid{grid-template-columns:repeat(4,1fr)}}
+.tool-nav .grid{display:grid; grid-template-columns:repeat(9,1fr); gap:10px}
+@media(max-width:980px){.tool-nav .grid{grid-template-columns:repeat(3,1fr)}}
 .tn-item{text-align:center; padding:12px 6px; border-radius:12px; border:1px solid rgba(255,255,255,.1); background:rgba(18,35,58,.6); color:#b8c4d0; font-size:13.5px; transition:.25s; cursor:pointer}
 .tn-item:hover{border-color:var(--gold); color:var(--gold2); transform:translateY(-3px)}
 .tn-item svg{width:26px; height:26px; stroke:var(--gold); margin-bottom:6px}
@@ -46,7 +46,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
   <div class="wrap">
     <div class="kicker rv">交互中心</div>
     <h1 class="rv">数智工具箱</h1>
-    <p class="lead rv" style="margin-top:14px">8 个工具、60 个术语、60 问智能 FAQ——测算全部在本机完成，政策与项目数据实时来自云端数据库，断网自动切换本地缓存。</p>
+    <p class="lead rv" style="margin-top:14px">8 个工具、60 个术语——测算全部在本机完成，政策与项目数据实时来自云端数据库，断网自动切换本地缓存；问答咨询已并入左下角智能问答助手。</p>
   </div>
 </section>
 
@@ -55,7 +55,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
 </div>
 
 <!-- 1 收益测算 -->
-<section class="section light tool-sec" id="t-calc">
+<section class="section light tool-sec" id="t-calc" data-nav="收益测算">
   <div class="wrap">
     <div class="kicker">工具 1</div>
     <h2>收益测算：你家屋顶，25 年能拿多少</h2>
@@ -91,7 +91,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
 </section>
 
 <!-- 2 项目匹配 -->
-<section class="section grain tool-sec" id="t-match">
+<section class="section grain tool-sec" id="t-match" data-nav="项目匹配">
   <div class="wrap">
     <div class="kicker">工具 2</div>
     <h2>项目匹配系统（62 项真实申报项目）</h2>
@@ -113,7 +113,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
 </section>
 
 <!-- 3 合同生成 -->
-<section class="section light tool-sec" id="t-contract">
+<section class="section light tool-sec" id="t-contract" data-nav="合同生成">
   <div class="wrap">
     <div class="kicker">工具 3</div>
     <h2>合同条款生成器</h2>
@@ -139,14 +139,14 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
     <div class="card" style="margin-top:24px">
       <h3>风险扫描：粘贴对方合同，高亮风险条款</h3>
       <textarea id="scanIn" rows="5" placeholder="把对方给你的合同文本粘贴到这里……" style="margin-top:12px"></textarea>
-      <button class="btn btn-gold" style="margin-top:14px" id="scanBtn">开始扫描（50 条风险关键词）</button>
+      <button class="btn btn-gold" style="margin-top:14px" id="scanBtn">开始扫描（条款级风险规则）</button>
       <div id="scanOut" style="margin-top:14px"></div>
     </div>
   </div>
 </section>
 
 <!-- 4 健康评级 -->
-<section class="section grain tool-sec" id="t-health">
+<section class="section grain tool-sec" id="t-health" data-nav="健康评级">
   <div class="wrap">
     <div class="kicker">工具 4</div>
     <h2>电站健康评级</h2>
@@ -162,7 +162,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
 </section>
 
 <!-- 5 租金公示 -->
-<section class="section light tool-sec" id="t-rent">
+<section class="section light tool-sec" id="t-rent" data-nav="租金公示">
   <div class="wrap">
     <div class="kicker">工具 5</div>
     <h2>租金公示表生成</h2>
@@ -180,7 +180,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
 </section>
 
 <!-- 6 明白纸 -->
-<section class="section grain tool-sec" id="t-mz">
+<section class="section grain tool-sec" id="t-mz" data-nav="明白纸">
   <div class="wrap">
     <div class="kicker">工具 6</div>
     <h2>明白纸生成</h2>
@@ -204,7 +204,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
 </section>
 
 <!-- 7 骗局识别 -->
-<section class="section light tool-sec" id="t-scam">
+<section class="section light tool-sec" id="t-scam" data-nav="骗局识别">
   <div class="wrap">
     <div class="kicker">工具 7</div>
     <h2>骗局识别</h2>
@@ -223,7 +223,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
 </section>
 
 <!-- 8 办事指引 -->
-<section class="section grain tool-sec" id="t-guide">
+<section class="section grain tool-sec" id="t-guide" data-nav="办事指引">
   <div class="wrap">
     <div class="kicker">工具 8</div>
     <h2>办事指引</h2>
@@ -239,7 +239,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
 </section>
 
 <!-- 术语词典 -->
-<section class="section light tool-sec" id="t-terms">
+<section class="section light tool-sec" id="t-terms" data-nav="术语词典">
   <div class="wrap">
     <div class="kicker">随查随用</div>
     <h2>术语词典（60 个）</h2>
@@ -249,30 +249,12 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
   </div>
 </section>
 
-<!-- 60 问 FAQ -->
-<section class="section grain tool-sec" id="t-faq">
-  <div class="wrap">
-    <div class="kicker">智能问答</div>
-    <h2>60 问智能 FAQ</h2>
-    <div style="margin:20px 0; display:flex; gap:12px; flex-wrap:wrap; align-items:center">
-      <div id="faqTags">
-        <button class="tag on" data-g="">全部</button>
-        <button class="tag" data-g="G">政府组</button>
-        <button class="tag" data-g="E">企业组</button>
-        <button class="tag" data-g="V">村集体组</button>
-        <button class="tag" data-g="F">农户组</button>
-      </div>
-      <input type="text" id="faqKw" placeholder="关键词搜索……" style="max-width:280px">
-    </div>
-    <div class="faq-cols" id="faqList"></div>
-  </div>
-</section>
-
-<script src="assets/js/data.js?v=20260910b"></script>
-<script src="assets/js/effects.js?v=20260910b"></script>
-<script src="assets/js/config.js?v=20260910b"></script>
-<script src="assets/js/api.js?v=20260910b"></script>
-<script src="assets/js/main.js?v=20260910b"></script>
+<script src="assets/js/data.js?v=20260912"></script>
+<script src="assets/js/effects.js?v=20260912"></script>
+<script src="assets/js/config.js?v=20260912"></script>
+<script src="assets/js/api.js?v=20260912"></script>
+<script src="assets/js/main.js?v=20260912"></script>
+<script src="assets/js/sidenav.js?v=20260912" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   var tools = [["t-calc", "收益测算", "M4 2h16v20H4z M8 6h8 M8 11h2 M14 11h2 M8 15h2 M14 15h2 M8 19h8"],
@@ -282,7 +264,8 @@ document.addEventListener("DOMContentLoaded", function () {
     ["t-rent", "租金公示", "M3 10l9-6 9 6 M5 9v11h14V9 M9 20v-6h6v6"],
     ["t-mz", "明白纸生成", "M7 2h10l4 4v16H7z M10 9h7 M10 13h7 M10 17h5"],
     ["t-scam", "骗局识别", "M12 3l10 18H2z M12 10v5 M12 18v.5"],
-    ["t-guide", "办事指引", "M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z M12 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"]];
+    ["t-guide", "办事指引", "M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z M12 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"],
+    ["t-terms", "术语词典", "M4 4h16v16H4z M8 8h8 M8 12h8 M8 16h5"]];
   document.getElementById("toolNav").innerHTML = tools.map(function (t) {
     return '<div class="tn-item" onclick="document.getElementById(\'' + t[0] + "').scrollIntoView({behavior:'smooth'})\">" +
       '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="' + t[2] + '"/></svg><br>' + t[1] + "</div>";
@@ -455,17 +438,86 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("ctActions").style.display = "block";
   });
 
-  var KW = "贷款,担保,融资租赁,抵押,质押,征信,授权,保证金,押金,服务费,中介费,手续费,违约金,回购,转让,授权委托,全权,代为办理,银行卡,密码,验证码,人脸识别,空白,另行约定,口头,承诺收益,保底收益,高收益,回本,分红比例,股权,合伙,共建,集资,众筹,入伙,加盟,代理费,培训费,诚意金,定金,罚息,复利,展期,自动续约,不可撤销,放弃,免责,概不负责,最终解释权".split(",");
+  /* 风险扫描 v2：条款级判定，替代原来的 50 个关键词朴素子串匹配。
+     旧做法把「不贷款、不担保」「口头承诺无效」「不得留空白」这类保护性条款全部误报，
+     合同写得越保护农户，「风险」反而越多，方向反了。新规则：
+     ① 按分句（。；！？换行）逐句判定，命中的是「风险表述」而不是「风险字眼」；
+     ② 命中处紧邻前文 8 字内有否定词（不/无/禁止/不得/避免/防止/非/勿/莫）的，属否定语境，不算；
+     ③ 命中处紧跟「无效／作废／不算」的，是宣布其无效的保护表述，也不算；
+     ④ 整句是风险提示或保护性指令（含「风险提示」「一律删除」「均属无效」「必须写清」等）的，
+        是对农户的告知而非风险本身，整句跳过。
+     这样本站生成的三种模式合同（纯租赁／合作共建／贷款共建）扫进来命中为 0，
+     而「以农户名义办贷款」「最终解释权归乙方」「口头约定即可」这类真风险一个不漏。 */
+  var RISK_RULES = [
+    { re: /以[^，。；\n]{0,12}?名义[^，。；\n]{0,6}?(办理|申请)?贷款/, why: "以农户名义办理贷款：农户即法定还款义务人，逾期直接影响个人征信，属典型骗贷结构。" },
+    { re: /(要求|由)(农户|甲方)[^，。；\n]{0,8}?(出资|垫付|集资|众筹)/, why: "要求农户出资或垫付：正规整村项目农户零出资，凡要农户掏钱的都是红旗信号。" },
+    { re: /(缴纳|收取|支付|交付)[^，。；\n]{0,8}?(保证金|押金|诚意金|定金|服务费|中介费|手续费|培训费|代理费|加盟费)/, why: "巧立名目收费：保证金、押金、服务费等前置收费在正规整村项目中不存在。" },
+    { re: /最终解释权(归|属于)/, why: "「最终解释权归企业」：霸王条款，发生争议时农户将丧失平等解释地位。" },
+    { re: /口头(约定|承诺|协议|说定)(即可|为准|有效)/, why: "承认口头约定效力：租金、期限等关键内容必须写进书面合同，口头承诺一律不作数。" },
+    { re: /以[^，。；\n]{0,10}?(房产|宅基地|房屋|征信)[^，。；\n]{0,6}?(作|作为|进行|办理)?[^，。；\n]{0,4}?(抵押|质押|担保)/, why: "以房产、宅基地或征信作抵押担保：农户可能因此失去房屋或背上债务。" },
+    { re: /(签署|签订|出具)[^，。；\n]{0,6}?空白(合同|文本|授权|纸张|条款)?/, why: "签署空白文件：空白处可被事后任意填加内容，绝不能签。" },
+    { re: /空白(授权|委托)/, why: "空白授权委托：等于把处置权拱手让人，可被用于冒名贷款。" },
+    { re: /(全权)?授权[^，。；\n]{0,8}?代为(办理|签署|处置|贷款)/, why: "全权授权代办：证件与签字权一旦交出，可能被用于冒名贷款或担保。" },
+    { re: /(索要|索取|提供|告知)[^，。；\n]{0,8}?(银行卡密码|密码|验证码|人脸识别)/, why: "索要密码、验证码或人脸识别：正规签约与结算不需要这些信息，索要即涉嫌诈骗。" },
+    { re: /(承诺|保证|确保)[^，。；\n]{0,6}?(收益|回报|回本|保本)/, why: "承诺收益或保本：发电收益随光照、电价波动，凡打包票的都是话术。" },
+    { re: /(实为|属于|视同|按)[^，。；\n]{0,6}?融资租赁/, why: "名为租赁实为融资租赁：设备所有权与债务会捆到农户身上。" },
+    { re: /自动(续约|续期|展期)/, why: "自动续约条款：到期不表态即被续约，剥夺农户到期选择权。" },
+    { re: /不可撤销/, why: "「不可撤销」表述：压缩农户法定的解除与反悔空间，需逐字核对指向。" },
+    { re: /放弃[^，。；\n]{0,10}?(诉讼|索赔|追偿|申诉|抗辩)/, why: "要求农户预先放弃诉讼、索赔权利：该类条款涉嫌免除己方责任。" },
+    { re: /(概不负责|一律免责|均不承担责任)/, why: "单方免责表述：把本应企业承担的责任整体推掉，权责严重不对等。" },
+    { re: /(复利|利滚利)/, why: "复利计息：逾期成本会快速放大，农户债务风险极高。" },
+    { re: /违约金[^，。；\n]{0,10}?由(农户|甲方)[^，。；\n]{0,4}?承担/, why: "违约金只压农户一侧：违约责任应当对等，单边罚则是坑。" }
+  ];
   document.getElementById("scanBtn").addEventListener("click", function () {
     var txt = document.getElementById("scanIn").value;
     var out = document.getElementById("scanOut");
     if (!txt.trim()) { out.innerHTML = '<p class="caption">请先粘贴合同文本。</p>'; return; }
-    var hits = [];
-    KW.forEach(function (k) { if (txt.indexOf(k) >= 0) hits.push(k); });
-    if (!hits.length) { out.innerHTML = '<div class="note-box"><b style="color:#2e7d4f">未命中风险关键词。</b>仍建议与村公示的备案范本逐条比对，并重点核验 5 大条款。</div>'; return; }
-    var shown = txt.replace(/</g, "＜");
-    hits.forEach(function (k) { shown = shown.split(k).join("<mark>" + k + "</mark>"); });
-    out.innerHTML = '<div class="warn-box"><b>命中 ' + hits.length + ' 类风险关键词：</b>' + hits.join("、") + "<br>替换建议：凡涉「贷款／担保／融资租赁」条款一律删除并改用纯租赁表述；「最终解释权」类条款无效化；收益承诺以书面租金数字为准。涉疑文本请报村两委与镇政府核实。</div>" +
+    var NEG = /(不|无|禁止|不得|避免|防止|非|勿|莫)/;
+    var PROTECT = /(风险提示|警示|一律删除|一律不签|一律拒绝|均属无效|不构成|切勿|建议优先|必须逐字写明|必须写清|必须写明)/;
+    var hits = [], ranges = [];
+    /* 按分隔符切句但保留分隔符本身，这样能把句内命中换算回全文偏移，供整文高亮使用 */
+    var pieces = txt.split(/([。；;\n！？!?]+)/), off = 0;
+    pieces.forEach(function (piece) {
+      if (!piece || /^[。；;\n！？!?]+$/.test(piece)) { off += piece.length; return; }
+      var cl = piece, protect = PROTECT.test(cl);
+      RISK_RULES.forEach(function (rule) {
+        var m = rule.re.exec(cl);
+        if (!m || protect) return;
+        var before = cl.slice(Math.max(0, m.index - 8), m.index);
+        if (NEG.test(before)) return;
+        var after = cl.slice(m.index + m[0].length, m.index + m[0].length + 4);
+        if (/(无效|作废|不算)/.test(after)) return;
+        if (hits.some(function (h) { return h.why === rule.why && h.cl === cl.trim(); })) return;
+        hits.push({ why: rule.why, cl: cl.trim() });
+        ranges.push([off + m.index, off + m.index + m[0].length]);
+      });
+      off += piece.length;
+    });
+    if (!hits.length) {
+      out.innerHTML = '<div class="note-box"><b style="color:#2e7d4f">未命中风险条款。</b>仍建议与村公示的备案范本逐条比对，并重点核验 5 大条款。</div>';
+      return;
+    }
+    /* 高亮区间先按长度降序收编、跳过互相重叠的短命中，再按位置回放——
+       旧版按词典顺序替换，「授权」会先把「授权委托」切碎，长词高亮不完整 */
+    ranges.sort(function (a, b) { return (b[1] - b[0]) - (a[1] - a[0]) || a[0] - b[0]; });
+    var picked = [];
+    ranges.forEach(function (r) {
+      if (picked.some(function (p) { return r[0] < p[1] && p[0] < r[1]; })) return;
+      picked.push(r);
+    });
+    picked.sort(function (a, b) { return a[0] - b[0]; });
+    function esc(s) { /* 转义必须覆盖 & < >，旧版只替换 <，合同里出现 & 或 > 会破坏文本结构 */
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    var shown = "", pos = 0;
+    picked.forEach(function (r) {
+      shown += esc(txt.slice(pos, r[0])) + "<mark>" + esc(txt.slice(r[0], r[1])) + "</mark>";
+      pos = r[1];
+    });
+    shown += esc(txt.slice(pos));
+    out.innerHTML = '<div class="warn-box"><b>命中 ' + hits.length + ' 处风险表述：</b><ol style="padding-left:22px; margin-top:8px; line-height:1.9">' +
+      hits.map(function (h) { return "<li>" + h.why + "</li>"; }).join("") +
+      "</ol>处置建议：凡涉「贷款／担保／融资租赁」条款一律删除并改用纯租赁表述；「最终解释权」类条款无效化；收益承诺以书面租金数字为准。涉疑文本请报村两委与镇政府核实。</div>" +
       '<div class="contract-text" style="display:block; margin-top:12px">' + shown + "</div>";
   });
 
@@ -585,24 +637,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   document.getElementById("termKw").addEventListener("input", renderTerms);
   renderTerms();
-
-  var fg = "", fkw = "";
-  var gname = { G: "政府", E: "企业", V: "村集体", F: "农户" };
-  function renderFaq() {
-    var rows = PVDATA.faq.filter(function (f) {
-      return (!fg || f.g === fg) && (!fkw || (f.q + f.a).indexOf(fkw) >= 0);
-    });
-    document.getElementById("faqList").innerHTML = rows.map(function (f) {
-      return '<details class="acc"><summary><span><span class="pill mist" style="margin-right:8px">' + gname[f.g] + "</span>" + f.no + ". " + f.q + '</span></summary><div class="acc-body">' + f.a + '<br><span class="caption">详见：手册 ' + f.ref + "</span></div></details>";
-    }).join("") || '<p class="caption">无匹配问答。</p>';
-  }
-  document.getElementById("faqTags").addEventListener("click", function (e) {
-    var b = e.target.closest(".tag"); if (!b) return;
-    document.querySelectorAll("#faqTags .tag").forEach(function (t) { t.classList.remove("on"); });
-    b.classList.add("on"); fg = b.dataset.g; renderFaq();
-  });
-  document.getElementById("faqKw").addEventListener("input", function () { fkw = this.value.trim(); renderFaq(); });
-  renderFaq();
 });
 </script>
 </body>

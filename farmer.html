@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>农户工作台 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260910b">
+<link rel="stylesheet" href="assets/css/main.css?v=20260912">
+<link rel="stylesheet" href="assets/css/gov-print.css?v=20260912">
 <style>
 .big-font{font-size:19px}
 .timeline-h{display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin-top:30px}
@@ -38,7 +39,7 @@
 </section>
 
 <!-- 4 项自查 -->
-<section class="section light">
+<section class="section light" id="check" data-nav="条件自查">
   <div class="wrap">
     <div class="kicker rv">结论 1 · 装不装？</div>
     <h2 class="rv">填 5 项客观情况，系统自动判定</h2>
@@ -98,7 +99,7 @@
 </section>
 
 <!-- 登记到拿钱时间轴 -->
-<section class="section grain">
+<section class="section grain" id="timeline" data-nav="办事时间轴">
   <div class="wrap">
     <div class="kicker rv">一张时间轴看明白</div>
     <h2 class="rv">从登记到拿钱：6 个环节</h2>
@@ -109,7 +110,7 @@
 </section>
 
 <!-- 租金速查 -->
-<section class="section light">
+<section class="section light" id="rent" data-nav="租金速查">
   <div class="wrap">
     <div class="kicker rv">结论 2 · 拿多少？</div>
     <h2 class="rv">租金速查表 2.0</h2>
@@ -137,7 +138,7 @@
 </section>
 
 <!-- 合同审查清单 -->
-<section class="section grain">
+<section class="section grain" id="clause" data-nav="合同避坑">
   <div class="wrap">
     <div class="kicker rv">结论 3 · 合同避坑</div>
     <h2 class="rv">合同审查清单：签字之前，盯死 5 条</h2>
@@ -154,7 +155,7 @@
 </section>
 
 <!-- 骗局识别器 -->
-<section class="section light">
+<section class="section light" id="scam" data-nav="骗局识别">
   <div class="wrap">
     <div class="kicker rv">核心工具</div>
     <h2 class="rv">★ 骗局识别器：4 个信号，一个不沾才能谈</h2>
@@ -181,7 +182,7 @@
 </div>
 
 <!-- 签约当天 8 步 -->
-<section class="section grain">
+<section class="section grain" id="sign" data-nav="签约向导">
   <div class="wrap">
     <div class="kicker rv">落笔之前</div>
     <h2 class="rv">签约当天 8 步向导</h2>
@@ -190,15 +191,17 @@
       <div id="signBox"></div>
       <div style="margin-top:18px; display:flex; gap:14px">
         <button class="btn btn-gold" id="signNext">确认本步，继续 →</button>
-        <button class="btn btn-line" id="signPrint" style="display:none" onclick="PV.print()">打印《签约确认单》</button>
+        <button class="btn btn-line" id="signPrint" style="display:none">打印《签约确认单》</button>
       </div>
       <div class="caption" style="margin-top:12px" id="signProg"></div>
+      <!-- 公文打印版容器：只承载签约确认单，打印时经 PV.printZone 隔离输出 -->
+      <div id="signDoc" style="display:none"></div>
     </div>
   </div>
 </section>
 
 <!-- 办事指引 -->
-<section class="section light">
+<section class="section light" id="guide" data-nav="办事指引">
   <div class="wrap">
     <div class="kicker rv">遇到事情别慌</div>
     <h2 class="rv">办事指引：7 类情形，找对人、走对路</h2>
@@ -210,7 +213,7 @@
 </section>
 
 <!-- 老年农户特别提示 -->
-<section class="section grain">
+<section class="section grain" id="elder" data-nav="老年提示">
   <div class="wrap" style="max-width:860px">
     <div class="kicker rv">大字版 · 高对比</div>
     <h2 class="rv">老年农户特别提示</h2>
@@ -222,9 +225,10 @@
   </div>
 </section>
 
-<script src="assets/js/data.js?v=20260910b"></script>
-<script src="assets/js/effects.js?v=20260910b"></script>
-<script src="assets/js/main.js?v=20260910b"></script>
+<script src="assets/js/data.js?v=20260912"></script>
+<script src="assets/js/effects.js?v=20260912"></script>
+<script src="assets/js/main.js?v=20260912"></script>
+<script src="assets/js/sidenav.js?v=20260912" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   /* 自查：客观填报 → 系统按统一规则逐项判定（不同输入必然产出不同结论） */
@@ -379,6 +383,21 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   document.getElementById("signNext").addEventListener("click", function () { si++; renderSign(); });
   renderSign();
+  /* 《签约确认单》公文版：8 步逐项留痕，与合同一并保存 */
+  document.getElementById("signPrint").addEventListener("click", function () {
+    var d = new Date();
+    var date = d.getFullYear() + " 年 " + (d.getMonth() + 1) + " 月 " + d.getDate() + " 日";
+    document.getElementById("signDoc").innerHTML = '<div class="gov-doc">' +
+      '<h1 class="gov-title">屋顶光伏签约确认单</h1>' +
+      '<p class="gov-meta"><span>确认日期：' + date + "</span><span>确认进度：8 / 8 步</span></p>" +
+      '<table class="gov-tbl"><thead><tr><th style="width:10%">序号</th><th>确认事项</th><th style="width:14%">确认结果</th></tr></thead><tbody>' +
+      S.map(function (s, i) {
+        return '<tr><td class="gov-c">' + (i + 1) + "</td><td>" + window.mgEsc(s) + '</td><td class="gov-c">已确认</td></tr>';
+      }).join("") + "</tbody></table>" +
+      '<p class="gov-note">8 步全部确认，可以签约。本确认单建议与合同一并保存；合同原件自家留 1 份，拍照再存 1 份。</p>' +
+      '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
+    PV.printZone("#signDoc", "签约确认单");
+  });
 
   /* 办事指引 */
   var G = [

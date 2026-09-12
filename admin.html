@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>数据管理台 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260910b">
+<link rel="stylesheet" href="assets/css/main.css?v=20260912">
 <style>
 .ad-head{text-align:center; padding:150px 0 50px}
 .toast{position:fixed; top:86px; left:50%; transform:translateX(-50%); z-index:1200; max-width:min(560px,90vw); padding:12px 24px; border-radius:12px; font-size:15px; display:none; backdrop-filter:blur(8px); box-shadow:0 10px 34px rgba(0,0,0,.4)}
@@ -62,7 +62,7 @@ table.adm tr.clickable:hover td{background:rgba(212,168,75,.07)}
   <div class="wrap">
     <div class="kicker rv">项目管理员专属</div>
     <h1 class="rv">数据管理台</h1>
-    <p class="lead rv" style="margin:14px auto 0">预约登记 · 村庄评估 · 表格存档 · 政策项目库 · 用户列表 · 管理员审批，一站管理。</p>
+    <p class="lead rv" style="margin:14px auto 0">预约登记 · 村庄评估 · 表格存档 · 政策项目库 · 用户列表 · 管理员审批 · 操作日志 · 准入审查，一站管理。</p>
   </div>
 </section>
 
@@ -94,6 +94,8 @@ table.adm tr.clickable:hover td{background:rgba(212,168,75,.07)}
         <button data-tab="lib" type="button">政策与项目库维护</button>
         <button data-tab="users" type="button">用户列表</button>
         <button data-tab="apps" type="button">管理员审批</button>
+        <button data-tab="logs" type="button">操作日志</button>
+        <button data-tab="reviews" type="button">准入审查</button>
       </div>
 
       <!-- 预约登记 -->
@@ -137,6 +139,16 @@ table.adm tr.clickable:hover td{background:rgba(212,168,75,.07)}
         <div class="detail-h">历史记录</div>
         <div class="tbl-wrap" id="appsHistory"><div class="empty">读取中……</div></div>
       </div>
+
+      <!-- 操作日志 -->
+      <div class="panel" id="p-logs">
+        <div class="tbl-wrap" id="lgWrap"><div class="empty">读取中……</div></div>
+      </div>
+
+      <!-- 准入审查 -->
+      <div class="panel" id="p-reviews">
+        <div class="tbl-wrap" id="rvWrap"><div class="empty">读取中……</div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -153,12 +165,12 @@ table.adm tr.clickable:hover td{background:rgba(212,168,75,.07)}
   </div>
 </div>
 
-<script src="assets/js/config.js?v=20260910b"></script>
-<script src="assets/js/api.js?v=20260910b"></script>
-<script src="assets/js/auth.js?v=20260910b"></script>
-<script src="assets/js/data.js?v=20260910b"></script>
-<script src="assets/js/effects.js?v=20260910b"></script>
-<script src="assets/js/main.js?v=20260910b"></script>
+<script src="assets/js/config.js?v=20260912"></script>
+<script src="assets/js/api.js?v=20260912"></script>
+<script src="assets/js/auth.js?v=20260912"></script>
+<script src="assets/js/data.js?v=20260912"></script>
+<script src="assets/js/effects.js?v=20260912"></script>
+<script src="assets/js/main.js?v=20260912"></script>
 <script>
 (function () {
   "use strict";
@@ -262,6 +274,8 @@ table.adm tr.clickable:hover td{background:rgba(212,168,75,.07)}
         else if (t === "lib") loadLib(curLib);
         else if (t === "users") loadUsers();
         else if (t === "apps") loadApps();
+        else if (t === "logs") loadLogs();
+        else if (t === "reviews") loadReviews();
       }
     });
   });
@@ -505,14 +519,120 @@ table.adm tr.clickable:hover td{background:rgba(212,168,75,.07)}
     $("usWrap").innerHTML = '<div class="empty">读取中……</div>';
     listTable("profiles", "created_at.desc").then(function (rows) {
       if (!rows.length) { $("usWrap").innerHTML = '<div class="empty">暂无注册用户。</div>'; return; }
-      var html = '<table class="adm"><tr><th>邮箱</th><th>显示名</th><th>角色</th><th>注册时间</th></tr>';
+      var me = MG.auth.session() && MG.auth.session().user ? MG.auth.session().user.id : null;
+      var html = '<table class="adm"><tr><th>邮箱</th><th>显示名</th><th>角色</th><th>注册时间</th><th>操作</th></tr>';
       rows.forEach(function (r) {
         var adm = r.role === "admin";
+        // 自己那行不出按钮：服务端也拦着自己降级，界面上就别给误点的机会
+        var act = (r.id === me) ? '<span style="color:#8a95a1; font-size:12.5px">（当前账号）</span>'
+          : '<button class="btn ' + (adm ? "btn-red" : "btn-gold") + ' mini-btn" data-role="' + esc(r.id) +
+            "|" + (adm ? "user" : "admin") + '" type="button">' + (adm ? "取消管理员" : "设为管理员") + "</button>";
         html += "<tr><td>" + clip(r.email) + "</td><td>" + clip(r.display_name) +
           '</td><td><span class="badge ' + (adm ? "badge-admin" : "badge-user") + '">' + (adm ? "项目管理员" : "普通用户") + "</span></td>" +
-          "<td>" + esc(fmtTime(r.created_at)) + "</td></tr>";
+          "<td>" + esc(fmtTime(r.created_at)) + '</td><td style="white-space:nowrap">' + act + "</td></tr>";
       });
       $("usWrap").innerHTML = html + "</table>";
+      $("usWrap").querySelectorAll("[data-role]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var parts = b.getAttribute("data-role").split("|");
+          var uid = parts[0], role = parts[1];
+          var tip = role === "admin" ? "确定把该用户设为管理员吗？对方将获得管理台全部权限。"
+            : "确定取消该用户的管理员身份吗？";
+          if (!confirm(tip)) return;
+          b.disabled = true;
+          MG.auth.setUserRole(uid, role).then(function () {
+            toast(role === "admin" ? "已设为管理员。" : "已取消管理员身份。", true);
+            loaded.logs = false; // 设角会写日志，下次切到日志页签重新拉
+            loadUsers();
+          }).catch(function (e) {
+            toast("操作失败：" + (e && e.message ? e.message : "网络异常"), false);
+            b.disabled = false;
+          });
+        });
+      });
+    });
+  }
+
+  /* ================= 操作日志 ================= */
+  /* actor / target 都是用户 uuid，得查 profiles 翻译成邮箱才好读 */
+  function loadLogs() {
+    $("lgWrap").innerHTML = '<div class="empty">读取中……</div>';
+    Promise.all([listTable("admin_actions", "created_at.desc"), listTable("profiles", "created_at.desc")]).then(function (rs) {
+      var rows = rs[0], profiles = rs[1];
+      var emailOf = {};
+      profiles.forEach(function (p) { emailOf[p.id] = p.email; });
+      if (!rows.length) { $("lgWrap").innerHTML = '<div class="empty">暂无操作日志。</div>'; return; }
+      var html = '<table class="adm"><tr><th>时间</th><th>操作人</th><th>目标用户</th><th>动作</th><th>详情</th></tr>';
+      rows.forEach(function (r) {
+        html += "<tr><td style='white-space:nowrap'>" + esc(fmtTime(r.created_at)) + "</td><td>" + clip(emailOf[r.actor] || r.actor) +
+          "</td><td>" + clip(emailOf[r.target] || r.target) + "</td><td>" + clip(r.action) +
+          "</td><td>" + clip(typeof r.detail === "object" ? JSON.stringify(r.detail) : r.detail) + "</td></tr>";
+      });
+      $("lgWrap").innerHTML = html + "</table>";
+    });
+  }
+
+  /* ================= 准入审查 ================= */
+  /* gov.html 的准入审查工具写入 access_reviews；材料在私有桶，点开前先换签名 URL */
+  function vSummary(v) {
+    if (v == null) return "—";
+    if (typeof v === "string") return v;
+    if (typeof v === "object") {
+      var keys = ["result", "conclusion", "level", "label", "summary", "结论", "判定", "结果"];
+      for (var i = 0; i < keys.length; i++) if (v[keys[i]] != null) return cellText(v[keys[i]]);
+      return JSON.stringify(v);
+    }
+    return String(v);
+  }
+  function filePath(f) { return typeof f === "string" ? f : (f && (f.path || f.name)) || ""; }
+  function fileName(f) {
+    if (f && typeof f === "object" && f.name) return f.name;
+    var p = filePath(f);
+    return p.split("/").pop() || p;
+  }
+  function loadReviews() {
+    $("rvWrap").innerHTML = '<div class="empty">读取中……</div>';
+    listTable("access_reviews", "created_at.desc").then(function (rows) {
+      if (!rows.length) { $("rvWrap").innerHTML = '<div class="empty">暂无准入审查记录。政府工作台提交审查后会显示在这里。</div>'; return; }
+      var html = '<table class="adm"><tr><th>时间</th><th>企业／机构</th><th>村庄</th><th>联系人</th><th>判定摘要</th></tr>';
+      rows.forEach(function (r, i) {
+        var files = Array.isArray(r.files) ? r.files : [];
+        var fHtml = files.length
+          ? files.map(function (f, j) {
+              return '<button class="btn btn-line mini-btn" data-file="' + i + "|" + j + '" type="button">' + esc(fileName(f)) + "</button>";
+            }).join("")
+          : '<span style="color:#8a95a1">无附件</span>';
+        html += '<tr class="clickable" data-ix="' + i + '"><td style="white-space:nowrap">' + esc(fmtTime(r.created_at)) + "</td><td>" +
+          clip(r.org) + "</td><td>" + clip(r.village) + "</td><td>" + clip(r.contact) + "</td><td>" + clip(vSummary(r.verdict)) + "</td></tr>" +
+          '<tr class="detail-row" data-dt="' + i + '" style="display:none"><td colspan="5">' +
+          '<div class="detail-h">申报信息</div><div class="detail-kv">' + kvRender(r.info) + "</div>" +
+          '<div class="detail-h">审查判定</div><div class="detail-kv">' + kvRender(r.verdict) + "</div>" +
+          '<div class="detail-h">审查材料</div><div style="padding:4px 6px">' + fHtml + "</div>" +
+          "</td></tr>";
+      });
+      $("rvWrap").innerHTML = html + "</table>";
+      $("rvWrap").querySelectorAll("tr.clickable").forEach(function (tr) {
+        tr.addEventListener("click", function (e) {
+          if (e.target.closest("[data-file]")) return; // 点材料按钮不收起详情
+          var d = $("rvWrap").querySelector('tr[data-dt="' + tr.getAttribute("data-ix") + '"]');
+          if (d) d.style.display = d.style.display === "none" ? "" : "none";
+        });
+      });
+      $("rvWrap").querySelectorAll("[data-file]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var parts = b.getAttribute("data-file").split("|");
+          var r = rows[+parts[0]], f = (Array.isArray(r.files) ? r.files : [])[+parts[1]];
+          var path = filePath(f);
+          if (!path) { toast("材料路径缺失，无法打开。", false); return; }
+          b.disabled = true;
+          MG.reviewFileUrl(path).then(function (url) {
+            if (url) window.open(url, "_blank");
+            else toast("获取材料链接失败，请稍后重试。", false);
+          }).catch(function (e) {
+            toast("获取材料链接失败：" + (e && e.message ? e.message : "网络异常"), false);
+          }).then(function () { b.disabled = false; });
+        });
+      });
     });
   }
 
