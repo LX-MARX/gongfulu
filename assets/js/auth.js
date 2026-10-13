@@ -186,7 +186,7 @@
     if (!ready) return Promise.reject(new Error("chat_unavailable"));
     var fn = cfg.QA_FUNCTION || "qa-proxy";
     return fetch(cfg.url + "/functions/v1/" + fn, {
-      method: "POST", headers: { "Content-Type": "application/json", apikey: cfg.anonKey },
+      method: "POST", headers: { "Content-Type": "application/json", apikey: cfg.anonKey, Authorization: "Bearer " + cfg.anonKey },
       body: JSON.stringify({ messages: messages })
     }).then(function (r) { return r.json(); });
   }
