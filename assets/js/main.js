@@ -1,4 +1,8 @@
-/* 「屋顶上的共富路」v3.2 共享脚本：导航/页脚注入 + 全局动效 */
+/*
+ * 屋顶上的共富路整村光伏服务平台软件 V1.0
+ * Copyright (c) 2026 夏立轩
+ * 共享脚本：导航/页脚注入、全局动效、账号区、打印与导出工具。
+ */
 (function () {
   "use strict";
   var STATIC = /[?&]static=1/.test(location.search) ||
@@ -46,7 +50,7 @@
       '<a class="brand" href="index.html"><img src="assets/img/logo.png" alt="项目标识">屋顶上的共富路</a>' +
       '<div class="links" id="navLinks">' + links + "</div>" +
       '<a class="cta" href="booking.html">预约调研</a>' +
-      '<div id="mgNavAcct"><a class="mga-login" href="account.html">登录 / 注册</a></div>' +
+      '<div id="mgNavAcct"><a class="pva-login" href="account.html">登录 / 注册</a></div>' +
       '<button id="navToggle" aria-label="菜单">☰</button>' +
       "</div>";
     document.body.prepend(nav);
@@ -69,14 +73,14 @@
     f.id = "footer";
     f.innerHTML =
       '<div class="wrap"><div class="cols">' +
-      "<div><h4>沐光共富 Solar Common</h4>" +
+      "<div><h4>屋顶上的共富路</h4>" +
       "<p>屋顶上的共富路——整村光伏建设全周期操作方案与数智治理研究</p>" +
       "<p>出品方：屋顶上的共富路项目组丨首个标杆案例：陕西省渭南市大荔县段家镇东高垣村</p></div>" +
       '<div><h4>通用方案</h4><a href="model.html">通用范式</a><a href="gov.html">政府工作台</a><a href="ent.html">企业工作台</a><a href="village.html">村干部工作台</a><a href="farmer.html">农户工作台</a></div>' +
       '<div><h4>工具与评估</h4><a href="tools.html">数智工具箱</a><a href="pension.html">光伏养老</a><a href="eval.html">五维评估</a><a href="booking.html">预约调研</a></div>' +
       '<div><h4>实证与背书</h4><a href="cases.html">东高垣标杆</a><a href="trust.html">背书与成果</a><a href="https://lx-marx.github.io/donggaoyuan-workstation/">相关工具：东高垣数字治理工作站</a></div>' +
       "</div>" +
-      '<div class="bottom">© 2026 沐光共富 Solar Common丨屋顶上的共富路项目组丨云端数据库＋离线缓存双模运行</div>' +
+      '<div class="bottom">© 2026 夏立轩｜屋顶上的共富路项目组｜云端数据库＋离线缓存双模运行</div>' +
       "</div>";
     document.body.appendChild(f);
   }
@@ -107,8 +111,11 @@
     var els = document.querySelectorAll("[data-count]");
     if (!els.length) return;
     function run(el) {
-      var target = parseFloat(el.getAttribute("data-count"));
-      var dec = (el.getAttribute("data-count").split(".")[1] || "").length;
+      var raw = el.getAttribute("data-count");
+      var target = parseFloat(raw);
+      /* 空值防护：缺属性或非数字时不启动动画，保留元素原有文本 */
+      if (raw == null || isNaN(target)) return;
+      var dec = (raw.split(".")[1] || "").length;
       var suf = el.getAttribute("data-suffix") || "";
       if (STATIC) { el.textContent = target.toFixed(dec) + suf; return; }
       var t0 = null;
@@ -145,9 +152,14 @@
       root.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
     }
     els.forEach(function (e) { io.observe(e); });
-    new MutationObserver(function (muts) {
+    /* 观察范围收窄到会发生动态注入的具体容器，避免整页 DOM 变动都触发回调；
+       页面一个已知容器都没有时退回 body 兜底 */
+    var mo = new MutationObserver(function (muts) {
       muts.forEach(function (m) { m.addedNodes.forEach(watchRv); });
-    }).observe(document.body, { childList: true, subtree: true });
+    });
+    var moRoots = document.querySelectorAll("main, #polList, #mList, #steps7, #termList, #formGroups, #guideList, #dspList");
+    if (moRoots.length) moRoots.forEach(function (n) { mo.observe(n, { childList: true, subtree: true }); });
+    else mo.observe(document.body, { childList: true, subtree: true });
   }
 
   /* ---------- 液态金属按钮高光 ---------- */
@@ -160,9 +172,7 @@
         var r = b.getBoundingClientRect();
         b.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100) + "%");
         b.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100) + "%");
-        /* 这里原来还跟着鼠标挪 backgroundPosition，金色渐变的暗端会被扫到
-           按钮文字底下，对比度忽高忽低；液态高光靠 .shine 已经够了，
-           背景位置就让它固定，别为了动效牺牲可读性 */
+        /* 背景位置保持固定，液态高光仅由 .shine 承担，避免按钮文字对比度波动 */
       });
     });
   }
@@ -203,14 +213,21 @@
     });
   }
 
-  /* ---------- 页面切换淡出 ---------- */
+  /* ---------- 页面切换淡出：仅拦截站内同级导航 ----------
+     豁免 Ctrl/Meta/Shift/Alt 组合键与中键（交给浏览器开新标签），
+     豁免站外链接与锚点跳转，避免劫持用户的正常打开方式 */
   function pageFade() {
     if (STATIC) return;
     document.addEventListener("click", function (e) {
+      if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       var a = e.target.closest("a[href$='.html'], a[href*='.html#']");
-      if (!a || a.target === "_blank" || a.href.indexOf("file:") !== 0 && a.origin !== location.origin) return;
-      var url = new URL(a.href);
-      if (url.pathname === location.pathname) return;
+      if (!a || a.target === "_blank") return;
+      var url;
+      try { url = new URL(a.href); } catch (err) { return; }
+      if (url.origin !== location.origin) return; // 站外链接直接放行
+      if (url.pathname === location.pathname) return; // 本页锚点不拦截
+      var dirOf = function (p) { return p.slice(0, p.lastIndexOf("/") + 1); };
+      if (dirOf(url.pathname) !== dirOf(location.pathname)) return; // 仅同级目录导航
       e.preventDefault();
       document.body.classList.add("leaving");
       setTimeout(function () { location.href = a.href; }, 300);
@@ -354,26 +371,33 @@
     }
   };
 
-  /* ---------- 账号区样式（mga- 前缀） ---------- */
+  /* ---------- 账号区样式（pva- 前缀，侧滑面板式） ---------- */
   function mgNavStyle() {
     var st = document.createElement("style");
     st.textContent =
       "#mgNavAcct{display:flex;align-items:center;gap:10px;margin-left:14px;white-space:nowrap}" +
-      ".mga-login{display:inline-block;padding:7px 18px;border:1px solid var(--gold);color:var(--gold);" +
+      ".pva-login{display:inline-block;padding:7px 18px;border:1px solid var(--gold);color:var(--gold);" +
       "border-radius:99px;font-size:14px;letter-spacing:.04em;text-decoration:none;transition:all .25s}" +
-      ".mga-login:hover{background:var(--gold);color:#1a1405}" +
-      ".mga-user{position:relative}" +
-      ".mga-name{background:none;border:1px solid rgba(165,131,47,.55);color:var(--gold);border-radius:99px;" +
+      ".pva-login:hover{background:var(--gold);color:#1a1405}" +
+      ".pva-name{background:none;border:1px solid rgba(165,131,47,.55);color:var(--gold);border-radius:99px;" +
       "padding:7px 16px;font-size:14px;cursor:pointer;font-family:inherit;transition:all .25s}" +
-      ".mga-name:hover{background:rgba(165,131,47,.15)}" +
-      ".mga-menu{position:absolute;top:calc(100% + 8px);right:0;min-width:150px;background:rgba(22,24,30,.97);" +
-      "border:1px solid var(--gold);border-radius:12px;padding:6px;display:none;flex-direction:column;" +
-      "box-shadow:0 12px 32px rgba(0,0,0,.5);z-index:1200}" +
-      ".mga-menu.open{display:flex}" +
-      ".mga-menu [hidden]{display:none!important}" +
-      ".mga-menu a,.mga-menu button{display:block;text-align:left;padding:9px 14px;font-size:13.5px;" +
+      ".pva-name:hover{background:rgba(165,131,47,.15)}" +
+      ".pva-mask{position:fixed;inset:0;z-index:1290;background:rgba(8,10,14,.55);" +
+      "opacity:0;pointer-events:none;transition:opacity .3s}" +
+      ".pva-mask.open{opacity:1;pointer-events:auto}" +
+      ".pva-panel{position:fixed;top:0;right:0;bottom:0;z-index:1300;width:264px;background:rgba(22,24,30,.98);" +
+      "border-left:1px solid var(--gold);padding:22px 16px;display:flex;flex-direction:column;gap:6px;" +
+      "transform:translateX(102%);transition:transform .32s cubic-bezier(.16,1,.3,1);box-shadow:-18px 0 44px rgba(0,0,0,.45)}" +
+      ".pva-panel.open{transform:translateX(0)}" +
+      ".pva-panel [hidden]{display:none!important}" +
+      ".pva-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 6px 14px;" +
+      "border-bottom:1px solid rgba(165,131,47,.35);margin-bottom:10px}" +
+      ".pva-head b{font-size:15px;color:var(--gold2,var(--gold));font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}" +
+      ".pva-close{flex:none;background:none;border:0;color:#b9b2a2;font-size:22px;line-height:1;cursor:pointer;padding:2px 6px;border-radius:8px}" +
+      ".pva-close:hover{color:#fff;background:rgba(255,255,255,.08)}" +
+      ".pva-panel a,.pva-panel .pva-out{display:block;text-align:left;padding:11px 14px;font-size:14px;" +
       "color:#e8e4da;text-decoration:none;background:none;border:0;border-radius:8px;cursor:pointer;font-family:inherit}" +
-      ".mga-menu a:hover,.mga-menu button:hover{background:rgba(165,131,47,.18);color:var(--gold2,var(--gold))}";
+      ".pva-panel a:hover,.pva-panel .pva-out:hover{background:rgba(165,131,47,.18);color:var(--gold2,var(--gold))}";
     document.head.appendChild(st);
   }
 
@@ -400,38 +424,47 @@
   }
   window.mgEsc = mgEsc;
 
-  /* ---------- 导航账号区：未登录→登录/注册；已登录→显示名＋下拉 ---------- */
+  /* ---------- 导航账号区：未登录→登录/注册；已登录→显示名＋右侧滑出面板 ---------- */
   function mgRenderAccount() {
     var host = document.getElementById("mgNavAcct");
     if (!host || !window.MG || !MG.auth) return;
+    /* 登录态变化会重复调用本函数，先清掉上一轮挂的遮罩与面板 */
+    document.querySelectorAll(".pva-mask,.pva-panel").forEach(function (n) { n.remove(); });
     var s = MG.auth.session();
     if (!s || !s.user) {
-      host.innerHTML = '<a class="mga-login" href="account.html">登录 / 注册</a>';
+      host.innerHTML = '<a class="pva-login" href="account.html">登录 / 注册</a>';
       return;
     }
     var name = (s.user.user_metadata && s.user.user_metadata.display_name) ||
       String(s.user.email || "").split("@")[0] || "用户";
-    host.innerHTML =
-      '<div class="mga-user">' +
-      '<button type="button" class="mga-name">' + mgEsc(name) + ' ▾</button>' +
-      '<div class="mga-menu">' +
+    host.innerHTML = '<button type="button" class="pva-name">' + mgEsc(name) + '</button>';
+    var mask = document.createElement("div");
+    mask.className = "pva-mask";
+    var panel = document.createElement("div");
+    panel.className = "pva-panel";
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-label", "账号面板");
+    panel.innerHTML =
+      '<div class="pva-head"><b>' + mgEsc(name) + '</b><button type="button" class="pva-close" aria-label="关闭">×</button></div>' +
       '<a href="account.html">个人中心</a>' +
-      '<a href="admin.html" class="mga-admin" hidden>管理台</a>' +
-      '<button type="button" class="mga-out">退出登录</button>' +
-      "</div></div>";
-    var nameBtn = host.querySelector(".mga-name"), menu = host.querySelector(".mga-menu");
-    nameBtn.addEventListener("click", function (e) {
+      '<a href="admin.html" class="pva-admin" hidden>管理台</a>' +
+      '<button type="button" class="pva-out">退出登录</button>';
+    document.body.appendChild(mask);
+    document.body.appendChild(panel);
+    function closePanel() { mask.classList.remove("open"); panel.classList.remove("open"); }
+    host.querySelector(".pva-name").addEventListener("click", function (e) {
       e.stopPropagation();
-      menu.classList.toggle("open");
+      mask.classList.add("open"); panel.classList.add("open");
     });
-    document.addEventListener("click", function () { menu.classList.remove("open"); });
+    mask.addEventListener("click", closePanel);
+    panel.querySelector(".pva-close").addEventListener("click", closePanel);
     MG.auth.profile().then(function (p) {
       if (p && p.role === "admin") {
-        var a = host.querySelector(".mga-admin");
+        var a = panel.querySelector(".pva-admin");
         if (a) a.hidden = false;
       }
     });
-    host.querySelector(".mga-out").addEventListener("click", function () {
+    panel.querySelector(".pva-out").addEventListener("click", function () {
       MG.auth.signOut().then(function () { location.reload(); });
     });
   }
@@ -441,11 +474,11 @@
   function mgBootAddons() {
     var base = "assets/js/", chain = [];
     if (!(window.MG && MG.auth)) {
-      if (!window.MG_CONFIG) chain.push(base + "config.js" + "?v=20260912");
-      if (!(window.MG && MG.book)) chain.push(base + "api.js" + "?v=20260912");
-      chain.push(base + "auth.js" + "?v=20260912");
+      if (!window.MG_CONFIG) chain.push(base + "config.js");
+      if (!(window.MG && MG.book)) chain.push(base + "api.js");
+      chain.push(base + "auth.js");
     }
-    chain.push(base + "chat.js" + "?v=20260912", base + "tour.js" + "?v=20260912");
+    chain.push(base + "chat.js", base + "tour.js");
     mgLoadChain(chain, mgRenderAccount);
     document.addEventListener("mg-auth-change", mgRenderAccount);
   }

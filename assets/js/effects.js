@@ -1,4 +1,8 @@
-/* 「屋顶上的共富路」v3.2 八处核心 3D/高级动效：原生 Canvas 2D + CSS 3D，零框架 */
+/*
+ * 屋顶上的共富路整村光伏服务平台软件 V1.0
+ * Copyright (c) 2026 夏立轩
+ * 核心 3D/高级动效：原生 Canvas 2D + CSS 3D，零框架。
+ */
 (function () {
   "use strict";
   var STATIC = /[?&]static=1/.test(location.search) ||
@@ -21,6 +25,8 @@
       houses.push({ r: r, c: c, hh: 14 + Math.random() * 20, tw: Math.random() * 6.28 });
     }
     var mx = 0, my = 0, tmx = 0, tmy = 0, sink = 0;
+    /* 等距网格绘制顺序固定（画家算法），生成后一次排序即可，无需每帧重排 */
+    houses.sort(function (a, b) { return (a.r + a.c) - (b.r + b.c); });
     addEventListener("mousemove", function (e) {
       tmx = (e.clientX / innerWidth - .5) * 40; tmy = (e.clientY / innerHeight - .5) * 40;
     }, { passive: true });
@@ -43,7 +49,6 @@
       ctx.fillStyle = "rgba(18,35,58,.55)";
       var g0 = iso(0, 0), g1 = iso(0, C), g2 = iso(R, C), g3 = iso(R, 0);
       ctx.beginPath(); ctx.moveTo(g0[0], g0[1]); ctx.lineTo(g1[0], g1[1]); ctx.lineTo(g2[0], g2[1]); ctx.lineTo(g3[0], g3[1]); ctx.closePath(); ctx.fill();
-      houses.sort(function (a, b) { return (a.r + a.c) - (b.r + b.c); });
       houses.forEach(function (h) {
         var p = iso(h.r, h.c), x = p[0], y = p[1], hw = TW * .34, hh = h.hh;
         ctx.fillStyle = "#16293f";

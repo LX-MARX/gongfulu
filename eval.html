@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>五维评估 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260910b">
+<link rel="stylesheet" href="assets/css/main.css">
 <style>
 #radarBall{width:100%; height:600px; cursor:grab}
 #radarBall:active{cursor:grabbing}
@@ -89,7 +89,7 @@
         <h3>提交评估存档</h3>
         <div class="grid2" style="margin-top:14px">
           <div><label>村庄名称</label><input type="text" id="evVillageName" placeholder="如：东高垣村"></div>
-          <div><label>联系方式（选填）</label><input type="text" id="evContact" placeholder="如：村两委 ×× 电话"></div>
+          <div><label>联系方式（必填）</label><input type="text" id="evContact" placeholder="如：村两委 ×× 电话"></div>
         </div>
         <div style="margin-top:16px; display:flex; gap:14px; flex-wrap:wrap; align-items:center">
           <button class="btn btn-gold" id="evSubmit">提交评估存档</button>
@@ -110,9 +110,9 @@
   </div>
 </section>
 
-<script src="assets/js/data.js?v=20260910b"></script>
-<script src="assets/js/effects.js?v=20260910b"></script>
-<script src="assets/js/main.js?v=20260910b"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/main.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   var dims = [
@@ -243,21 +243,41 @@ document.addEventListener("DOMContentLoaded", function () {
     lastEval.grade = grade;
     drawSelf();
   });
+  /* 提交存档：节流 + 必填校验 + 回执编号 */
+  var evBusy = false;
   document.getElementById("evSubmit").addEventListener("click", function () {
     var msg = document.getElementById("evSubmitMsg");
+    var btn = document.getElementById("evSubmit");
+    /* 节流：提交进行中忽略重复点击 */
+    if (evBusy) return;
     if (!lastEval) { msg.textContent = "请先点击「计算五维得分」。"; return; }
     var village = gv("evVillageName").trim(), contact = gv("evContact").trim();
+    /* 必填校验：村庄名称与联系方式 */
+    if (!village) { msg.textContent = "请填写村庄名称。"; return; }
+    if (!contact) { msg.textContent = "请填写联系方式，便于后续回访核实。"; return; }
     var scores = {};
     lastEval.cards.forEach(function (c) { scores[c.name] = c.s; });
     if (!(window.MG && typeof MG.evalSubmit === "function")) {
       msg.textContent = "提交失败，请稍后重试。";
       return;
     }
+    evBusy = true;
+    btn.disabled = true;
     msg.textContent = "正在提交……";
     /* evalSubmit 内部不抛错：写入失败（含离线未配置）resolve null，只有拿到响应才算成功 */
     MG.evalSubmit("gongfulu", "five_dim", village, contact, lastEval.inputs, scores, lastEval.grade)
       .then(function (res) {
-        msg.textContent = res ? "已提交存档。" : "提交失败，请稍后重试。";
+        if (res) {
+          /* 生成回执编号：PG-提交日期-记录号（云端未返回记录号时取 100-899 随机数） */
+          var d = new Date();
+          var ymd = "" + d.getFullYear() + ("0" + (d.getMonth() + 1)).slice(-2) + ("0" + d.getDate()).slice(-2);
+          var seq = (res[0] && res[0].id) || (100 + Math.floor(Math.random() * 800));
+          msg.textContent = "已提交存档，回执编号：PG-" + ymd + "-" + seq + "。";
+        } else {
+          msg.textContent = "提交失败，请稍后重试。";
+        }
+        evBusy = false;
+        btn.disabled = false;
       });
   });
   addEventListener("resize", drawSelf);

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>预约调研 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260910b">
+<link rel="stylesheet" href="assets/css/main.css">
 <style>
 .bk-head{text-align:center; padding:140px 0 60px}
 .bk-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:20px}
@@ -14,6 +14,9 @@
 .bk-card .bd{flex:1; font-size:14.5px; color:#b8c4d0}
 #qForm label{margin-top:12px}
 #qDone{display:none; text-align:center}
+.fld-err{display:block; color:#ff9d94; font-size:13px; margin-top:5px; line-height:1.5}
+.fld-err:empty{display:none}
+#qForm input.fld-bad{border-color:#ff8a80; box-shadow:0 0 0 1px #ff8a80}
 .svc{display:grid; grid-template-columns:repeat(4,1fr); gap:22px; margin-top:30px}
 @media(max-width:900px){.svc{grid-template-columns:1fr 1fr}}
 .svc .card{text-align:center}
@@ -39,9 +42,9 @@
         <h3 style="color:var(--gold2)">① 在线问卷预约</h3>
         <p class="bd">极简 5 题，约 1 分钟填完；提交后获得预约编号，课题组 3 个工作日内与您联系确认调研时间。</p>
         <div id="qForm">
-          <label>Q1 您的姓名</label><input type="text" id="q1">
+          <label>Q1 您的姓名</label><input type="text" id="q1"><span class="fld-err" id="e-q1"></span>
           <label>Q2 您的单位／职务</label><input type="text" id="q2" placeholder="如：××县发改委／××村村支书／××企业投资部">
-          <label>Q3 联系电话（必填）</label><input type="tel" id="q3" placeholder="手机号">
+          <label>Q3 联系电话（必填）</label><input type="tel" id="q3" placeholder="手机号"><span class="fld-err" id="e-q3"></span>
           <label>Q4 调研地点</label>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
             <select id="q4p"><option>陕西省</option><option>其他省份</option></select>
@@ -49,6 +52,7 @@
             <select id="q4x"><option>大荔县</option><option>其他县区</option></select>
             <input type="text" id="q4v" placeholder="镇、村名称">
           </div>
+          <span class="fld-err" id="e-q4v"></span>
           <label>Q5 村庄基本情况</label><textarea id="q5" rows="3" placeholder="全村约＿＿户，有意向／已开展光伏的约＿＿户，主要想解决什么问题"></textarea>
           <button class="btn btn-gold" style="margin-top:18px; width:100%" id="qSubmit">填写预约问卷 · 提交</button>
         </div>
@@ -92,14 +96,22 @@
   </div>
 </section>
 
-<script src="assets/js/data.js?v=20260910b"></script>
-<script src="assets/js/effects.js?v=20260910b"></script>
-<script src="assets/js/config.js?v=20260910b"></script>
-<script src="assets/js/api.js?v=20260910b"></script>
-<script src="assets/js/main.js?v=20260910b"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
 <div style="display:none"><div id="qVoucher"></div></div>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+  var esc = window.mgEsc;
+  /* 字段级内联校验：出错字段红字提示＋边框标红并聚焦，重新提交时自动清除 */
+  function fldErr(id, msg) {
+    var s = document.getElementById("e-" + id), f = document.getElementById(id);
+    if (s) s.textContent = msg || "";
+    if (f) f.classList.toggle("fld-bad", !!msg);
+    if (msg && f) f.focus();
+  }
   document.getElementById("qSubmit").addEventListener("click", function () {
     var name = document.getElementById("q1").value.trim();
     var unit = document.getElementById("q2").value.trim();
@@ -107,9 +119,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var addr = document.getElementById("q4p").value + document.getElementById("q4c").value + document.getElementById("q4x").value;
     var vg = document.getElementById("q4v").value.trim();
     var brief = document.getElementById("q5").value.trim();
-    if (!name) { alert("请填写您的姓名（Q1 为必填）。"); return; }
-    if (!/^1\d{10}$/.test(tel)) { alert("请填写 11 位手机号（Q3 为必填）。"); return; }
-    if (!vg) { alert("请填写镇、村名称（Q4 为必填）。"); return; }
+    fldErr("q1"); fldErr("q3"); fldErr("q4v");
+    if (!name) { fldErr("q1", "请填写您的姓名（Q1 为必填）。"); return; }
+    if (!/^1\d{10}$/.test(tel)) { fldErr("q3", "请填写 11 位手机号（Q3 为必填）。"); return; }
+    if (!vg) { fldErr("q4v", "请填写镇、村名称（Q4 为必填）。"); return; }
     var hm = brief.match(/(\d+)\s*户/);
     var rec = {
       site: "gongfulu",
@@ -135,10 +148,10 @@ document.addEventListener("DOMContentLoaded", function () {
         '<p style="text-align:center; font-size:13px; letter-spacing:.2em">屋顶上的共富路 · 整村光伏驻村调研</p>' +
         '<table class="tbl" style="margin-top:6px">' +
         "<tr><th style='width:130px'>登记编号</th><td><b>" + no + "</b></td></tr>" +
-        "<tr><th>调研村庄</th><td>" + rec.village + "</td></tr>" +
-        "<tr><th>联系人</th><td>" + rec.contact + "</td></tr>" +
-        "<tr><th>联系电话</th><td>" + rec.phone + "</td></tr>" +
-        "<tr><th>村庄基本情况</th><td>" + (brief || "（未填写）") + "</td></tr>" +
+        "<tr><th>调研村庄</th><td>" + esc(rec.village) + "</td></tr>" +
+        "<tr><th>联系人</th><td>" + esc(rec.contact) + "</td></tr>" +
+        "<tr><th>联系电话</th><td>" + esc(rec.phone) + "</td></tr>" +
+        "<tr><th>村庄基本情况</th><td>" + esc(brief || "（未填写）") + "</td></tr>" +
         "<tr><th>提交时间</th><td>" + dateStr + " " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0") + "</td></tr>" +
         "<tr><th>登记日期</th><td>" + dateStr + "</td></tr>" +
         "<tr><th>登记状态</th><td>" + (online ? "已写入云端数据库" : "离线本机登记，待二次确认") + "</td></tr>" +

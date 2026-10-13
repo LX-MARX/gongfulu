@@ -9,7 +9,7 @@
  */
 (function () {
   "use strict";
-  if (window.__pvSideNavLoaded) return; // defer 双引或同事重复引入时别挂两遍
+  if (window.__pvSideNavLoaded) return; // defer 双引时防止重复挂载
   window.__pvSideNavLoaded = true;
 
   var CSS =

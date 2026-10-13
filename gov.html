@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>政府工作台 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260912">
-<link rel="stylesheet" href="assets/css/gov-print.css?v=20260912">
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/gov-print.css">
 <style>
 .search-panel{padding:34px; margin-top:30px}
 #polSearch{font-size:18px; padding:16px 22px}
@@ -194,12 +194,12 @@
   </div>
 </section>
 
-<script src="assets/js/data.js?v=20260912"></script>
-<script src="assets/js/effects.js?v=20260912"></script>
-<script src="assets/js/config.js?v=20260912"></script>
-<script src="assets/js/api.js?v=20260912"></script>
-<script src="assets/js/main.js?v=20260912"></script>
-<script src="assets/js/sidenav.js?v=20260912" defer></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/sidenav.js" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   /* 政策检索（云端政策库优先，连接失败或未配置时回退本地缓存） */
@@ -214,6 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
       requirement: p.requirement, deadline: p.deadline, subsidy: p.subsidy };
   }
   function renderPol() {
+    var esc = window.mgEsc; /* 云端/缓存数据一律转义后再进 innerHTML */
     var rows = polRows.filter(function (p) {
       var okLv = !lv || p.level.indexOf(lv.replace("镇村", "镇")) >= 0;
       var okKw = !kw || (p.title + p.org + p.topics.join(" ") + p.docNo).toLowerCase().indexOf(kw) >= 0;
@@ -221,9 +222,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     cnt.textContent = "共 " + rows.length + " 条（展示前 30 条）" + (window.MG && MG.state.online ? "丨数据来源：云端政策库（实时）" : "丨数据来源：本地缓存");
     list.innerHTML = rows.slice(0, 30).map(function (p) {
-      return '<div class="pol-item"><div class="tt">' + p.title + '</div>' +
-        '<div class="meta">' + p.level + " 丨 " + p.org + " 丨 " + (p.docNo || "文号见原文") + " 丨 " + p.date + "</div>" +
-        '<div class="ap"><b style="color:var(--gold2)">基层落实要点：</b>' + (p.applyPoint || p.requirement || "—") + "</div></div>";
+      return '<div class="pol-item"><div class="tt">' + esc(p.title) + '</div>' +
+        '<div class="meta">' + esc(p.level) + " 丨 " + esc(p.org) + " 丨 " + esc(p.docNo || "文号见原文") + " 丨 " + esc(p.date) + "</div>" +
+        '<div class="ap"><b style="color:var(--gold2)">基层落实要点：</b>' + esc(p.applyPoint || p.requirement || "—") + "</div></div>";
     }).join("") || '<p class="caption">无匹配结果。</p>';
   }
   function loadPol() {

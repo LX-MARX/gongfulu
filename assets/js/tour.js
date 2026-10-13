@@ -1,7 +1,8 @@
-/* 沐光共富 · 新手引导（「屋顶上的共富路」站）
- * 首访自动弹出一次（localStorage: mg_tour_done_gongfulu）；
- * 导航账号区左侧常驻「使用指南」按钮，点击可随时重播。
- * 遮罩点击不关闭，必须点按钮操作，防止误触。
+/*
+ * 屋顶上的共富路整村光伏服务平台软件 V1.0
+ * Copyright (c) 2026 夏立轩
+ * 新手引导：首访自动弹出一次（localStorage: mg_tour_done_gongfulu）；
+ * 导航账号区左侧常驻「使用指南」按钮，点击可随时重播。遮罩点击不关闭，必须点按钮操作，防止误触。
  */
 (function () {
   "use strict";
@@ -43,31 +44,31 @@
     }
   ];
 
-  /* ---------- 样式注入（mgt- 前缀） ---------- */
+  /* ---------- 样式注入（pvt- 前缀） ---------- */
   var css =
-    ".mgt-guide{border:1px solid " + GOLD + ";color:" + GOLD2 + ";background:transparent;border-radius:99px;" +
+    ".pvt-guide{border:1px solid " + GOLD + ";color:" + GOLD2 + ";background:transparent;border-radius:99px;" +
     "padding:6px 14px;font-size:13px;letter-spacing:.04em;cursor:pointer;white-space:nowrap;transition:all .25s;font-family:inherit}" +
-    ".mgt-guide:hover{background:" + GOLD + ";color:#1a1405}" +
-    ".mgt-mask{position:fixed;inset:0;z-index:10020;background:rgba(8,8,12,.62);backdrop-filter:blur(3px);" +
+    ".pvt-guide:hover{background:" + GOLD + ";color:#1a1405}" +
+    ".pvt-mask{position:fixed;inset:0;z-index:10020;background:rgba(8,8,12,.62);backdrop-filter:blur(3px);" +
     "display:flex;align-items:center;justify-content:center;font-family:inherit}" +
-    ".mgt-card{width:420px;max-width:92vw;background:rgba(20,22,28,.96);border:1px solid " + GOLD + ";border-radius:18px;" +
-    "box-shadow:0 24px 70px rgba(0,0,0,.6);padding:28px 28px 20px;animation:mgt-in .35s ease}" +
-    "@keyframes mgt-in{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}" +
-    ".mgt-step-no{font-size:12px;color:" + GOLD2 + ";letter-spacing:.15em;margin-bottom:10px}" +
-    ".mgt-title{font-size:20px;font-weight:700;color:#f0ece2;margin:0 0 12px;letter-spacing:.02em}" +
-    ".mgt-desc{font-size:14px;line-height:1.85;color:#c9c2b2;margin:0 0 22px;min-height:78px}" +
-    ".mgt-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}" +
-    ".mgt-dots{display:flex;gap:7px}" +
-    ".mgt-dots i{width:8px;height:8px;border-radius:50%;background:rgba(197,160,76,.3);transition:all .25s}" +
-    ".mgt-dots i.on{background:" + GOLD2 + ";transform:scale(1.25)}" +
-    ".mgt-btns{display:flex;gap:8px;align-items:center}" +
-    ".mgt-btn{border-radius:99px;padding:8px 18px;font-size:13.5px;cursor:pointer;transition:all .25s;font-family:inherit}" +
-    ".mgt-btn.skip{background:none;border:0;color:#8a8378;padding:8px 10px}" +
-    ".mgt-btn.skip:hover{color:#c9c2b2}" +
-    ".mgt-btn.prev{background:none;border:1px solid rgba(197,160,76,.5);color:#c9c2b2}" +
-    ".mgt-btn.prev:hover{border-color:" + GOLD2 + ";color:" + GOLD2 + "}" +
-    ".mgt-btn.next{background:linear-gradient(135deg," + GOLD2 + "," + GOLD + ");border:0;color:#1a1405;font-weight:700}" +
-    ".mgt-btn.next:hover{filter:brightness(1.1)}";
+    ".pvt-card{width:420px;max-width:92vw;background:rgba(20,22,28,.96);border:1px solid " + GOLD + ";border-radius:18px;" +
+    "box-shadow:0 24px 70px rgba(0,0,0,.6);padding:28px 28px 20px;animation:pvt-in .35s ease}" +
+    "@keyframes pvt-in{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}" +
+    ".pvt-step-no{font-size:12px;color:" + GOLD2 + ";letter-spacing:.15em;margin-bottom:10px}" +
+    ".pvt-title{font-size:20px;font-weight:700;color:#f0ece2;margin:0 0 12px;letter-spacing:.02em}" +
+    ".pvt-desc{font-size:14px;line-height:1.85;color:#c9c2b2;margin:0 0 22px;min-height:78px}" +
+    ".pvt-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}" +
+    ".pvt-dots{display:flex;gap:7px}" +
+    ".pvt-dots i{width:8px;height:8px;border-radius:50%;background:rgba(197,160,76,.3);transition:all .25s}" +
+    ".pvt-dots i.on{background:" + GOLD2 + ";transform:scale(1.25)}" +
+    ".pvt-btns{display:flex;gap:8px;align-items:center}" +
+    ".pvt-btn{border-radius:99px;padding:8px 18px;font-size:13.5px;cursor:pointer;transition:all .25s;font-family:inherit}" +
+    ".pvt-btn.skip{background:none;border:0;color:#8a8378;padding:8px 10px}" +
+    ".pvt-btn.skip:hover{color:#c9c2b2}" +
+    ".pvt-btn.prev{background:none;border:1px solid rgba(197,160,76,.5);color:#c9c2b2}" +
+    ".pvt-btn.prev:hover{border-color:" + GOLD2 + ";color:" + GOLD2 + "}" +
+    ".pvt-btn.next{background:linear-gradient(135deg," + GOLD2 + "," + GOLD + ");border:0;color:#1a1405;font-weight:700}" +
+    ".pvt-btn.next:hover{filter:brightness(1.1)}";
   var st = document.createElement("style");
   st.textContent = css;
   document.head.appendChild(st);
@@ -81,38 +82,38 @@
 
   function render() {
     var s = STEPS[cur], last = cur === STEPS.length - 1;
-    mask.querySelector(".mgt-step-no").textContent = "第 " + (cur + 1) + " 步 · 共 " + STEPS.length + " 步";
-    mask.querySelector(".mgt-title").textContent = s.t;
-    mask.querySelector(".mgt-desc").textContent = s.d;
-    var dots = mask.querySelectorAll(".mgt-dots i");
+    mask.querySelector(".pvt-step-no").textContent = "第 " + (cur + 1) + " 步 · 共 " + STEPS.length + " 步";
+    mask.querySelector(".pvt-title").textContent = s.t;
+    mask.querySelector(".pvt-desc").textContent = s.d;
+    var dots = mask.querySelectorAll(".pvt-dots i");
     dots.forEach(function (d, i) { d.classList.toggle("on", i === cur); });
-    mask.querySelector(".mgt-btn.prev").style.visibility = cur === 0 ? "hidden" : "visible";
-    mask.querySelector(".mgt-btn.next").textContent = last ? "完成" : "下一步";
+    mask.querySelector(".pvt-btn.prev").style.visibility = cur === 0 ? "hidden" : "visible";
+    mask.querySelector(".pvt-btn.next").textContent = last ? "完成" : "下一步";
   }
 
   function play() {
     if (mask) return;
     cur = 0;
     mask = document.createElement("div");
-    mask.className = "mgt-mask";
+    mask.className = "pvt-mask";
     mask.innerHTML =
-      '<div class="mgt-card" role="dialog" aria-label="使用指南">' +
-      '<div class="mgt-step-no"></div>' +
-      '<h3 class="mgt-title"></h3>' +
-      '<p class="mgt-desc"></p>' +
-      '<div class="mgt-foot">' +
-      '<button class="mgt-btn skip">跳过</button>' +
-      '<div class="mgt-dots">' + STEPS.map(function () { return "<i></i>"; }).join("") + "</div>" +
-      '<div class="mgt-btns">' +
-      '<button class="mgt-btn prev">上一步</button>' +
-      '<button class="mgt-btn next">下一步</button>' +
+      '<div class="pvt-card" role="dialog" aria-label="使用指南">' +
+      '<div class="pvt-step-no"></div>' +
+      '<h3 class="pvt-title"></h3>' +
+      '<p class="pvt-desc"></p>' +
+      '<div class="pvt-foot">' +
+      '<button class="pvt-btn skip">跳过</button>' +
+      '<div class="pvt-dots">' + STEPS.map(function () { return "<i></i>"; }).join("") + "</div>" +
+      '<div class="pvt-btns">' +
+      '<button class="pvt-btn prev">上一步</button>' +
+      '<button class="pvt-btn next">下一步</button>' +
       "</div></div></div>";
     document.body.appendChild(mask);
-    mask.querySelector(".mgt-btn.skip").addEventListener("click", function () { close(true); });
-    mask.querySelector(".mgt-btn.prev").addEventListener("click", function () {
+    mask.querySelector(".pvt-btn.skip").addEventListener("click", function () { close(true); });
+    mask.querySelector(".pvt-btn.prev").addEventListener("click", function () {
       if (cur > 0) { cur--; render(); }
     });
-    mask.querySelector(".mgt-btn.next").addEventListener("click", function () {
+    mask.querySelector(".pvt-btn.next").addEventListener("click", function () {
       if (cur < STEPS.length - 1) { cur++; render(); } else close(true);
     });
     render();
@@ -121,9 +122,9 @@
   /* ---------- 常驻入口：导航账号区左侧「使用指南」 ---------- */
   function mountGuide() {
     var acct = document.getElementById("mgNavAcct");
-    if (!acct || document.querySelector(".mgt-guide")) return;
+    if (!acct || document.querySelector(".pvt-guide")) return;
     var b = document.createElement("button");
-    b.className = "mgt-guide";
+    b.className = "pvt-guide";
     b.type = "button";
     b.textContent = "使用指南";
     b.addEventListener("click", function (e) { e.preventDefault(); play(); });

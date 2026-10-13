@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>我的账号 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260912">
+<link rel="stylesheet" href="assets/css/main.css">
 <style>
 .ac-head{text-align:center; padding:150px 0 56px}
 .ac-box{max-width:920px; margin:0 auto}
@@ -77,7 +77,7 @@
       <div class="glass ac-panel rv" id="panelReg" style="display:none">
         <label>显示名</label><input type="text" id="rgName" placeholder="如：东高垣村两委 · 王建国">
         <label>邮箱或手机号</label><input type="text" id="rgEmail" placeholder="you@example.com 或 11 位手机号" autocomplete="username">
-        <label>密码（至少 6 位）</label><input type="password" id="rgPwd" placeholder="至少 6 位" autocomplete="new-password">
+        <label>密码（至少 8 位）</label><input type="password" id="rgPwd" placeholder="至少 8 位" autocomplete="new-password" minlength="8">
         <label>再次输入密码</label><input type="password" id="rgPwd2" placeholder="与上方密码保持一致" autocomplete="new-password">
         <p class="ac-note" style="margin:16px 0 0">支持手机号或邮箱注册。注册即为普通用户，可云端保存测算、评估与表格存档。如需管理员权限，注册登录后可在本页提交申请，由项目组审核开通。</p>
         <label class="agree"><input type="checkbox" id="rgAgree"><span>我已知晓：注册信息仅用于本项目服务，不会用于其他用途。</span></label>
@@ -132,12 +132,12 @@
   </div>
 </section>
 
-<script src="assets/js/config.js?v=20260912"></script>
-<script src="assets/js/api.js?v=20260912"></script>
-<script src="assets/js/auth.js?v=20260912"></script>
-<script src="assets/js/data.js?v=20260912"></script>
-<script src="assets/js/effects.js?v=20260912"></script>
-<script src="assets/js/main.js?v=20260912"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/main.js"></script>
 <script>
 (function () {
   "use strict";
@@ -199,7 +199,7 @@
     showErr($("rgErr"), "");
     if (!name) { showErr($("rgErr"), "请填写显示名。"); return; }
     if (!isPhoneNo(email) && !isEmailOk(email)) { showErr($("rgErr"), "请填写正确的邮箱地址或 11 位手机号。"); return; }
-    if (p1.length < 6) { showErr($("rgErr"), "密码至少 6 位。"); return; }
+    if (p1.length < 8) { showErr($("rgErr"), "密码至少 8 位。"); return; }
     if (p1 !== p2) { showErr($("rgErr"), "两次输入的密码不一致。"); return; }
     if (!$("rgAgree").checked) { showErr($("rgErr"), "请勾选「信息仅用于项目服务」后再注册。"); return; }
     var btn = $("btnReg"); btn.disabled = true; btn.textContent = "注册中……";

@@ -1,5 +1,8 @@
-/* 沐光共富 · 账号与扩展数据层（两站共用，依赖 api.js 先行加载）
- * 提供：邮箱或手机号注册/登录/退出、角色资料、在线表格存档、村庄评估提交、管理员数据维护、Kimi 智能问答代理。管理员采用申请审批制，也可由管理员直接设角。
+/*
+ * 屋顶上的共富路整村光伏服务平台软件 V1.0
+ * Copyright (c) 2026 夏立轩
+ * 账号与扩展数据层（依赖 api.js 先行加载）：邮箱或手机号注册/登录/退出、角色资料、
+ * 在线表格存档、村庄评估提交、管理员数据维护、智能问答代理。管理员采用申请审批制，也可由管理员直接设角。
  * 会话保存在 localStorage「mg_session」；所有写操作携带用户令牌，权限由数据库行级安全策略裁决。
  */
 (function () {
@@ -177,11 +180,12 @@
     }, true);
   }
 
-  /* ---------- Kimi 智能问答（边缘函数代理，密钥不落地浏览器） ----------
+  /* ---------- 智能问答（边缘函数代理，密钥不落地浏览器） ----------
      失败统一抛错：由 chat.js 决定先捞本地 FAQ 再兜底，这里不抢答 */
   function chat(messages) {
     if (!ready) return Promise.reject(new Error("chat_unavailable"));
-    return fetch(cfg.url + "/functions/v1/kimi-chat", {
+    var fn = cfg.QA_FUNCTION || "qa-proxy";
+    return fetch(cfg.url + "/functions/v1/" + fn, {
       method: "POST", headers: { "Content-Type": "application/json", apikey: cfg.anonKey },
       body: JSON.stringify({ messages: messages })
     }).then(function (r) { return r.json(); });

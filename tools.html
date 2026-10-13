@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>数智工具箱 —— 屋顶上的共富路</title>
-<link rel="stylesheet" href="assets/css/main.css?v=20260912">
+<link rel="stylesheet" href="assets/css/main.css">
 <style>
 .tool-nav{position:sticky; top:64px; z-index:50; padding:14px 0; background:#0A1628; box-shadow:0 10px 28px rgba(0,0,0,.4)}
 .tool-nav .grid{display:grid; grid-template-columns:repeat(9,1fr); gap:10px}
@@ -249,12 +249,12 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
   </div>
 </section>
 
-<script src="assets/js/data.js?v=20260912"></script>
-<script src="assets/js/effects.js?v=20260912"></script>
-<script src="assets/js/config.js?v=20260912"></script>
-<script src="assets/js/api.js?v=20260912"></script>
-<script src="assets/js/main.js?v=20260912"></script>
-<script src="assets/js/sidenav.js?v=20260912" defer></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/effects.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/sidenav.js" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   var tools = [["t-calc", "收益测算", "M4 2h16v20H4z M8 6h8 M8 11h2 M14 11h2 M8 15h2 M14 15h2 M8 19h8"],
@@ -271,6 +271,9 @@ document.addEventListener("DOMContentLoaded", function () {
       '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="' + t[2] + '"/></svg><br>' + t[1] + "</div>";
   }).join("");
 
+  /* ===== 模块 Calc：收益测算与项目匹配 ===== */
+  const Calc = {
+    init: function () {
   function t(id, s) { document.getElementById(id).textContent = s; }
   function calc() {
     var A = +document.getElementById("area").value, k = +document.getElementById("ori").value, pr = +document.getElementById("typ").value;
@@ -397,47 +400,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (rows.length < 2) return;
     PV.csv("我的申报计划", rows);
   });
-
-  document.getElementById("ctMode").addEventListener("change", function () {
-    document.getElementById("ctWarn").style.display = this.value === "lease" ? "none" : "block";
-  });
-  document.getElementById("ctGen").addEventListener("click", function () {
-    var mode = document.getElementById("ctMode").value;
-    var rent = document.getElementById("ctRent").value, ys = document.getElementById("ctYears").value, vg = document.getElementById("ctVillage").value || "××村";
-    var txt;
-    if (mode === "coop") {
-      txt = "屋顶光伏合作共建合同（核心条款文本 · " + vg + "）\n\n" +
-        "第一条（共建标的）甲方（农户）以自有房屋屋顶使用权作价参与共建，乙方（企业）出资安装、运营光伏发电设备；房屋所有权不变，合作期满屋顶使用权完整回归甲方。\n" +
-        "第二条（出资条款）乙方承担设备、施工、并网等全部货币出资；甲方仅以屋顶使用权参与，不出资、不贷款、不担保。任何要求甲方追加出资或承担设备价款的约定均属无效。\n" +
-        "第三条（收益分配）电站收益按约定比例分成：甲方分成比例为 ××%（折算不低于 " + rent + " 元/块/年的参照水平），分配基数、结算周期与账目公开方式逐项写明；只认书面比例，口头承诺无效。\n" +
-        "第四条（合作期限与退出）合作期 " + ys + " 年。期内甲方退出、房屋处置或乙方退出时的电站处置与清算办法：××××。本条不得留空白。\n" +
-        "第五条（风险分担）经营亏损、限发、灾损由乙方承担，甲方不承担经营亏损补足义务；房屋因安装受损的，由乙方负责修复或赔偿。\n" +
-        "第六条（违约与解除）双方违约责任对等：××××。\n\n" +
-        "风险提示：合作共建收益随发电量与电价波动，非固定租金；分成比例、亏损承担与账目核查权未写清的，一律不签。本文本为条款骨架，正式签约以县级部门备案范本为准。";
-    } else if (mode === "loan") {
-      txt = "屋顶光伏贷款共建合同（核心条款文本 · " + vg + "）\n\n" +
-        "第一条（贷款主体与偿还责任）以甲方（农户）名义申请贷款的，甲方即法定还款义务人：月供金额、还款年限、逾期罚息与提前还款条件必须逐字写明；乙方代偿或补贴承诺不构成甲方还款义务的免除。\n" +
-        "第二条（贷款用途与抵押担保）贷款仅限用于屋顶电站建设；凡以甲方房产、宅基地、征信作抵押担保或要求签署空白授权、代为办理手续的条款，一律删除，否则不签。\n" +
-        "第三条（收益分配）发电收益优先偿还贷款本息，剩余部分按约定比例归甲方；租金参照标准 " + rent + " 元/块/年仅为测算参照，实际到手收益以结算单为准。\n" +
-        "第四条（期限与到期处置）合作期 " + ys + " 年。贷款未结清前房屋转让、继承、拆迁时的债务承接办法：××××；到期后电站（移交／拆除）约定：××××。本条不得留空白。\n" +
-        "第五条（风险提示）发电收益不足以覆盖月供时，差额由谁补足必须写清；限发、灾损、电价下调导致收益下降的偿还责任归属：××××。\n" +
-        "第六条（违约与解除）双方违约责任对等：××××。\n\n" +
-        "风险提示：以农户名义办贷款即背上征信责任，逾期影响个人信用。东高垣村早期骗贷教训表明，建议优先选择纯屋顶租赁（农户不出资、不贷款、不担保）。本文本为条款骨架，正式签约以县级部门备案范本为准。";
-    } else {
-      txt = "屋顶光伏租赁合同（纯租赁条款骨架 · " + vg + "）\n\n" +
-        "第一条（租赁标的）甲方（农户）将自有房屋屋顶使用权出租给乙方（企业），用于安装、使用、维护光伏发电设备；房屋所有权不变，租期届满使用权完整回归甲方。\n" +
-        "第二条（租金与支付）租金标准 " + rent + " 元/块/年（人字坡 15 元/块/年），按实际安装板块数计算，每（年／半年）支付一次至甲方指定账户；只认书面数字，口头承诺无效。\n" +
-        "第三条（租期与到期处置）租期 " + ys + " 年。到期后电站（续租／移交／拆除）按以下约定执行：××××；拆除费用与屋顶恢复由乙方承担。本条不得留空白。\n" +
-        "第四条（农户「三不」）甲方不出资、不贷款、不担保。本合同不构成任何融资、担保或融资租赁安排；甲方身份证信息仅用于签约备案与结算。\n" +
-        "第五条（损失分担）拉闸限发、灾损、发电量波动造成的损失由乙方承担，甲方租金不受影响；房屋因安装受损的，由乙方负责修复或赔偿。\n" +
-        "第六条（违约与解除）双方违约责任对等：××××。\n\n" +
-        "提示：本文本为标准条款骨架，正式签约以县级部门备案范本为准；对照手册第 130 条 5 大条款逐条核验。";
     }
-    var el = document.getElementById("contractText");
-    el.style.display = "block"; el.textContent = txt;
-    document.getElementById("ctActions").style.display = "block";
-  });
+  };
 
+  /* ===== 模块 Assess：风险扫描、健康评级与骗局识别 ===== */
+  const Assess = {
+    init: function () {
   /* 风险扫描 v2：条款级判定，替代原来的 50 个关键词朴素子串匹配。
      旧做法把「不贷款、不担保」「口头承诺无效」「不得留空白」这类保护性条款全部误报，
      合同写得越保护农户，「风险」反而越多，方向反了。新规则：
@@ -583,6 +551,51 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("tscamOk").style.display = "block";
     }
   });
+    }
+  };
+
+  /* ===== 模块 Gen：合同生成、租金公示、明白纸、办事指引与术语词典 ===== */
+  const Gen = {
+    init: function () {
+  document.getElementById("ctMode").addEventListener("change", function () {
+    document.getElementById("ctWarn").style.display = this.value === "lease" ? "none" : "block";
+  });
+  document.getElementById("ctGen").addEventListener("click", function () {
+    var mode = document.getElementById("ctMode").value;
+    var rent = document.getElementById("ctRent").value, ys = document.getElementById("ctYears").value, vg = document.getElementById("ctVillage").value || "××村";
+    var txt;
+    if (mode === "coop") {
+      txt = "屋顶光伏合作共建合同（核心条款文本 · " + vg + "）\n\n" +
+        "第一条（共建标的）甲方（农户）以自有房屋屋顶使用权作价参与共建，乙方（企业）出资安装、运营光伏发电设备；房屋所有权不变，合作期满屋顶使用权完整回归甲方。\n" +
+        "第二条（出资条款）乙方承担设备、施工、并网等全部货币出资；甲方仅以屋顶使用权参与，不出资、不贷款、不担保。任何要求甲方追加出资或承担设备价款的约定均属无效。\n" +
+        "第三条（收益分配）电站收益按约定比例分成：甲方分成比例为 ××%（折算不低于 " + rent + " 元/块/年的参照水平），分配基数、结算周期与账目公开方式逐项写明；只认书面比例，口头承诺无效。\n" +
+        "第四条（合作期限与退出）合作期 " + ys + " 年。期内甲方退出、房屋处置或乙方退出时的电站处置与清算办法：××××。本条不得留空白。\n" +
+        "第五条（风险分担）经营亏损、限发、灾损由乙方承担，甲方不承担经营亏损补足义务；房屋因安装受损的，由乙方负责修复或赔偿。\n" +
+        "第六条（违约与解除）双方违约责任对等：××××。\n\n" +
+        "风险提示：合作共建收益随发电量与电价波动，非固定租金；分成比例、亏损承担与账目核查权未写清的，一律不签。本文本为条款骨架，正式签约以县级部门备案范本为准。";
+    } else if (mode === "loan") {
+      txt = "屋顶光伏贷款共建合同（核心条款文本 · " + vg + "）\n\n" +
+        "第一条（贷款主体与偿还责任）以甲方（农户）名义申请贷款的，甲方即法定还款义务人：月供金额、还款年限、逾期罚息与提前还款条件必须逐字写明；乙方代偿或补贴承诺不构成甲方还款义务的免除。\n" +
+        "第二条（贷款用途与抵押担保）贷款仅限用于屋顶电站建设；凡以甲方房产、宅基地、征信作抵押担保或要求签署空白授权、代为办理手续的条款，一律删除，否则不签。\n" +
+        "第三条（收益分配）发电收益优先偿还贷款本息，剩余部分按约定比例归甲方；租金参照标准 " + rent + " 元/块/年仅为测算参照，实际到手收益以结算单为准。\n" +
+        "第四条（期限与到期处置）合作期 " + ys + " 年。贷款未结清前房屋转让、继承、拆迁时的债务承接办法：××××；到期后电站（移交／拆除）约定：××××。本条不得留空白。\n" +
+        "第五条（风险提示）发电收益不足以覆盖月供时，差额由谁补足必须写清；限发、灾损、电价下调导致收益下降的偿还责任归属：××××。\n" +
+        "第六条（违约与解除）双方违约责任对等：××××。\n\n" +
+        "风险提示：以农户名义办贷款即背上征信责任，逾期影响个人信用。东高垣村早期骗贷教训表明，建议优先选择纯屋顶租赁（农户不出资、不贷款、不担保）。本文本为条款骨架，正式签约以县级部门备案范本为准。";
+    } else {
+      txt = "屋顶光伏租赁合同（纯租赁条款骨架 · " + vg + "）\n\n" +
+        "第一条（租赁标的）甲方（农户）将自有房屋屋顶使用权出租给乙方（企业），用于安装、使用、维护光伏发电设备；房屋所有权不变，租期届满使用权完整回归甲方。\n" +
+        "第二条（租金与支付）租金标准 " + rent + " 元/块/年（人字坡 15 元/块/年），按实际安装板块数计算，每（年／半年）支付一次至甲方指定账户；只认书面数字，口头承诺无效。\n" +
+        "第三条（租期与到期处置）租期 " + ys + " 年。到期后电站（续租／移交／拆除）按以下约定执行：××××；拆除费用与屋顶恢复由乙方承担。本条不得留空白。\n" +
+        "第四条（农户「三不」）甲方不出资、不贷款、不担保。本合同不构成任何融资、担保或融资租赁安排；甲方身份证信息仅用于签约备案与结算。\n" +
+        "第五条（损失分担）拉闸限发、灾损、发电量波动造成的损失由乙方承担，甲方租金不受影响；房屋因安装受损的，由乙方负责修复或赔偿。\n" +
+        "第六条（违约与解除）双方违约责任对等：××××。\n\n" +
+        "提示：本文本为标准条款骨架，正式签约以县级部门备案范本为准；对照手册第 130 条 5 大条款逐条核验。";
+    }
+    var el = document.getElementById("contractText");
+    el.style.display = "block"; el.textContent = txt;
+    document.getElementById("ctActions").style.display = "block";
+  });
 
   var GD = {
     "农户": [
@@ -637,6 +650,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   document.getElementById("termKw").addEventListener("input", renderTerms);
   renderTerms();
+    }
+  };
+
+  /* 入口：三个模块按序初始化，行为与原线性执行一致 */
+  Calc.init();
+  Assess.init();
+  Gen.init();
 });
 </script>
 </body>
