@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>五维评估 —— 屋顶上的共富路</title>
+<meta name="description" content="五维评估：产业、生态、治理、文化、生活五维框架，客观数据自动评分。">
+<link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
 <style>
-#radarBall{width:100%; height:600px; cursor:grab}
-#radarBall:active{cursor:grabbing}
 #ballInfo{margin-top:10px}
+#radarFlat{cursor:default}
 .dim-item{display:grid; grid-template-columns:120px 1fr; gap:20px; padding:20px 0; border-bottom:1px solid #e2e0d6}
 .dim-item .sc{font-family:var(--mono); font-size:36px; color:#a5832f; font-weight:700}
 .self-grid{display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:26px}
@@ -28,15 +29,15 @@
   <div class="wrap">
     <div class="kicker rv">通用评估框架</div>
     <h1 class="rv">五维评估框架</h1>
-    <p class="lead rv" style="margin-top:14px">产业 · 生态 · 治理 · 文化 · 生活。可复用的通用框架，本页以东高垣村数据作示例填充；评分为主观评估（满分 5 分），不构成审计结论。</p>
+    <p class="lead rv" style="margin-top:14px">产业 · 生态 · 治理 · 文化 · 生活五个维度。本页以东高垣村数据为例；评分为框架性参考（满分 5 分）。</p>
   </div>
 </section>
 
-<!-- 3D 雷达球 -->
+<!-- 五维雷达图（平面） -->
 <section class="section grain" style="padding-top:10px">
   <div class="wrap">
-    <canvas id="radarBall"></canvas>
-    <div id="ballInfo" class="note-box">拖拽旋转球体；悬停顶点查看维度详情。金色多边形为东高垣村示例数据。</div>
+    <svg id="radarFlat" viewBox="0 0 560 480" style="width:100%;max-width:640px;display:block;margin:0 auto"></svg>
+    <div id="ballInfo" class="note-box">点击顶点查看维度详情。金色多边形为东高垣村数据。</div>
   </div>
 </section>
 
@@ -47,9 +48,9 @@
     <h2>维度详解</h2>
     <div style="margin-top:20px">
       <div class="dim-item rv"><div class="sc">4.5</div><div><h3>产业 · 财产性收入新通道</h3><p style="color:#5a6b7c; font-size:15px">185 户农户零成本获得 25 年稳定租金，户均年租金约 1500—2000 元；村集体建筑光伏租金补充村内开支；企业属地化运营带动运维岗位。</p><p class="caption">2026 年 2 月入户访谈、企业访谈</p></div></div>
-      <div class="dim-item rv"><div class="sc">4.2</div><div><h3>生态 · 年减碳约 6500 吨（测算值）</h3><p style="color:#5a6b7c; font-size:15px">年发电约 805 万 kWh，按 0.8 kg/kWh 折算年减碳约 6440 吨（取整表述约 6500 吨）；村史馆广场光伏车棚、光伏路灯形成可见的绿色景观。</p><p class="caption">课题组测算（2026 年），发电量为企业访谈口径</p></div></div>
+      <div class="dim-item rv"><div class="sc">4.2</div><div><h3>生态 · 年减碳约 6500 吨（测算值）</h3><p style="color:#5a6b7c; font-size:15px">年发电约 805 万 kWh，按 0.8 kg/kWh 折算年减碳约 6500 吨；村史馆广场光伏车棚、光伏路灯形成可见的绿色景观。</p><p class="caption">项目组测算（2026 年），发电量为企业访谈口径</p></div></div>
       <div class="dim-item rv"><div class="sc">4.0</div><div><h3>治理 · 村企协同的治理增量</h3><p style="color:#5a6b7c; font-size:15px">村两委建立安装户数与增收统计台账；「农户—村两委—运维驿站」三方联络与工单机制让矛盾有了制度化出口；骗贷前科后重建的准入审查成为治理资产。</p><p class="caption">2026 年 2 月入户访谈（村主任 H 某）</p></div></div>
-      <div class="dim-item rv"><div class="sc">3.2</div><div><h3>文化 · 信任文化的重建（进行中）</h3><p style="color:#5a6b7c; font-size:15px">从「普遍抵触」到「争相签约」，村庄对现代契约制度的信任在修复；但租金期待差、朝向心结等仍需长期弥合。</p><p class="caption">课题组 2026 年 2 月驻点调研观察</p></div></div>
+      <div class="dim-item rv"><div class="sc">3.2</div><div><h3>文化 · 信任文化的重建（进行中）</h3><p style="color:#5a6b7c; font-size:15px">从「普遍抵触」到「争相签约」，村庄对现代契约制度的信任在修复；但租金期待差、朝向心结等仍需长期弥合。</p><p class="caption">项目组 2026 年 2 月驻点调研观察</p></div></div>
       <div class="dim-item rv"><div class="sc">3.8</div><div><h3>生活 · 「光伏养老」的补充保障</h3><p style="color:#5a6b7c; font-size:15px">租金构成留守老人稳定补充性现金流；部分农户对租金水平存在更高期待；清洁能源替代散煤的取暖转型仍在路上。</p><p class="caption">2026 年 2 月入户访谈</p></div></div>
     </div>
   </div>
@@ -59,7 +60,7 @@
 <section class="section light" style="padding-top:40px">
   <div class="wrap">
     <div class="kicker">迁移复用</div>
-    <h2>为你的村庄评估（客观数据自动评分）</h2>
+    <h2>为您的村庄评估（客观数据自动评分）</h2>
     <p class="lead" style="margin-top:12px">不用自己打分。填报 10 项可核实的客观数据，系统按手册规则自动计算五维得分、评语与扣分原因，并与东高垣村示例对比。</p>
     <div class="self-grid">
       <div class="card" id="selfForm">
@@ -79,7 +80,7 @@
       </div>
       <div class="card" style="text-align:center">
         <canvas id="selfRadar" style="width:100%; height:340px"></canvas>
-        <p class="caption">亮金为你的村庄，墨青为东高垣村示例（4.5 / 4.2 / 4.0 / 3.2 / 3.8）</p>
+        <p class="caption">亮金为您的村庄，墨青为东高垣村示例（4.5 / 4.2 / 4.0 / 3.2 / 3.8）</p>
       </div>
     </div>
     <div id="evOut" style="display:none">
@@ -105,13 +106,12 @@
   <div class="wrap" style="max-width:860px">
     <div class="card rv" style="border-color:rgba(212,168,75,.4)">
       <h3 style="color:var(--gold2)">评估说明</h3>
-      <p style="color:#c4cfda; font-size:15.5px; margin-top:10px">五维评分为课题组在田野证据基础上的<b>结构化主观评估</b>，满分 5 分，用于呈现整村光伏赋能乡村振兴的整体轮廓，<b>不构成对项目的审计或鉴定结论</b>。文化维度得分相对偏低，反映信任重建的长期性；生活维度受租金期待差影响留有提升空间；生态维度减碳量为折算测算值（系数 0.8 kg/kWh）。所有证据条目均来自访谈、台账与实地观察，并逐条标注来源与时点。</p>
+      <p style="color:#c4cfda; font-size:15.5px; margin-top:10px">五维评分为项目组在田野证据基础上的<b>结构化主观评估</b>，满分 5 分，用于呈现整村光伏赋能乡村振兴的整体轮廓，<b>不构成对项目的审计或鉴定结论</b>。文化维度得分相对偏低，反映信任重建的长期性；生活维度受租金期待差影响留有提升空间；生态维度减碳量为折算测算值（系数 0.8 kg/kWh）。所有证据条目均来自访谈、台账与实地观察，并逐条标注来源与时点。</p>
     </div>
   </div>
 </section>
 
 <script src="assets/js/data.js"></script>
-<script src="assets/js/effects.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -122,11 +122,57 @@ document.addEventListener("DOMContentLoaded", function () {
     { name: "文化", score: 3.2, info: "契约信任修复中；租金期待差与朝向心结需长期弥合。" },
     { name: "生活", score: 3.8, info: "「光伏养老」补充保障；部分农户对租金存在更高期待。" }
   ];
-  FX.radarBall(document.getElementById("radarBall"), dims, function (i) {
-    var el = document.getElementById("ballInfo");
-    el.innerHTML = i < 0 ? "拖拽旋转球体；悬停顶点查看维度详情。金色多边形为东高垣村示例数据。"
-      : "<b>" + dims[i].name + " · " + dims[i].score + " 分：</b>" + dims[i].info;
-  });
+  /* 平面雷达图：东高垣村五维数据 */
+  (function () {
+    var svg = document.getElementById("radarFlat");
+    var NS = "http://www.w3.org/2000/svg";
+    var cx = 280, cy = 250, R = 165;
+    function pt(i, r) {
+      var a = -Math.PI / 2 + i * 2 * Math.PI / 5;
+      return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
+    }
+    function line(a, b, cls) {
+      var l = document.createElementNS(NS, "line");
+      l.setAttribute("x1", a[0]); l.setAttribute("y1", a[1]);
+      l.setAttribute("x2", b[0]); l.setAttribute("y2", b[1]);
+      l.setAttribute("stroke", cls || "rgba(239,231,211,.25)"); l.setAttribute("stroke-width", 1);
+      svg.appendChild(l);
+    }
+    [0.25, 0.5, 0.75, 1].forEach(function (k) {
+      var pts = [];
+      for (var i = 0; i < 5; i++) pts.push(pt(i, R * k));
+      var pg = document.createElementNS(NS, "polygon");
+      pg.setAttribute("points", pts.map(function (p) { return p.join(","); }).join(" "));
+      pg.setAttribute("fill", "none"); pg.setAttribute("stroke", "rgba(239,231,211,.22)");
+      svg.appendChild(pg);
+    });
+    for (var i = 0; i < 5; i++) line([cx, cy], pt(i, R));
+    /* 数据多边形 */
+    var dpts = dims.map(function (d, i) { return pt(i, R * d.score / 5); });
+    var dpg = document.createElementNS(NS, "polygon");
+    dpg.setAttribute("points", dpts.map(function (p) { return p.join(","); }).join(" "));
+    dpg.setAttribute("fill", "rgba(217,164,65,.18)"); dpg.setAttribute("stroke", "#D9A441"); dpg.setAttribute("stroke-width", 2);
+    svg.appendChild(dpg);
+    /* 顶点与标签 */
+    dims.forEach(function (d, i) {
+      var p = pt(i, R * d.score / 5);
+      var c = document.createElementNS(NS, "circle");
+      c.setAttribute("cx", p[0]); c.setAttribute("cy", p[1]); c.setAttribute("r", 6);
+      c.setAttribute("fill", "#D9A441"); c.style.cursor = "pointer";
+      c.addEventListener("click", function () {
+        document.getElementById("ballInfo").innerHTML = "<b>" + d.name + " · " + d.score + " 分：</b>" + d.info;
+      });
+      svg.appendChild(c);
+      var lp = pt(i, R + 30);
+      var t = document.createElementNS(NS, "text");
+      t.setAttribute("x", lp[0]); t.setAttribute("y", lp[1]);
+      t.setAttribute("text-anchor", "middle");
+      t.setAttribute("fill", "#EFE7D3"); t.setAttribute("font-size", 17);
+      t.setAttribute("font-family", "FangSong,STFangsong,serif"); t.setAttribute("letter-spacing", "3");
+      t.textContent = d.name + " " + d.score;
+      svg.appendChild(t);
+    });
+  })();
 
   /* 五维自动评分：客观数据 → 规则映射（评分依据来自手册），不同数据产出不同得分 */
   /* 评分规则（写死，满分 5 分、保留 1 位小数）：
@@ -238,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
       (grade === "示范型" ? "五维均衡发展，可作为整村光伏示范样板总结推广。" :
        grade === "提升型" ? "整体可行但存在短板维度，对照上表扣分原因逐项补齐。" :
        "多项基础条件薄弱，建议先夯实组织动员与运维机制再推进。") +
-      "评分为规则化测算，不构成审计结论。";
+      "评分为框架性参考，最终以实地评估为准。";
     document.getElementById("evSubmitMsg").textContent = "";
     lastEval.grade = grade;
     drawSelf();

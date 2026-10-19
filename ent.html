@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>企业工作台 —— 屋顶上的共富路</title>
+<meta name="description" content="企业工作台：投资测算、投前尽调、建设向导、运维模拟与 25 年生命周期。">
+<link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
 <link rel="stylesheet" href="assets/css/gov-print.css">
 <style>
@@ -52,7 +54,7 @@
   <div class="wrap">
     <div class="kicker rv">投资决策 · 工具</div>
     <h2 class="rv">收益测算引擎</h2>
-    <p class="lead rv">全部计算在前端完成；参数默认值取东高垣村样本口径，输出为课题组测算参考值，不构成投资结论。</p>
+    <p class="lead rv">全部计算在前端完成；参数默认值取东高垣村样本口径，输出为项目组测算参考值，不构成投资结论。</p>
     <div class="calc-grid">
       <div class="card in-panel rv">
         <h3>输入参数</h3>
@@ -120,16 +122,25 @@
   </div>
 </section>
 
-<!-- 3D 回收期环 -->
+<!-- 回收期样本 -->
 <section class="section grain" id="ring" data-nav="回收期样本">
   <div class="wrap ring-wrap">
     <div>
       <div class="kicker rv">东高垣样本 · 静态面板</div>
-      <h2 class="rv">7—8 年：回收期进度环</h2>
+      <h2 class="rv">7—8 年：简化口径回收期</h2>
       <p class="lead rv" style="margin-top:12px">东高垣村样本总投资约 2100 万元、年发电收益约 286 万元，简化口径回收期约 7—8 年；25 年租期内含约 17 年以上净收益窗口。补齐运维、租金、保险、税费与限发损失后，回收期将相应延长（手册第 72—74 条）。</p>
-      <p class="caption" style="margin-top:12px">东高垣村口径，2026 年 2 月企业访谈；课题组交叉验证 285.4 万元，口径自洽。</p>
+      <p class="caption" style="margin-top:12px">东高垣村口径，2026 年 2 月企业访谈。</p>
     </div>
-    <div class="ring3d-stage" id="ringStage"></div>
+    <div class="card rv" style="padding:34px">
+      <div class="din num-glow" style="font-size:56px">7—8<span style="font-size:18px;color:var(--ivory-60);margin-left:8px">年</span></div>
+      <div style="margin-top:18px;height:10px;background:rgba(239,231,211,.12)">
+        <div style="width:32%;height:100%;background:var(--amber)"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:12.5px;color:var(--ivory-60);font-family:var(--mono)">
+        <span>回收期（约 7—8 年）</span><span>租期 25 年</span>
+      </div>
+      <div style="margin-top:18px;font-size:14px;color:var(--ivory-60);line-height:2;font-family:var(--fz)">净收益窗口约 17 年以上；「531 新政」后新增项目须按市场化电价重算。</div>
+    </div>
   </div>
 </section>
 
@@ -209,12 +220,11 @@
       <div class="life-item rv"><span class="dot"></span><h3>第 16—25 年 · 后期</h3><p style="color:#5a6b7c; font-size:15.5px">净收益与技改：探索绿电交易等增值通道；设备健康度分级管理，防止亚健康演变为停机。考核：净收益兑现、技改完成率。</p></div>
       <div class="life-item rv"><span class="dot"></span><h3>约满 · 退役期</h3><p style="color:#5a6b7c; font-size:15.5px">到期处置预案：提前 2 年启动续约或拆除安置方案征询，避免到期纠纷；拆除与屋顶恢复由企业负责（以签约书面约定为准）。</p></div>
     </div>
-    <p class="caption">时间轴为课题组依据 25 年租约与回收期测算整理的管理建议框架（手册第十四章）。</p>
+    <p class="caption">时间轴为项目组依据 25 年租约与回收期测算整理的管理建议框架（手册第十四章）。</p>
   </div>
 </section>
 
 <script src="assets/js/data.js"></script>
-<script src="assets/js/effects.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/sidenav.js" defer></script>
 <script>
@@ -333,14 +343,10 @@ document.addEventListener("DOMContentLoaded", function () {
       '<table class="gov-tbl"><thead><tr><th style="width:32%">指标</th><th>测算值</th></tr></thead><tbody>' +
       results.map(function (p) { return '<tr><td class="gov-k">' + p[0] + "</td><td>" + p[1] + "</td></tr>"; }).join("") +
       "</tbody></table>" +
-      '<p class="gov-note">本报告全部计算在前端完成，参数默认值取东高垣村样本口径，输出为课题组测算参考值，不构成投资结论。「531 新政」后新增项目须按市场化电价重算。敏感性提示：发电量每下浮 5%，年收益约减 14 万元；电价每下浮 0.01 元/kWh，年收益约减 8 万元（以 805 万 kWh 为基准）。</p>' +
+      '<p class="gov-note">本报告全部计算在前端完成，参数默认值取东高垣村样本口径，输出为项目组测算参考值，不构成投资结论。「531 新政」后新增项目须按市场化电价重算。敏感性提示：发电量每下浮 5%，年收益约减 14 万元；电价每下浮 0.01 元/kWh，年收益约减 8 万元（以 805 万 kWh 为基准）。</p>' +
       '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
     PV.printZone("#invDoc", "投资可行性测算报告");
   });
-
-  /* 3D 回收期环 */
-  FX.ring(document.getElementById("ringStage"), 7.5 / 25,
-    '<div class="din num-glow">7—8</div><div class="label" style="color:#a9bccf">年 · 简化口径回收期</div><div class="caption">25 年租期 · 净收益窗口约 17 年+</div>');
 
   /* 尽调 10 项 */
   var dd = ["政策合规：县试点方案、并网与补贴政策口径、土地与规划约束", "电网容量：台区容量核算、改造计划与投资主体、限发历史", "屋顶资源：合格屋顶台账、产权清晰度、危房排除情况", "资源评估：当地光照资源、等效利用小时数测算", "村庄治理：村两委动员能力、历史矛盾、既有光伏负面事件", "农户意愿：抽样意愿调查、可接受租金水平", "合同安排：合同范本合规性、租金支付周期、到期处置条款", "成本测算：单瓦造价、施工组织、并网配套成本", "保险安排：财产综合险、公众责任险询价与承保条件", "退出与极端情形：征收拆迁、房屋翻建、企业退出时的处置预案"];
@@ -375,7 +381,7 @@ document.addEventListener("DOMContentLoaded", function () {
       rows + "</tbody></table>" +
       "<p>" + (done === 10 ? "10 项全部完成取证，可召开尽调评审会，逐项给出「通过、附条件通过、不通过」结论；附条件事项在投资协议中转化为先决条件。" :
         "尚有 " + (10 - done) + " 项未完成取证，暂不召开尽调评审会；电网容量与村庄治理为权重最高的 2 项，应优先补齐。") + "</p>" +
-      '<p class="gov-note">依据《整村光伏建设手册》第 75—76 条逐项取证并留存底稿；底稿归档，保存期不短于合同期限。</p>' +
+      '<p class="gov-note">依据《整村分布式光伏建设手册》第 75—76 条逐项取证并留存底稿；底稿归档，保存期不短于合同期限。</p>' +
       '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
     PV.printZone("#ddDoc", "投前尽调报告");
   });

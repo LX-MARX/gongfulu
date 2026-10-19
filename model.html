@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>通用范式 —— 屋顶上的共富路</title>
+<meta name="description" content="通用范式：政府引导、企业投资、村集体组织、农户参与的四方协同机制。">
+<link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
 <style>
 .masthead{min-height:60vh; display:grid; grid-template-columns:1.1fr .9fr; gap:48px; align-items:center;
   background-image:linear-gradient(rgba(61,90,117,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(61,90,117,.14) 1px,transparent 1px);
   background-size:44px 44px}
 @media(max-width:900px){.masthead{grid-template-columns:1fr}}
-#cosmos{cursor:grab}
-#cosmos:active{cursor:grabbing}
 .theory-card{min-height:280px; display:flex; flex-direction:column}
 .theory-card .bd{flex:1; font-size:15px; color:#5a6b7c}
 .vflow{position:relative; padding:40px 0 10px}
@@ -75,18 +75,32 @@
   </div>
 </section>
 
-<!-- 3D 四方协同星系 -->
+<!-- 四方协同结构图 -->
 <section class="section grain" style="padding-top:40px" id="cosmosSec" data-nav="四方协同">
   <div class="wrap">
-    <div class="kicker rv">3D 交互模型</div>
-    <h2 class="rv">四方协同星系</h2>
-    <p class="lead rv">拖拽 360° 旋转；点击某一方，该方前移、其余虚化，下方展开该角色学理阐释。</p>
+    <div class="kicker rv">结构图</div>
+    <h2 class="rv">四方协同结构</h2>
+    <p class="lead rv">点击任一方，下方展开该角色的学理阐释。</p>
   </div>
-  <div class="wrap"><div id="cosmos" class="cosmos"></div></div>
   <div class="wrap">
-    <div id="faceDetail" class="glass rv" style="padding:28px 34px; margin-top:10px; display:none">
-      <h3 id="fdTitle" style="color:var(--gold2)"></h3>
-      <p id="fdBody" style="color:#c4cfda; font-size:16px; margin-top:10px"></p>
+    <svg viewBox="0 0 720 480" class="rv" style="width:100%;max-width:860px;display:block;margin:0 auto" id="quadSvg">
+      <g stroke="rgba(239,231,211,.35)" stroke-width="1" fill="none" stroke-dasharray="5 5">
+        <path d="M360 240 L150 110 M360 240 L570 110 M360 240 L150 370 M360 240 L570 370"/>
+        <path d="M150 110 L570 110 M150 370 L570 370 M150 110 L150 370 M570 110 L570 370" stroke-dasharray="none"/>
+      </g>
+      <g class="qnd" data-i="0" style="cursor:pointer"><rect x="60" y="60" width="180" height="100" fill="rgba(27,58,92,.6)" stroke="#EFE7D3" stroke-width="1.2"/><text x="150" y="104" text-anchor="middle" fill="#EFE7D3" font-size="19" letter-spacing="4" font-family="FangSong,STFangsong,serif">政 府</text><text x="150" y="130" text-anchor="middle" fill="rgba(239,231,211,.6)" font-size="12">制度供给</text></g>
+      <g class="qnd" data-i="1" style="cursor:pointer"><rect x="480" y="60" width="180" height="100" fill="rgba(27,58,92,.6)" stroke="#EFE7D3" stroke-width="1.2"/><text x="570" y="104" text-anchor="middle" fill="#EFE7D3" font-size="19" letter-spacing="4" font-family="FangSong,STFangsong,serif">企 业</text><text x="570" y="130" text-anchor="middle" fill="rgba(239,231,211,.6)" font-size="12">投资建设</text></g>
+      <g class="qnd" data-i="2" style="cursor:pointer"><rect x="60" y="320" width="180" height="100" fill="rgba(27,58,92,.6)" stroke="#EFE7D3" stroke-width="1.2"/><text x="150" y="364" text-anchor="middle" fill="#EFE7D3" font-size="19" letter-spacing="4" font-family="FangSong,STFangsong,serif">村集体</text><text x="150" y="390" text-anchor="middle" fill="rgba(239,231,211,.6)" font-size="12">组织协调</text></g>
+      <g class="qnd" data-i="3" style="cursor:pointer"><rect x="480" y="320" width="180" height="100" fill="rgba(27,58,92,.6)" stroke="#EFE7D3" stroke-width="1.2"/><text x="570" y="364" text-anchor="middle" fill="#EFE7D3" font-size="19" letter-spacing="4" font-family="FangSong,STFangsong,serif">农 户</text><text x="570" y="390" text-anchor="middle" fill="rgba(239,231,211,.6)" font-size="12">屋顶参与</text></g>
+      <rect x="272" y="200" width="176" height="80" fill="none" stroke="#D9A441" stroke-width="1.5"/>
+      <text x="360" y="232" text-anchor="middle" fill="#D9A441" font-size="16" letter-spacing="3" font-family="FangSong,STFangsong,serif">制度网络</text>
+      <text x="360" y="258" text-anchor="middle" fill="rgba(239,231,211,.6)" font-size="12" font-family="FangSong,STFangsong,serif">契约 · 台账 · 公示</text>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div id="faceDetail" class="glass rv" style="padding:28px 34px; margin-top:26px; display:none">
+      <h3 id="fdTitle" style="color:var(--amber)"></h3>
+      <p id="fdBody" style="color:var(--ivory-60); font-size:16px; margin-top:10px; line-height:2"></p>
       <p class="caption" style="margin-top:12px">内容来源：《整村分布式光伏建设手册》（200 页版）第二章 2.5—2.8 节</p>
     </div>
   </div>
@@ -195,7 +209,7 @@
         <li>信用足够的投资主体：有国资背景或强资信企业兜底</li>
         <li>村两委动员能力：党员干部能带头、能入户、能调解，且纳入县级制度通道</li>
       </ul>
-      <p class="caption" style="margin-top:14px">课题组依据东高垣案例提炼（2026 年）；手册第三章</p>
+      <p class="caption" style="margin-top:14px">项目组依据东高垣案例提炼（2026 年）；手册第三章</p>
     </div>
     <div class="cond rv" style="background:rgba(200,75,63,.08); border-right:4px solid var(--red)">
       <h2 style="color:#e8a49c">6 项负面清单</h2>
@@ -223,7 +237,6 @@
 </div>
 
 <script src="assets/js/data.js"></script>
-<script src="assets/js/effects.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/sidenav.js" defer></script>
 <script>
@@ -235,11 +248,20 @@ document.addEventListener("DOMContentLoaded", function () {
     { name: "农户", brief: "屋顶出租 · 零成本 · 稳定收租 25 年", more: "农户只出租屋顶、不掏一分钱、不贷款、不担保，按 30 元/块/年（人字坡 15 元/块/年）收取 25 年固定租金，户均年租金约 1500—2000 元。" }
   ];
   var det = document.getElementById("faceDetail");
-  FX.cosmos(document.getElementById("cosmos"), faces, function (i) {
-    if (i < 0) { det.style.display = "none"; return; }
-    det.style.display = "block";
-    document.getElementById("fdTitle").textContent = faces[i].name + " · " + faces[i].brief;
-    document.getElementById("fdBody").textContent = faces[i].more;
+  var qSel = -1;
+  document.querySelectorAll("#quadSvg .qnd").forEach(function (n) {
+    n.addEventListener("click", function () {
+      var i = +n.dataset.i;
+      qSel = qSel === i ? -1 : i;
+      document.querySelectorAll("#quadSvg .qnd rect").forEach(function (r, j) {
+        r.setAttribute("stroke", j === qSel ? "#D9A441" : "#EFE7D3");
+        r.setAttribute("stroke-width", j === qSel ? "2" : "1.2");
+      });
+      if (qSel < 0) { det.style.display = "none"; return; }
+      det.style.display = "block";
+      document.getElementById("fdTitle").textContent = faces[qSel].name + " · " + faces[qSel].brief;
+      document.getElementById("fdBody").textContent = faces[qSel].more;
+    });
   });
 
   var vdata = [

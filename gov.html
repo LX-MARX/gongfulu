@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>政府工作台 —— 屋顶上的共富路</title>
+<meta name="description" content="政府工作台：政策检索库、进度管理、RACI 责任矩阵、准入审查与考核台账。">
+<link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
 <link rel="stylesheet" href="assets/css/gov-print.css">
 <style>
@@ -42,7 +44,7 @@
   <div class="wrap">
     <div class="kicker rv">角色指南 · 政府</div>
     <h1 class="rv">政府工作台：制度供给与风险防控</h1>
-    <p class="lead rv" style="margin-top:14px">县、镇政府是整村推进的「第一推动力」：纳入试点盘子、组织招标定项、协调部门与电网、守住准入底线、建立考核台账。本页依据大荔县整县推进实践与《建设手册》第二篇整理。</p>
+    <p class="lead rv" style="margin-top:14px">县、镇政府是整村推进的「第一推动力」：纳入试点盘子、组织招标定项、协调部门与电网、守住准入底线、建立考核台账。本页依据大荔县整县推进实践与《整村分布式光伏建设手册》第二篇整理。</p>
   </div>
 </section>
 
@@ -51,7 +53,7 @@
   <div class="wrap">
     <div class="kicker rv">政策工具 · 五级政策库</div>
     <h2 class="rv">政策检索库（119 条）</h2>
-    <p class="lead rv">课题组 2025 年 8 月—2026 年 1 月建库，覆盖国家、省、市、县、镇村 5 级共 121 条政策文本，剔除 2 条误入库后展示 119 条，持续更新。</p>
+    <p class="lead rv">项目组 2025 年 8 月—2026 年 1 月建库，覆盖国家、省、市、县、镇村 5 级共 121 条政策文本，剔除 2 条误入库后展示 119 条，持续更新。</p>
     <div class="glass search-panel rv">
       <input id="polSearch" type="text" placeholder="搜索政策名称、发文机关、关键词……">
       <div class="lvl-tags" id="lvlTags">
@@ -163,7 +165,7 @@
       <div class="card rv">
         <h3>政策变化</h3>
         <p style="color:#5a6b7c; font-size:15.5px; margin-top:8px">2025 年「531 新政」推动新能源上网电价全面市场化，上网电量原则上全部进入电力市场，按投产时间区分存量与增量项目分类施策，固定收益预期被打破。</p>
-        <p class="caption" style="margin-top:10px">公开政策文件；课题组 121 条五级政策库持续跟踪</p>
+        <p class="caption" style="margin-top:10px">公开政策文件；项目组 121 条五级政策库持续跟踪</p>
       </div>
       <div class="card rv">
         <h3>落地影响</h3>
@@ -188,14 +190,13 @@
           <li>对电网：把容量扩容纳入乡村基础设施盘子</li>
           <li>对模式：探索绿电交易、源网荷储等新收益通道</li>
         </ul>
-        <p class="caption" style="margin-top:10px">课题组 2026 年 5—9 月跟踪分析建议（手册第八章）</p>
+        <p class="caption" style="margin-top:10px">项目组 2026 年 5—9 月跟踪分析建议（手册第八章）</p>
       </div>
     </div>
   </div>
 </section>
 
 <script src="assets/js/data.js"></script>
-<script src="assets/js/effects.js"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/main.js"></script>
@@ -275,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
     d.innerHTML = "<h3>第 " + (+c.dataset.i + 1) + " 阶段 · " + s.nm + "</h3>" +
       '<p style="margin:10px 0; color:#5a6b7c">' + s.pts + "</p>" +
       '<p style="font-size:14.5px"><b>牵头单位：</b>' + s.lead + "　<b>关键成果物：</b>" + s.out + "</p>" +
-      '<p class="caption" style="margin-top:8px">《建设手册》第 51—55 条 6 段式实施细则</p>';
+      '<p class="caption" style="margin-top:8px">《整村分布式光伏建设手册》第 51—55 条 6 段式实施细则</p>';
   });
 
   /* RACI */
@@ -406,7 +407,7 @@ document.addEventListener("DOMContentLoaded", function () {
       (verdict.level === "veto" ? "依据手册第 58 条，本结论书面作出并载明依据条款；被否决主体享有陈述申辩权，申辩期间不得入村签约；否决信息在县域内通报。" :
        verdict.level === "fail" ? "未通过项：" + fails.join("、") + "。逐项留痕后退回补正，补正前不得进入签约环节。" :
        "6 项审查全部通过且无一票否决情形，可进入签约备案环节；审查底稿归档，保存期不短于合同期限。") + "</p>" +
-      '<p class="gov-note">本结论书由系统依据《整村光伏建设手册》第 56—58 条规则，按审查者填报的客观信息自动判定生成；所附证明材料与审查记录一并存档备查。</p>' +
+      '<p class="gov-note">本结论书由系统依据《整村分布式光伏建设手册》第 56—58 条规则，按审查者填报的客观信息自动判定生成；所附证明材料与审查记录一并存档备查。</p>' +
       '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
     document.getElementById("arMsg").style.display = "none";
   }

@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>预约调研 —— 屋顶上的共富路</title>
+<meta name="description" content="预约驻村调研：在线问卷、电话、邮箱三种方式，服务范围全国。">
+<link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
 <style>
 .bk-head{text-align:center; padding:140px 0 60px}
@@ -40,7 +42,7 @@
       <div class="glass bk-card rv">
         <svg class="ic" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z M14 2v6h6 M9 13h8 M9 17h8"/></svg>
         <h3 style="color:var(--gold2)">① 在线问卷预约</h3>
-        <p class="bd">极简 5 题，约 1 分钟填完；提交后获得预约编号，课题组 3 个工作日内与您联系确认调研时间。</p>
+        <p class="bd">极简 5 题，约 1 分钟填完；提交后获得预约编号，项目组 3 个工作日内与您联系确认调研时间。</p>
         <div id="qForm">
           <label>Q1 您的姓名</label><input type="text" id="q1"><span class="fld-err" id="e-q1"></span>
           <label>Q2 您的单位／职务</label><input type="text" id="q2" placeholder="如：××县发改委／××村村支书／××企业投资部">
@@ -97,7 +99,6 @@
 </section>
 
 <script src="assets/js/data.js"></script>
-<script src="assets/js/effects.js"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/main.js"></script>
@@ -141,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       : "MG-" + ymd + "-" + String(Math.floor(Math.random() * 900) + 100); /* 离线回退：沿用原有本机编号 */
       document.getElementById("qNo").textContent = no;
       document.getElementById("qMode").textContent = online
-        ? "已实时写入云端数据库，课题组将在 3 个工作日内与您联系确认调研时间。也可直接致电或发邮件二次确认（见右侧两种方式）。"
+        ? "已实时写入云端数据库，项目组将在 3 个工作日内与您联系确认调研时间。也可直接致电或发邮件二次确认（见右侧两种方式）。"
         : "当前为离线缓存模式，预约未上传服务器，请通过电话或邮件（见右侧两种方式）二次确认。";
       document.getElementById("qVoucher").innerHTML =
         '<div style="max-width:640px; margin:0 auto; font-size:15px; line-height:2">' +
@@ -156,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "<tr><th>登记日期</th><td>" + dateStr + "</td></tr>" +
         "<tr><th>登记状态</th><td>" + (online ? "已写入云端数据库" : "离线本机登记，待二次确认") + "</td></tr>" +
         "</table>" +
-        '<p style="margin-top:14px">课题组将在 3 个工作日内与您联系确认调研时间；如需加急，请致电 13721171245 或发送邮件至 1491568874@qq.com，并报登记编号。</p>' +
+        '<p style="margin-top:14px">项目组将在 3 个工作日内与您联系确认调研时间；如需加急，请致电 13721171245 或发送邮件至 1491568874@qq.com，并报登记编号。</p>' +
         '<p style="text-align:right; margin-top:18px">屋顶上的共富路项目组</p>' +
         '<p style="text-align:right; margin-top:4px">' + dateStr + "</p></div>";
       document.getElementById("qForm").style.display = "none";
