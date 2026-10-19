@@ -28,16 +28,8 @@ a:hover{color:var(--gold)}
 img{max-width:100%; display:block}
 button{font-family:var(--sans); cursor:pointer}
 
-/* ===== 质感：噪点 + 扫描线 ===== */
+/* ===== 噪点/扫描线：已停用（保留类名兼容旧标记） ===== */
 .grain{position:relative}
-.grain::before{
-  content:""; position:absolute; inset:0; pointer-events:none; z-index:0; opacity:.04;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-.grain::after{
-  content:""; position:absolute; inset:0; pointer-events:none; z-index:0; opacity:.05;
-  background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(240,242,245,.5) 3px 4px);
-}
 .grain>*{position:relative; z-index:1}
 
 /* ===== 金色三层渐变文字/元素 ===== */
@@ -172,28 +164,25 @@ h3{font-size:22px; font-weight:600; line-height:1.4}
 }
 /* hero 区给整块文字加了深色 text-shadow，按钮文字继承下来会糊在金色渐变上 */
 .hero .btn,.hero-inner .btn{text-shadow:none}
-.btn-gold:hover{box-shadow:0 8px 30px rgba(240,215,140,.5), inset 0 1px 0 rgba(255,255,255,.5); transform:translateY(-2px)}
+.btn-gold:hover{box-shadow:0 8px 30px rgba(240,215,140,.5), inset 0 1px 0 rgba(255,255,255,.5); filter:brightness(1.06)}
 .btn-line{border-color:var(--gold); color:var(--gold2); background:transparent}
 .btn-line:hover{background:rgba(212,168,75,.12)}
 .btn.big{border-radius:var(--r-tag); padding:20px 48px; font-size:20px}
-.btn .shine{position:absolute; inset:0; pointer-events:none;
-  background:radial-gradient(120px 60px at var(--mx,50%) var(--my,50%),rgba(255,255,255,.45),transparent 70%);
-  opacity:0; transition:opacity .3s}
-.btn:hover .shine{opacity:1}
+/* 液态高光 .shine：已停用（main.js 不再注入） */
 .btn-red{border-color:var(--red); color:#e8a49c; background:transparent}
 .btn-red:hover{background:rgba(200,75,63,.12)}
 
 /* ===== 卡片 ===== */
 .card{
   background:var(--ink2); border:1px solid rgba(61,90,117,.4); border-radius:var(--r-card);
-  padding:30px; position:relative; transition:transform .4s var(--ease-out), box-shadow .4s, border-color .4s;
+  padding:30px; position:relative; transition:box-shadow .4s, border-color .4s;
 }
 .section.light .card{background:#fff; border-color:#e2e0d6; box-shadow:0 2px 14px rgba(20,40,60,.05)}
 .card.hover-line::before{
   content:""; position:absolute; top:0; left:0; right:0; height:4px; border-radius:12px 12px 0 0;
   background:linear-gradient(90deg,var(--gold),var(--gold2)); opacity:0; transition:opacity .35s;
 }
-.card.hover-line:hover{transform:translateY(-8px); box-shadow:0 18px 44px rgba(0,0,0,.35); border-color:var(--gold)}
+.card.hover-line:hover{border-color:var(--gold); box-shadow:0 12px 32px rgba(0,0,0,.28)}
 .section.light .card.hover-line:hover{box-shadow:0 18px 40px rgba(20,40,60,.14)}
 .card.hover-line:hover::before{opacity:1}
 .grid2{display:grid; grid-template-columns:1fr 1fr; gap:28px}

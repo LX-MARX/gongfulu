@@ -485,7 +485,8 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     buildNav(); buildFooter(); buildCrumb();
-    spotlight(); counters(); reveal(); liquid(); magnet(); tilt(); pageFade(); termTips();
+    counters(); reveal(); pageFade(); termTips();
+    /* 聚光灯/液态高光/磁吸/3D Tilt：已按 V2 定稿移除 */
     mgNavStyle(); mgBootAddons();
   });
 })();
