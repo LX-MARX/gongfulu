@@ -46,8 +46,8 @@
 │   ├── js/config.js    # 数据库连接配置（Project URL 与 anon public key）
 │   ├── js/api.js       # 数据接入层 window.MG（政策/项目读取、预约写入、状态徽标）
 │   ├── js/data.js      # 静态业务数据资源文件（云端数据的离线缓存，口径与云端一致）：
-│   │                   #   window.PVDATA（政策 119 条、项目 62 项、FAQ 60 条、
-│   │                   #   术语 60 条、案例 11 条、模板 20 张）＋测算常量 window.PVCONST
+│   │                   #   window.PVDATA（政策 119 条、项目 62 项、FAQ 63 条、
+│   │                   #   术语 60 条、案例 11 条、工作表 23 张）＋测算常量 window.PVCONST
 │   ├── js/main.js      # 共享逻辑（导航/页脚注入、动效、术语自动标注、
 │   │                   #   打印隔离 PV.printZone、对比条形图 PV.cmpBars）
 │   └── js/effects.js   # 动效（粒子、3D 柱图、流水线动画）
