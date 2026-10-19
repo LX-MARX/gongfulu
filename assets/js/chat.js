@@ -14,7 +14,7 @@
   var GOLD = "#a5832f", GOLD2 = "#c9a04c";
   var CONTACT = (window.MG_CONFIG || {}).CONTACT || {};
   var FALLBACK = "暂时无法连接智能助手，请稍后再试，或拨打 " + (CONTACT.phone || "项目组服务电话") + " 咨询项目组。";
-  var WELCOME = "您好！我是共富路智能助手，已内置 63 条常见问题（政府、企业、村集体、农户四类），租金、电网容量、防骗识别、申报流程等都能直接答；答不了的会转云端智能问答接着答，也可直接向我提问。";
+  var WELCOME = "已内置 63 条常见问题解答（政府、企业、村集体、农户四类），租金、电网容量、防骗识别、申报流程可直接提问；未命中的问题转在线问答。";
   var CHIPS = ["农户装光伏要出钱吗？", "租金怎么算？", "怎么识别光伏骗局？", "电网容量不够怎么办？"];
 
   /* ---------- 本地 FAQ 匹配 ----------
@@ -129,7 +129,7 @@
   var panel = document.createElement("div");
   panel.className = "pvc-panel";
   panel.innerHTML =
-    '<div class="pvc-head"><div><b>共富路智能助手</b><span>已内置 63 条常见问题，也可直接向我提问</span></div>' +
+    '<div class="pvc-head"><div><b>共富路问答</b><span>内置 63 条常见问题解答，未命中转在线问答</span></div>' +
     '<button class="pvc-close" aria-label="关闭">×</button></div>' +
     '<div class="pvc-body"></div>' +
     '<div class="pvc-input"><input type="text" placeholder="请输入您的问题…" maxlength="500">' +
