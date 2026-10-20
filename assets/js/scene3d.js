@@ -12,9 +12,10 @@ export function createVillage(canvas, opts) {
 
   /* ---------- 渲染器 ---------- */
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));  /* 流畅层硬预算 DPR≤1.5 */
+  renderer.setPixelRatio(1);  /* 流畅层硬预算：DPR=1，分辨率换帧率 */
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.autoUpdate = false;          /* 静态场景：阴影只烘一次，拖动时间滑杆时再更新 */
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.1;
 
@@ -87,7 +88,7 @@ export function createVillage(canvas, opts) {
   scene.add(new THREE.HemisphereLight(0x9DB8D8, 0x4A3A24, 0.7));
   const sun = new THREE.DirectionalLight(0xFFC98A, 2.5);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.mapSize.set(1024, 1024);
   sun.shadow.camera.left = -34; sun.shadow.camera.right = 34;
   sun.shadow.camera.top = 34; sun.shadow.camera.bottom = -34;   /* 阴影限主角院 */
   sun.shadow.bias = -0.0004;
@@ -288,19 +289,19 @@ export function createVillage(canvas, opts) {
     }
     return g;
   }
-  /* 标语残迹（褪红） */
-  function sloganWall(x, z, ry) {
-    const tex = makeTex(256, 64, (g, w, h) => {
+  /* 标语墙（老墙褪红残迹 + 新标语鲜红，时代并置） */
+  function sloganWall(x, z, ry, text, fresh) {
+    const tex = makeTex(512, 96, (g, w, h) => {
       g.fillStyle = "#B59A72"; g.fillRect(0, 0, w, h);
-      g.fillStyle = "rgba(176,58,46,.38)";
-      g.font = "900 34px SimSun,serif";
-      g.fillText("乡村振兴", 18, 44);
-      for (let i = 0; i < 200; i++) {
-        g.fillStyle = "rgba(181,154,114," + Math.random() * 0.5 + ")";
+      g.fillStyle = fresh ? "rgba(158,32,24,.92)" : "rgba(176,58,46,.38)";
+      g.font = "900 52px SimSun,serif";
+      g.fillText(text, 26, 66);
+      for (let i = 0; i < (fresh ? 120 : 260); i++) {
+        g.fillStyle = "rgba(181,154,114," + Math.random() * (fresh ? 0.25 : 0.55) + ")";
         g.fillRect(Math.random() * w, Math.random() * h, 3, 3);
       }
     });
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(4.4, 1.1),
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(4.4, 0.85),
       new THREE.MeshStandardMaterial({ map: tex, roughness: 1 }));
     m.position.set(x, 1.5, z); m.rotation.y = ry; scene.add(m);
   }
@@ -357,7 +358,7 @@ export function createVillage(canvas, opts) {
     purlin.position.set(0, hLow + (hHigh - hLow) * t + 0.1, zEdge + (zBack - zEdge) * t);
     canopy.add(purlin);
   }
-  /* 板阵：贴坡满铺（V12 角度错误已修正：-SLOPE 贴坡） */
+  /* 板阵：贴坡满铺（板面倾角与支架坡向一致：南低北高 = rotation.x 取 +SLOPE） */
   const panelGeo = new THREE.BoxGeometry(1.0, 0.045, 0.64);
   const frameGeo = new THREE.BoxGeometry(1.06, 0.035, 0.7);
   const heroPanels = new THREE.InstancedMesh(panelGeo, pvMat, PN_X * PN_Z);
@@ -368,7 +369,7 @@ export function createVillage(canvas, opts) {
   for (let r = 0; r < PN_Z; r++) for (let c = 0; c < PN_X; c++) {
     const t = (r + 0.5) / PN_Z;
     dummy.position.set(-arrW / 2 + (c + 0.5) * PW, hLow + (hHigh - hLow) * t + 0.17, zEdge + (zBack - zEdge) * t);
-    dummy.rotation.set(-SLOPE, 0, 0);
+    dummy.rotation.set(SLOPE, 0, 0);
     dummy.updateMatrix();
     heroPanels.setMatrixAt(pi, dummy.matrix);
     dummy.position.y -= 0.04; dummy.updateMatrix();
@@ -459,52 +460,122 @@ export function createVillage(canvas, opts) {
   neighbor.position.set(-19, 0, -1); neighbor.rotation.y = 0.06;
   scene.add(neighbor);
 
-  /* ---------- 巷道两侧中保真院落 14 座 ---------- */
+  /* ---------- 巷道两侧中保真院落 14 座：房型与装法解耦 ---------- */
   let seed = 20261019;
   function rnd() { seed = (seed * 48271) % 2147483647; return seed / 2147483647; }
-  const midWall = wallMat, midRoof = tileMat;
-  const midPV = pvMat;
+  const G_SLOPE = 28 * Math.PI / 180;
   const midLots = [];
   for (let side = -1; side <= 1; side += 2) {
     for (let i = 0; i < 7; i++) {
-      midLots.push({ x: -52 + i * 16 + (rnd() - 0.5) * 3, z: 16 + side * (12 + rnd() * 3), ry: (rnd() - 0.5) * 0.12, pv: rnd() < 0.8, flat: rnd() < 0.6 });
+      midLots.push({
+        x: -52 + i * 16 + (rnd() - 0.5) * 3, z: 16 + side * (12 + rnd() * 3),
+        ry: (rnd() - 0.5) * 0.12, pv: rnd() < 0.8,
+        flat: rnd() < 0.55,                          /* 房型：平顶 / 两坡瓦顶 */
+        mount: rnd() < 0.5 ? "canopy" : "aframe",    /* 装法：一字坡支架 / 人字坡架（平房两种都能装） */
+        w: 8 + rnd() * 2.5, d: 5.4 + rnd() * 1.2, h: 3 + rnd() * 0.8
+      });
     }
   }
-  const midBodies = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), midWall, midLots.length);
+  const flatLots = midLots.filter(L => L.flat), gableLots = midLots.filter(L => !L.flat);
+  const midBodies = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), wallMat, midLots.length);
   midBodies.castShadow = midBodies.receiveShadow = true;
-  const midRoofs = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.1, 1), midRoof, midLots.length);
-  midRoofs.castShadow = true;
-  const midPanels = new THREE.InstancedMesh(panelGeo, midPV, midLots.length * 24);
+  const flatSlabs = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.22, 1), concreteMat, flatLots.length);
+  flatSlabs.castShadow = true;
+  const flatPara = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.34, 0.14), wallMat, flatLots.length * 2);
+  const gableA = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.09, 1), tileMat, gableLots.length);
+  const gableB = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.09, 1), tileMat, gableLots.length);
+  gableA.castShadow = gableB.castShadow = true;
+  const gableRidge = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.1, 0.1, 1, 6), tileMat, gableLots.length);
+  const midPosts = new THREE.InstancedMesh(postGeo, steelMat, flatLots.length * 8);
+  midPosts.castShadow = true;
+  const midPanels = new THREE.InstancedMesh(panelGeo, pvMat, midLots.length * 24);
   const midFrames = new THREE.InstancedMesh(frameGeo, aluMat, midLots.length * 24);
-  let mi = 0;
+  let mi = 0, fi = 0, pi4 = 0, gi = 0, ti = 0;
   midLots.forEach(function (L, idx) {
-    const w = 8 + rnd() * 2.5, d = 5.4 + rnd() * 1.2, h = 3 + rnd() * 0.8;
-    dummy.position.set(L.x, h / 2, L.z); dummy.rotation.set(0, L.ry, 0); dummy.scale.set(w, h, d);
+    const cos = Math.cos(L.ry), sin = Math.sin(L.ry);
+    dummy.position.set(L.x, L.h / 2, L.z); dummy.rotation.set(0, L.ry, 0); dummy.scale.set(L.w, L.h, L.d);
     dummy.updateMatrix(); midBodies.setMatrixAt(idx, dummy.matrix);
-    dummy.position.set(L.x, h + 0.3, L.z); dummy.scale.set(w * 1.08, 6, d * 1.1);
-    dummy.updateMatrix(); midRoofs.setMatrixAt(idx, dummy.matrix);
-    if (L.pv) {
-      /* 中保真：6×4 满铺 */
-      for (let r = 0; r < 4; r++) for (let c = 0; c < 6; c++) {
-        const lx = (c - 2.5) * 1.06, lz = (r - 1.5) * 0.7;
-        const cos = Math.cos(L.ry), sin = Math.sin(L.ry);
-        dummy.position.set(L.x + lx * cos - lz * sin, h + (L.flat ? 1.15 : 0.95), L.z + lx * sin + lz * cos);
-        dummy.rotation.set(L.flat ? -SLOPE : -N_SLOPE * 0.8, L.ry, 0);
-        dummy.scale.set(1, 1, 1);
-        dummy.updateMatrix();
-        midPanels.setMatrixAt(mi, dummy.matrix);
-        dummy.position.y -= 0.04; dummy.updateMatrix();
-        midFrames.setMatrixAt(mi, dummy.matrix);
-        mi++;
+    function local(lx, lz) { return [L.x + lx * cos - lz * sin, L.z + lx * sin + lz * cos]; }
+    function placePanel(lx, ly, lz, rx) {
+      const p = local(lx, lz);
+      dummy.position.set(p[0], ly, p[1]);
+      dummy.rotation.set(rx, L.ry, 0); dummy.scale.set(1, 1, 1); dummy.updateMatrix();
+      midPanels.setMatrixAt(mi, dummy.matrix);
+      dummy.position.y -= 0.05; dummy.updateMatrix();
+      midFrames.setMatrixAt(mi, dummy.matrix); mi++;
+    }
+    function placePost(lx, lz, top) {
+      const p = local(lx, lz);
+      const hh = top - (L.h + 0.22);                 /* 自屋面板起 */
+      dummy.position.set(p[0], L.h + 0.22 + hh / 2, p[1]);
+      dummy.rotation.set(0, 0, 0); dummy.scale.set(1, Math.max(hh, 0.12), 1); dummy.updateMatrix();
+      midPosts.setMatrixAt(ti++, dummy.matrix);
+    }
+    if (L.flat) {
+      /* 平屋顶：屋面板 + 女儿墙 */
+      dummy.position.set(L.x, L.h + 0.11, L.z); dummy.rotation.set(0, L.ry, 0); dummy.scale.set(L.w * 1.04, 1, L.d * 1.04);
+      dummy.updateMatrix(); flatSlabs.setMatrixAt(fi, dummy.matrix);
+      [-1, 1].forEach(s => {
+        const lz = s * L.d * 0.52, p = local(0, lz);
+        dummy.position.set(p[0], L.h + 0.4, p[1]);
+        dummy.rotation.set(0, L.ry, 0); dummy.scale.set(L.w * 1.06, 1, 1);
+        dummy.updateMatrix(); flatPara.setMatrixAt(pi4++, dummy.matrix);
+      });
+      if (L.pv && L.mount === "canopy") {
+        /* 平房 × 一字坡支架：前排矮柱 + 后排高柱 + 18° 板面 */
+        const zF = L.d * 0.3, zB = -L.d * 0.3, y0 = L.h + 0.85;
+        [-1.6, -0.55, 0.55, 1.6].forEach(lx => {
+          placePost(lx * (L.w / 6.4), zF, y0);
+          placePost(lx * (L.w / 6.4), zB, y0 + Math.tan(SLOPE) * (zF - zB));
+        });
+        for (let r = 0; r < 3; r++) for (let c = 0; c < 6; c++) {
+          const lz = zF + (zB - zF) * (r + 0.5) / 3;
+          placePanel((c - 2.5) * 1.06, y0 + Math.tan(SLOPE) * (zF - lz), lz, SLOPE);
+        }
+      } else if (L.pv) {
+        /* 平房 × 人字坡 A 字架：双坡对脊，板随两坡 */
+        const span = 1.35, y0 = L.h + 0.6;
+        [-1.6, -0.55, 0.55, 1.6].forEach(lx => {
+          placePost(lx * (L.w / 6.4), span, y0);
+          placePost(lx * (L.w / 6.4), -span, y0);
+        });
+        [1, -1].forEach(s => {
+          for (let r = 0; r < 2; r++) for (let c = 0; c < 6; c++) {
+            const lz = s * (0.45 + r * 0.68);
+            const ly = y0 + (span - Math.abs(lz)) * Math.tan(G_SLOPE) + 0.12;
+            placePanel((c - 2.5) * 1.06, ly, lz, s * G_SLOPE);
+          }
+        });
+      }
+    } else {
+      /* 两坡瓦顶：双坡面 + 正脊，人字坡顺坡贴南坡 */
+      const halfD = L.d / 2, roofH = Math.tan(G_SLOPE) * halfD, slopeLen = Math.hypot(halfD, roofH) + 0.2;
+      [1, -1].forEach(s => {
+        const lz = s * halfD / 2, p = local(0, lz);
+        dummy.position.set(p[0], L.h + roofH / 2 + 0.05, p[1]);
+        dummy.rotation.set(s * G_SLOPE, L.ry, 0); dummy.scale.set(L.w * 1.06, 1, slopeLen);
+        dummy.updateMatrix(); (s > 0 ? gableA : gableB).setMatrixAt(gi, dummy.matrix);
+      });
+      dummy.position.set(L.x, L.h + roofH + 0.06, L.z);
+      dummy.rotation.set(0, L.ry, Math.PI / 2); dummy.scale.set(1, L.w * 1.08, 1);
+      dummy.updateMatrix(); gableRidge.setMatrixAt(gi, dummy.matrix);
+      gi++;
+      if (L.pv) {
+        for (let r = 0; r < 2; r++) for (let c = 0; c < 6; c++) {
+          const lz = ((r + 0.5) / 2) * halfD * 0.84 + 0.12;
+          placePanel((c - 2.5) * 1.06, L.h + roofH - Math.tan(G_SLOPE) * lz + 0.13, lz, G_SLOPE);
+        }
       }
     }
   });
-  midPanels.count = mi; midFrames.count = mi;
-  scene.add(midBodies); scene.add(midRoofs); scene.add(midPanels); scene.add(midFrames);
+  midPanels.count = mi; midFrames.count = mi; midPosts.count = ti;
+  scene.add(midBodies); scene.add(flatSlabs); scene.add(flatPara);
+  scene.add(gableA); scene.add(gableB); scene.add(gableRidge); scene.add(midPosts);
+  scene.add(midPanels); scene.add(midFrames);
 
   /* 远景低模 30 座（雾中剪影，合并几何） */
   const farGeos = [];
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 20; i++) {
     const g = new THREE.BoxGeometry(7 + rnd() * 4, 3 + rnd() * 1.6, 5 + rnd() * 2);
     const a = rnd() * Math.PI * 2, r = 95 + rnd() * 70;
     g.translate(Math.cos(a) * r, 1.6, Math.sin(a) * r * 0.55 - 30);
@@ -592,7 +663,7 @@ export function createVillage(canvas, opts) {
   /* ---------- 树（多面体低冠） ---------- */
   const treeMat = new THREE.MeshStandardMaterial({ color: 0x46583C, roughness: 1 });
   const trunkMat = new THREE.MeshStandardMaterial({ color: 0x4E3A26, roughness: 1 });
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 10; i++) {
     const t = new THREE.Group();
     const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.12, 1.4, 6), trunkMat);
     trunk.position.y = 0.7; t.add(trunk);
@@ -604,28 +675,37 @@ export function createVillage(canvas, opts) {
     t.position.set(x, 0, z);
     scene.add(t);
   }
-  /* 三轮车 + 标语墙 */
+  /* 三轮车 + 标语墙（按主题分配时代表述） */
   scene.add(trike(8, 18.5, 0.4));
-  sloganWall(-9.5, 10.2, 0);
+  sloganWall(-9.5, 10.2, 0, "乡村全面振兴", true);            /* 主巷口新标语 */
+  sloganWall(62, 8.2, -0.35, "清洁能源进村入户", true);        /* 村史馆广场·光伏车棚旁 */
+  sloganWall(11.5, 17.6, 0.1, "发展新质生产力", true);          /* 台区变压器巷口 */
+  sloganWall(-24, 9.8, 0.05, "乡村振兴", false);               /* 老墙褪红残迹（新旧并置） */
 
   /* ---------- 扬尘微粒 ---------- */
   const dustGeo = new THREE.BufferGeometry();
-  const dustPos = new Float32Array(200 * 3);
-  for (let i = 0; i < 200; i++) {
+  const dustPos = new Float32Array(80 * 3);
+  for (let i = 0; i < 80; i++) {
     dustPos[i * 3] = (rnd() - 0.5) * 130;
     dustPos[i * 3 + 1] = rnd() * 16 + 0.5;
     dustPos[i * 3 + 2] = (rnd() - 0.5) * 100;
   }
   dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
-  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xE8CF9A, size: 0.13, transparent: true, opacity: 0.42 }));
+  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xE8CF9A, size: 0.13, transparent: true, opacity: 0.35 }));
   scene.add(dust);
 
-  /* ---------- 收益流光点（板→逆变器→表→杆，3 段共 12 点） ---------- */
+  /* ---------- 收益流：实体线缆 + 光点（板→逆变器→表→杆，3 段共 12 点） ---------- */
   const flowCurves = [
     new THREE.QuadraticBezierCurve3(new THREE.Vector3(2.2, 4.9, -0.6), new THREE.Vector3(4.2, 3.4, -1.2), new THREE.Vector3(4.9, 2.0, -1)),
     new THREE.QuadraticBezierCurve3(new THREE.Vector3(4.9, 1.5, -0.9), new THREE.Vector3(3.7, 1.2, -0.8), new THREE.Vector3(2.6, 1.55, -0.72)),
     feedCurve,
   ];
+  /* 实体线缆（沿流光路径的深色导管） */
+  const cableMat = new THREE.MeshStandardMaterial({ color: 0x2A2D31, roughness: 0.75 });
+  flowCurves.forEach(c => {
+    const tube = new THREE.Mesh(new THREE.TubeGeometry(c, 20, 0.028, 5), cableMat);
+    tube.castShadow = true; scene.add(tube);
+  });
   const dotGeo = new THREE.SphereGeometry(0.09, 8, 8);
   const dotMat = new THREE.MeshBasicMaterial({ color: 0xFFD98A });
   const dots = [];
@@ -669,27 +749,54 @@ export function createVillage(canvas, opts) {
     const sunDir = sun.position.clone().normalize();
     sunDisc.position.copy(sunDir.multiplyScalar(330));
     sunDisc.material.opacity = 0.35 + t * 0.65;
+    renderer.shadowMap.needsUpdate = true;        /* 太阳移动后重烘一次阴影 */
   }
   setTime(1);
 
-  /* ---------- 屋顶类型切换 ---------- */
+  /* ---------- 屋顶装法切换（平房顶上：一字坡支架 ⇄ 人字坡 A 字架） ---------- */
   let roofType = "flat";
-  const gableGroup = new THREE.Group();          /* 主宅人字坡替换件 */
-  function buildGable() {
-    const r1 = new THREE.Mesh(new THREE.BoxGeometry(10.2, 0.1, Math.hypot(3.4, 1.7)), tileMat);
-    r1.position.set(0, 4.45, 1.7); r1.rotation.x = N_SLOPE * 0.82; r1.castShadow = true;
-    const r2 = r1.clone(); r2.position.z = -1.7; r2.rotation.x = -N_SLOPE * 0.82;
-    gableGroup.add(r1); gableGroup.add(r2);
-    const rg = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 10.3, 8), tileMat);
-    rg.rotation.z = Math.PI / 2; rg.position.set(0, 5.75, 0); gableGroup.add(rg);
-    gableGroup.visible = false;
-    hero.add(gableGroup);
+  const aframeGroup = new THREE.Group();         /* 主宅平房顶上的人字坡 A 字架 */
+  function buildAframe() {
+    const G = 28 * Math.PI / 180, span = 1.5, y0 = 3.62 + 0.62, ridgeZ = 1.2;
+    const afP = new THREE.InstancedMesh(panelGeo, pvMat, 40);
+    const afF = new THREE.InstancedMesh(frameGeo, aluMat, 40);
+    afP.castShadow = afF.castShadow = true;
+    let ai = 0;
+    [1, -1].forEach(s => {
+      for (let r = 0; r < 2; r++) for (let c = 0; c < 10; c++) {
+        const lz = ridgeZ + s * (0.45 + r * 0.68);
+        const ly = y0 + (span - (0.45 + r * 0.68)) * Math.tan(G) + 0.12;
+        dummy.position.set(-4.77 + c * 1.06, ly, lz);
+        dummy.rotation.set(s * G, 0, 0); dummy.scale.set(1, 1, 1); dummy.updateMatrix();
+        afP.setMatrixAt(ai, dummy.matrix);
+        dummy.position.y -= 0.05; dummy.updateMatrix();
+        afF.setMatrixAt(ai, dummy.matrix); ai++;
+      }
+    });
+    afP.count = afF.count = ai;
+    aframeGroup.add(afP); aframeGroup.add(afF);
+    /* 支架柱：前后两排 */
+    for (let i = 0; i < 5; i++) {
+      const x = -4.3 + i * 2.15;
+      [ridgeZ + span, ridgeZ - span].forEach(z => {
+        const post = new THREE.Mesh(postGeo, steelMat);
+        post.scale.y = y0 - 3.62; post.position.set(x, 3.62 + post.scale.y / 2, z);
+        post.castShadow = true; aframeGroup.add(post);
+      });
+    }
+    /* 脊梁 */
+    const rg = new THREE.Mesh(new THREE.BoxGeometry(10.2, 0.08, 0.08), steelMat);
+    rg.position.set(0, y0 + span * Math.tan(G) + 0.06, ridgeZ); aframeGroup.add(rg);
+    aframeGroup.visible = false;
+    hero.add(aframeGroup);
+    /* 纳入悬停拾取 */
+    PARTS[0].targets.push(afP, afF);
   }
-  buildGable();
+  buildAframe();
   function setRoofType(type) {
     roofType = type;
-    canopy.visible = type === "flat";
-    gableGroup.visible = type === "gable";
+    canopy.visible = type === "flat";      /* 一字坡支架 */
+    aframeGroup.visible = type === "gable"; /* 人字坡 A 字架（同在平房顶上） */
   }
 
   /* ---------- 控制器与观察位 ---------- */
@@ -736,12 +843,19 @@ export function createVillage(canvas, opts) {
   addEventListener("resize", resize);
 
   const v3 = new THREE.Vector3();
-  let lastT = 0;
+  let lastT = 0, fpsE = 60, degraded = false;
   function tick(t) {
     requestAnimationFrame(tick);
     if (!running || !visible) return;
     resize();
     const dt = Math.min((t - lastT) / 1000, 0.05); lastT = t;
+    /* 帧率守卫：持续低帧自动降载（关扬尘、减半光点） */
+    fpsE = fpsE * 0.95 + (1 / Math.max(dt, 0.001)) * 0.05;
+    if (!degraded && t > 4000 && fpsE < 42) {
+      degraded = true;
+      dust.visible = false;
+      dots.forEach((d, i) => { if (i % 2) d.visible = false; });
+    }
     controls.update();
     if (opts.onFrame) opts.onFrame(dt);
     /* 悬停拾取 */

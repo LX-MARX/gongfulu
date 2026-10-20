@@ -2,454 +2,153 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>屋顶上的共富路 —— 整村光伏建设方案</title>
-<meta name="description" content="整村光伏建设方案：源自陕西省大荔县东高垣村 185 户实践，含租金速查、23 张工作表、四方工作台与驻村实证。">
+<meta name="description" content="整村光伏建设方案：源自陕西大荔东高垣村实践——企业全额投资，农户不出资、不贷款、不担保，租金按块计、年年到卡。">
 <link rel="icon" href="assets/img/logo.png">
-<link rel="stylesheet" href="assets/css/main.css">
 <style>
-/* ============ 首页专属（V13·V2 定稿） ============ */
-.hero{position:relative;min-height:92vh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;background:#0B1828;text-align:center}
-.hero-photo{position:absolute;inset:0}
-.hero-photo img{width:100%;height:100%;object-fit:cover}
-.hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 46%,rgba(11,24,40,.92) 100%)}
-.hero-inner{position:relative;z-index:2;padding:0 6vw}
-.brow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:#8A6A2A}
-.brow i{font-style:normal;margin-right:12px}
-.hero .brow{color:#E8CF9A}
-.hero-title{font-family:var(--serif);font-weight:900;font-size:56px;line-height:1.2;color:#F2F4F7;letter-spacing:.03em;margin-top:20px;text-shadow:0 2px 28px rgba(11,24,40,.55)}
-.hero-fact{font-size:15px;color:#D8E2EC;margin-top:18px;text-shadow:0 1px 12px rgba(11,24,40,.6)}
-.hero-fact b{color:#E8CF9A;font-weight:600}
-.hero-cta{margin-top:34px}
-.hero-credit{position:absolute;right:18px;bottom:18px;z-index:3;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:rgba(242,244,247,.55)}
-.hero-bottom{position:relative;z-index:2;margin:46px 6vw 0;padding:15px 0 17px;border-top:1px solid rgba(200,147,58,.3);
-  display:flex;justify-content:space-between;gap:20px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#B9C9D8;text-align:left}
-.hero-bottom b{color:#E8CF9A;font-weight:700}
-@media(max-width:900px){.hero-title{font-size:34px}.hero-bottom{flex-direction:column;gap:6px}.hero-credit{display:none}}
-@media(max-width:1280px) and (min-width:901px){.hero-title{font-size:44px}}
-
-/* 租金测算器 */
-.calc-sec{padding:100px 0;background:#FAF6EF;color:#4A4A4A}
-.calc-sec h2{font-family:var(--serif);font-weight:900;font-size:34px;line-height:1.35;color:#1A1A1A;margin-top:16px}
-.calc-sec .lead{color:#4A4A4A;font-size:15px;margin-top:12px;max-width:560px}
-.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,4.5vw,72px);margin-top:44px;align-items:start}
-@media(max-width:900px){.calc-grid{grid-template-columns:1fr}}
-.calc-form{background:#FFF;border:1px solid rgba(26,26,26,.14);padding:28px 30px}
-.calc-form label{display:block;font-size:13px;color:#4A4A4A;font-weight:600;margin:18px 0 8px}
-.calc-form label:first-of-type{margin-top:0}
-.seg{display:flex;border:1px solid rgba(26,26,26,.25)}
-.seg button{flex:1;height:44px;background:#FFF;border:0;font-size:13.5px;cursor:pointer;font-family:inherit;color:#4A4A4A;transition:.25s}
-.seg button.cur{background:#1D4E89;color:#FFF}
-.calc-form input[type=number]{width:100%;height:44px;border:1px solid rgba(26,26,26,.25);padding:0 14px;font-size:15px;font-family:var(--mono);color:#1A1A1A;outline:none;transition:border-color .25s}
-.calc-form input[type=number]:focus{border-color:#1D4E89;box-shadow:0 0 0 3px rgba(29,78,137,.12)}
-.calc-form .hint{font-size:12px;color:#8A8A8A;margin-top:6px}
-.calc-out{margin-top:24px;border-top:2px solid #1A1A1A;padding-top:18px}
-.calc-out .row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;font-size:14px}
-.calc-out .row .v{font-family:var(--mono);font-weight:700;color:#1E4E86;font-size:22px}
-.calc-out .row .v i{font-style:normal;font-size:.55em;color:#C8933A}
-.calc-out .row.big .v{font-size:34px;color:#C8933A}
-.calc-view{margin-top:20px;width:100%;height:44px;border-radius:2px;font-size:15px}
-.ledger{background:#FDFCF8;border:1px solid rgba(26,26,26,.18);border-left:3px solid #C8933A;padding:18px 24px;margin-top:26px}
-.ledger .lh{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:#8A6A2A;border-bottom:1px dashed rgba(26,26,26,.2);padding-bottom:10px;margin-bottom:6px}
-.ledger .lr{display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:1px solid rgba(26,26,26,.08)}
-.ledger .lr:last-child{border-bottom:none}
-.ledger .lr .k{color:#8A8A8A}
-.ledger .lr .v{font-family:var(--mono);font-weight:600;color:#1E4E86}
-.ledger .lr.total .v{color:#C8933A;font-size:17px}
-.ledger .ls{margin-top:10px;font-size:11px;color:#8A8A8A}
-
-/* 3D 段：单屏 + 选项卡 */
-.scene-sec{background:#0B1828;position:relative}
-.scene-stage{position:relative;height:100vh;overflow:hidden}
-#gl{position:absolute;inset:0;width:100%;height:100%;cursor:grab}
+:root{
+  --bg:#0A1628; --fg:#f2f4f7; --kick:#8a93a3; --sub:#9aa3ad;
+  --panel-bg:rgba(14,20,30,.72); --panel-bd:#26303d; --panel-fg:#dfe3e8;
+  --btn-bg:#f2f4f7; --btn-fg:#0A1628; --cc:#5d6570; --gold:#e8c98a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{margin:0;overflow:hidden;background:var(--bg);font-family:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+#gl{position:fixed;inset:0;width:100%;height:100%;cursor:grab}
 #gl:active{cursor:grabbing}
-#wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
-.shot-tabs{position:absolute;z-index:6;left:50%;transform:translateX(-50%);bottom:26px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:92vw}
-.shot-tabs button{display:flex;align-items:center;gap:9px;height:44px;padding:0 18px;font-size:13px;font-family:inherit;letter-spacing:.04em;cursor:pointer;
-  border-radius:2px;border:1px solid rgba(138,138,138,.5);background:rgba(15,32,54,.72);backdrop-filter:blur(8px);color:#8FA8BF;transition:border-color .3s,background .3s,color .3s}
-.shot-tabs button .st-no{font-family:var(--mono);font-size:11px}
-.shot-tabs button.done{background:#1E4E86;border-color:#1E4E86;color:#FFF}
-.shot-tabs button.done .st-no::after{content:" ✓"}
-.shot-tabs button.cur{background:#FFF;border-color:#2E7CC9;color:#1D4E89}
-.shot-tabs button:hover{border-color:#E8CF9A}
-.shot-card{position:absolute;z-index:5;left:6vw;top:110px;width:380px;max-width:88vw;
-  background:#FAF6EF;border:1px solid rgba(26,26,26,.22);border-left:3px solid #C8933A;padding:22px 26px 18px;color:#4A4A4A}
-.shot-card .sc-no{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:#8A6A2A;margin-bottom:7px}
-.shot-card .sc-t{font-family:var(--serif);font-size:22px;font-weight:900;color:#1A1A1A;margin-bottom:8px;line-height:1.4}
-.shot-card .sc-d{font-size:13px;line-height:1.85}
-.shot-card .sc-d b{color:#1E4E86;font-weight:600}
-.shot-card .sc-kpi{display:flex;gap:24px;margin-top:13px;padding-top:12px;border-top:1px solid rgba(26,26,26,.14)}
-.shot-card .sc-kpi .v{font-family:var(--mono);font-size:22px;font-weight:700;color:#1E4E86}
-.shot-card .sc-kpi .v i{font-style:normal;font-size:.52em;color:#C8933A;font-weight:400}
-.shot-card .sc-kpi .l{font-size:11px;color:#8A8A8A;letter-spacing:.1em;margin-top:2px}
-.stage-ctl{position:absolute;z-index:6;right:5vw;top:110px;display:flex;flex-direction:column;gap:14px;align-items:flex-end}
-.time-ctl{display:flex;align-items:center;gap:12px;color:#8FA8BF;font-family:var(--mono);font-size:11px;letter-spacing:.12em}
-.time-ctl input{width:160px;accent-color:#C8933A}
-.time-ctl b{color:#E8CF9A;min-width:44px}
-@media(max-width:900px){.shot-card{left:5vw;right:5vw;width:auto;top:96px}.stage-ctl{right:5vw;top:auto;bottom:92px}}
-
-/* 农户段 */
-.farmer-sec{padding:100px 0;background:#FAF6EF;color:#4A4A4A}
-.farmer-sec h2{font-family:var(--serif);font-weight:900;font-size:34px;line-height:1.35;color:#1A1A1A;margin-top:16px}
-.farmer-sec h2 em{font-style:normal;color:#1E4E86}
-.farmer-sec .plain{font-size:15px;margin-top:16px;line-height:2;max-width:640px}
-.redline{margin-top:26px;border:1px solid rgba(168,50,45,.4);border-left:3px solid #A8322D;background:rgba(168,50,45,.05);padding:18px 22px;max-width:640px}
-.redline h4{color:#A8322D;font-size:15px;font-weight:800;margin-bottom:8px}
-.redline p{font-size:13px;line-height:1.85}
-
-/* 村集体 */
-.village-sec{background:#F0E8D9;padding:100px 0;color:#4A4A4A}
-.village-sec .grid{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(30px,4vw,64px);align-items:center}
-@media(max-width:900px){.village-sec .grid{grid-template-columns:1fr}}
-.village-sec h2{font-family:var(--serif);font-weight:900;font-size:34px;line-height:1.35;margin-top:16px;color:#1A1A1A}
-.village-sec .lead{font-size:15px;margin-top:14px;line-height:1.95}
-.steps{margin-top:22px}
-.step3{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;font-size:13px;margin:0 8px 8px 0;border:1px solid}
-.step3.done{background:#1E4E86;border-color:#1E4E86;color:#FFF}
-.step3.done::before{content:"✓ ";font-family:var(--mono)}
-.step3.doing{border-color:#1D4E89;color:#1D4E89;background:#FFF}
-.step3.todo{border-color:#C9C4B8;color:#8A8A8A;background:transparent}
-.paper-sheet{position:relative;background:#FDFCF8;padding:0 0 34px;
-  box-shadow:0 2px 4px rgba(26,26,26,.1),0 24px 64px rgba(26,26,26,.16);border:1px solid rgba(26,26,26,.12);font-family:var(--serif)}
-.paper-sheet::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23p)' opacity='0.05'/%3E%3C/svg%3E")}
-.paper-sheet .red-band{padding:18px 34px 12px;border-bottom:3px solid #B03A2E;text-align:center}
-.paper-sheet .red-band .t1{font-weight:900;font-size:20px;color:#B03A2E;letter-spacing:.18em}
-.paper-sheet .red-band .t2{font-family:var(--mono);font-size:11px;color:#8A6A2A;letter-spacing:.14em;margin-top:6px}
-.paper-sheet .sheet-title{text-align:center;font-weight:700;font-size:16px;color:#1A1A1A;letter-spacing:.06em;padding:18px 34px 4px}
-.paper-sheet .sheet-no{text-align:center;font-family:var(--mono);font-size:11px;color:#8A6A2A;letter-spacing:.12em;padding-bottom:12px}
-.paper-sheet table{width:calc(100% - 68px);margin:0 34px;border-collapse:collapse;font-size:14px;font-family:var(--sans)}
-.paper-sheet th,.paper-sheet td{border:1px solid rgba(26,26,26,.3);padding:8px 11px;color:#1A1A1A;text-align:left}
-.paper-sheet th{background:rgba(29,78,137,.05);font-weight:700;width:26%;font-size:13px}
-.paper-sheet .mono{font-family:var(--mono);color:#8A6A2A;font-weight:600}
-.paper-sheet .foot{display:flex;justify-content:space-between;padding:20px 34px 0;font-size:13px;color:#1A1A1A}
-.paper-sheet .foot .seal-note{color:#8A8A8A;font-size:12px}
-.paper-sheet .copies{text-align:center;font-size:11px;color:#8A8A8A;margin-top:14px;letter-spacing:.1em}
-
-/* 政企双条 */
-.two-orgs{padding:96px 0;background:#FAF6EF;color:#4A4A4A}
-.org-row{display:grid;grid-template-columns:56px 1fr auto auto;gap:clamp(18px,3vw,44px);align-items:baseline;padding:30px 0;border-top:1px solid rgba(26,26,26,.16)}
-.org-row:last-child{border-bottom:1px solid rgba(26,26,26,.16)}
-.org-row .no{font-family:var(--mono);font-size:11px;color:#8A6A2A;letter-spacing:.16em}
-.org-row h3{font-family:var(--serif);font-size:22px;font-weight:900;color:#1A1A1A}
-.org-row p{font-size:13px;max-width:520px;margin-top:4px}
-.org-row .num{font-family:var(--mono);font-size:22px;font-weight:700;color:#1E4E86;white-space:nowrap}
-.org-row .num i{font-style:normal;font-size:.52em;font-weight:400;color:#C8933A}
-.org-row a{color:#1D4E89}
-@media(max-width:900px){.org-row{grid-template-columns:1fr;gap:8px}}
-
-/* 实证 */
-.proof-sec{background:#0B1828;padding:100px 0;color:#F2F4F7}
-.proof-sec h2{font-family:var(--serif);font-weight:900;font-size:34px;margin-top:16px}
-.proof-sec .lead{color:#9FB4C8;font-size:15px;margin-top:12px;max-width:620px}
-.bleed{margin-top:48px;position:relative}
-.bleed img{width:100%;height:min(62vh,600px);object-fit:cover}
-.bleed .cap{position:absolute;left:5vw;bottom:26px;background:#FAF6EF;border-left:3px solid #C8933A;padding:12px 18px;font-size:13px;color:#4A4A4A;box-shadow:0 8px 26px rgba(11,24,40,.3)}
-.bleed .cap i{font-style:normal;font-family:var(--mono);color:#8A6A2A;margin-right:10px}
-.frames{max-width:1200px;margin:40px auto 0;padding:0 5vw;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.fr{background:#FFF;border:1px solid #D8D4C8;padding:8px;box-shadow:inset 0 0 0 1px #FFF}
-.fr img{width:100%;height:220px;object-fit:cover;border:1px solid #E4E0D4}
-.fr figcaption{padding:10px 2px 2px;font-size:13px;color:#8A8A8A}
-.fr figcaption i{font-style:normal;font-family:var(--mono);color:#8A6A2A}
-@media(max-width:900px){.frames{grid-template-columns:1fr}}
-
-/* 收尾 */
-.tail{background:#0F2036;color:#F2F4F7;padding:100px 0 0}
-.trace-list{margin-top:40px;max-width:860px}
-.trace-item{display:grid;grid-template-columns:110px 20px 1fr;gap:0 24px;padding:15px 0;border-bottom:1px solid rgba(200,147,58,.12);align-items:baseline}
-.trace-item .d{font-family:var(--mono);font-size:13px;color:#E8CF9A}
-.trace-item .dot{width:7px;height:7px;background:#C8933A;border-radius:50%;justify-self:center}
-.trace-item h4{font-size:15px;font-weight:700;display:inline}
-.trace-item p{font-size:13px;color:#8FA8BF;margin-top:2px}
-.trace-item p i{font-style:normal;color:#E8CF9A;opacity:.9}
-.tail-cta{margin-top:70px;padding:76px 0;text-align:center;border-top:1px solid rgba(200,147,58,.14)}
-.tail-cta .big{font-family:var(--serif);font-weight:900;font-size:34px;margin:16px 0 32px}
-.tail-cta .note{margin-top:20px;font-size:13px;color:#8FA8BF}
+#wires{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+#title{position:fixed;left:28px;top:24px;color:var(--fg);pointer-events:none;z-index:5}
+#title .kicker{font-size:11px;letter-spacing:.28em;color:var(--kick);text-transform:uppercase}
+#title h1{margin:4px 0 6px;font-family:"Noto Serif SC","Source Han Serif SC",Georgia,"STSong",serif;font-weight:600;font-size:34px;letter-spacing:.01em}
+#title .sub{font-size:11.5px;color:var(--sub);letter-spacing:.06em}
+#title .rule{width:210px;border-top:1px solid var(--fg);margin-top:10px}
+#spec{position:fixed;right:28px;top:26px;text-align:right;color:var(--fg);pointer-events:none;z-index:5}
+#spec .brand{font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+#spec .lines{margin-top:6px;font-size:10.5px;line-height:1.7;color:var(--sub);letter-spacing:.08em}
+#spec .lines b{color:var(--fg);font-weight:600}
+#ui{position:fixed;left:28px;bottom:22px;color:var(--panel-fg);font-size:12px;z-index:6;
+  background:var(--panel-bg);border:1px solid var(--panel-bd);padding:12px 16px;border-radius:4px;
+  backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .9s;max-width:330px}
+body:hover #ui, body.pinui #ui{opacity:1;pointer-events:auto}
+body.idle #ui{opacity:0;pointer-events:none}
+#ui .note{font-size:12px;line-height:1.7;color:var(--panel-fg);min-height:20px}
+#ui .note b{color:var(--gold);font-weight:600}
+#ui .shots{margin-top:10px}
+#ui button{margin:0 6px 0 0;cursor:pointer;background:var(--btn-bg);color:var(--btn-fg);border:0;padding:4px 10px;font-size:11px;letter-spacing:.08em;border-radius:2px}
+#ui button.cur{background:var(--gold);color:#23180a}
+#ui label{display:block;margin-top:10px;color:#7d8692;font-size:10px;letter-spacing:.05em}
+#ui input[type=range]{width:180px;accent-color:var(--gold);vertical-align:middle}
+#ui .tl{display:inline-block;min-width:38px;color:var(--sub);font-size:11px}
+#ui .links{margin-top:10px;padding-top:8px;border-top:1px solid var(--panel-bd);font-size:11px}
+#ui .links a{color:var(--sub);text-decoration:none;margin-right:14px;letter-spacing:.04em}
+#ui .links a:hover{color:var(--fg)}
+#cc{position:fixed;right:28px;bottom:20px;color:var(--cc);font-size:10px;letter-spacing:.04em;text-align:right;pointer-events:none;line-height:1.6;z-index:5}
+#loading{position:fixed;left:50%;top:46%;transform:translate(-50%,-50%);color:var(--kick);font-size:12px;letter-spacing:.2em;z-index:9}
+#hint{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:7;color:var(--sub);
+  font-size:11.5px;letter-spacing:.1em;background:var(--panel-bg);border:1px solid var(--panel-bd);
+  padding:8px 18px;border-radius:99px;transition:opacity 1.2s;pointer-events:none}
+#hint.off{opacity:0}
+.mgc-fab,.pvc-fab{right:26px !important;bottom:70px !important}
+@media(max-width:760px){
+  #title h1{font-size:24px}
+  #spec{display:none}
+  #ui{left:12px;right:12px;bottom:12px;max-width:none}
+}
 </style>
 </head>
-<body data-page="index">
+<body>
+<canvas id="gl"></canvas>
+<svg id="wires"></svg>
 
-<!-- Hero -->
-<section class="hero">
-  <div class="hero-photo"><img src="assets/img/case-2.jpg" alt="东高垣村光伏村落实拍"></div>
-  <div class="hero-veil"></div>
-  <div class="hero-inner">
-    <div class="brow"><i>方案</i>整村光伏建设 · 源自陕西省大荔县东高垣村实践</div>
-    <h1 class="hero-title">屋顶上的共富路</h1>
-    <div class="hero-fact">185 户出租屋顶，企业全额投资；租金按块计：<b>一字坡 30 元/块/年，人字坡 15 元/块/年</b></div>
-    <div class="hero-cta"><a class="btn btn-gold" href="#calc">算一算我家屋顶</a></div>
-  </div>
-  <div class="hero-credit">项目组驻村实拍 · 2026 年 2 月</div>
-  <div class="hero-bottom">
-    <span>电价依据：<b>全额上网 0.3545 元/度</b>（发改价格〔2025〕136 号）</span>
-    <span>租期 <b>25 年</b>，到期企业复原屋顶</span>
-  </div>
-</section>
+<div id="title">
+  <div class="kicker">Whole-Village PV · Donggaoyuan</div>
+  <h1>屋顶上的共富路</h1>
+  <div class="sub">企业全额投资，农户不出一分钱——一度电的旅程</div>
+  <div class="rule"></div>
+</div>
 
-<!-- 租金测算器 -->
-<section class="calc-sec" id="calc">
-  <div class="container">
-    <div class="brow"><i>工具</i>租金速查</div>
-    <h2>算一算我家屋顶</h2>
-    <p class="lead">选屋顶类型、填可装块数（或按面积约 3.2 ㎡/块换算），按东高垣村合同口径直接得数。</p>
-    <div class="calc-grid">
-      <div class="calc-form">
-        <label>屋顶类型</label>
-        <div class="seg" id="roofSeg">
-          <button class="cur" data-rate="30" data-t="flat">一字坡支架（平顶房）· 30 元/块/年</button>
-          <button data-rate="15" data-t="gable">人字坡（两坡瓦顶）· 15 元/块/年</button>
-        </div>
-        <label>可装板块数（块）</label>
-        <input type="number" id="blockInput" value="50" min="10" max="120" step="1">
-        <div class="hint">户均约 50 块；按面积估算：块数 ≈ 屋顶面积（㎡）÷ 3.2</div>
-        <div class="calc-out">
-          <div class="row big"><span class="k">年租金（预估）</span><span class="v" id="outYear">1500<i> 元/年</i></span></div>
-          <div class="row"><span class="k">25 年累计</span><span class="v" id="outTotal">37500<i> 元</i></span></div>
-          <div class="row"><span class="k">月均可支配</span><span class="v" id="outMonth">125<i> 元/月</i></span></div>
-        </div>
-        <button class="btn calc-view" id="viewInModel" style="background:#1D4E89;color:#FFF;border:1px solid #1D4E89">在模型里看这种屋顶 ↓</button>
-        <div class="ledger">
-          <div class="lh"><span>对照 · 台账样本户 DGY-017</span><span>2024 年度</span></div>
-          <div class="lr"><span class="k">屋顶类型</span><span class="v">一字坡支架</span></div>
-          <div class="lr"><span class="k">装板块数</span><span class="v">48 块</span></div>
-          <div class="lr total"><span class="k">2024 年租金到账</span><span class="v">1440 元</span></div>
-          <div class="ls">摘自企业租金支付台账，2026 年 2 月项目组入户核实。</div>
-        </div>
-      </div>
-      <div>
-        <p class="plain" style="margin-top:0">测算口径全部来自东高垣村在执行的合同文本：一字坡支架 30 元/块/年、人字坡 15 元/块/年，租期 25 年，租金每年支付到户主银行卡。企业承担建设投资、运维与保险，到期负责复原屋顶。</p>
-        <p class="plain">测算结果为口径预估，实际装板块数以入户测绘为准；台区剩余容量不足时，装板块数与租金相应核减。</p>
-      </div>
-    </div>
+<div id="spec">
+  <div class="brand">Rooftop Lease · 25-Year</div>
+  <div class="lines">
+    租金 一字坡 <b>30</b> 元/块·年<br>
+    租金 人字坡 <b>15</b> 元/块·年<br>
+    户均约 <b>50</b> 块 · 635 W<br>
+    年到账 <b>1500—2000</b> 元/户<br>
+    电价 <b>0.3545</b> 元/度
   </div>
-</section>
+</div>
 
-<!-- 3D 段：一度电的旅程 -->
-<section class="scene-sec" id="modelSec">
-  <div class="scene-stage" id="stage">
-    <canvas id="gl"></canvas>
-    <svg id="wires"></svg>
-    <div class="shot-card" id="shotCard">
-      <div class="sc-no" id="scNo"></div>
-      <div class="sc-t" id="scT"></div>
-      <div class="sc-d" id="scD"></div>
-      <div class="sc-kpi" id="scKpi"></div>
-    </div>
-    <div class="stage-ctl">
-      <div class="time-ctl">
-        <span>正午</span>
-        <input type="range" id="timeSlider" min="0" max="100" value="100">
-        <span>黄昏</span><b id="timeLabel">18:30</b>
-      </div>
-    </div>
-    <div class="shot-tabs" id="shotTabs"></div>
+<div id="ui">
+  <div class="note" id="note">渭北旱塬，年日照约 <b>1350 小时</b>。收益从这里开始。</div>
+  <div class="shots" id="shots"></div>
+  <label>屋顶装法
+    <button data-t="flat" class="cur" id="rf1" style="margin-left:8px">一字坡</button><button data-t="gable" id="rf2">人字坡</button>
+  </label>
+  <label>日照 <input type="range" id="timeSlider" min="0" max="100" value="35"> <span class="tl" id="timeLabel">14:18</span></label>
+  <div class="links">
+    <a href="tools.html">算一算我家屋顶 →</a><a href="forms.html">23 张工作表 →</a><a href="farmer.html">农户指南 →</a><a href="cases.html">东高垣实证 →</a>
   </div>
-</section>
+</div>
 
-<!-- 农户段 -->
-<section class="farmer-sec">
-  <div class="container">
-    <div class="brow"><i>第一章</i>先给农户看</div>
-    <h2>出租屋顶的实账：<em>按块计租，每年到账</em></h2>
-    <p class="plain">东高垣村 185 户签的是同一类合同：企业承担全部投资，农户只出屋顶。租金按装板块数计，每年按时打到户主卡上；合同期 25 年，到期企业负责复原屋顶。</p>
-    <p class="plain">这个村早年吃过骗贷的亏：一家小公司进村低价签约，骗取村民身份证信息后以村民名义办贷款。所以本方案把三条红线写进每一份材料。</p>
-    <div class="redline rv">
-      <h4>三条红线</h4>
-      <p>任何人让农户 ① 掏一分钱、② 签字贷款或担保、③ 交出身份证原件——都不是本项目行为，请立即向村委会核实。</p>
-    </div>
-    <a class="go" href="farmer.html" style="display:inline-block;margin-top:28px;color:#1D4E89;font-size:15px">进入农户工作台（自查 / 速查 / 合同审查 / 骗局识别）→</a>
-  </div>
-</section>
+<div id="cc">© 2026 四川大学课题组 · 屋顶上的共富路<br>租金口径：企业合同与 2024 年到账台账</div>
+<div id="loading">载入村落实景…</div>
+<div id="hint">拖动旋转 · 滚轮缩放 · 指向屋顶与设备查看注记</div>
 
-<!-- 村集体 -->
-<section class="village-sec">
-  <div class="container">
-    <div class="grid">
-      <div>
-        <div class="brow"><i>第二章</i>再给村集体看</div>
-        <h2>动员、公示、签约、验收：23 张表全程留痕</h2>
-        <p class="lead">每一步都有凭据。23 张工作表覆盖入户摸底到并网验收全流程，重大事项落实「四议两公开」，名单公示 7 天。每张表可在线预览、填写、打印。</p>
-        <div class="steps">
-          <span class="step3 done">意愿摸底</span><span class="step3 done">名单公示 7 天</span><span class="step3 doing">集中签约</span><span class="step3 todo">施工并网</span><span class="step3 todo">验收归档</span>
-        </div>
-        <a class="go" href="forms.html" style="display:inline-block;margin-top:26px;color:#1D4E89;font-size:15px">打开 23 张工作表 →</a>
-      </div>
-      <div class="paper-sheet">
-        <div class="red-band">
-          <div class="t1">东高垣村村民委员会</div>
-          <div class="t2">整村分布式光伏项目 · 建档文书</div>
-        </div>
-        <div class="sheet-title">农户屋顶租赁登记表</div>
-        <div class="sheet-no">编号 M-03 · 一户一档 · 一式两联</div>
-        <table>
-          <tr><th>户主姓名</th><td>（在线填写）</td><th style="width:22%">身份证号</th><td>（在线填写）</td></tr>
-          <tr><th>联系电话</th><td>（在线填写）</td><th>房屋坐落</th><td>东高垣村　组　号</td></tr>
-          <tr><th>四至边界</th><td colspan="3">东至＿＿＿＿，南至＿＿＿＿，西至＿＿＿＿，北至＿＿＿＿</td></tr>
-          <tr><th>屋顶类型与面积</th><td>一字坡支架 · 约 160 ㎡</td><th>可装板块数</th><td class="mono">约 50 块</td></tr>
-          <tr><th>租金标准</th><td class="mono">30 元/块/年</td><th>预估年租金</th><td class="mono">约 1500 元</td></tr>
-          <tr><th>银行卡号</th><td>（在线填写）</td><th>租期</th><td>25 年</td></tr>
-        </table>
-        <div class="foot">
-          <span>户主签字（按手印）：__________</span>
-          <span class="seal-note">东高垣村村民委员会（盖章） · 2026 年　月　日</span>
-        </div>
-        <div class="copies">— 第一联：村委会存档 · 第二联：农户留存 —</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 政企双条 -->
-<section class="two-orgs">
-  <div class="container">
-    <div class="brow"><i>第三章</i>政府与企业</div>
-    <div class="org-row rv" style="margin-top:32px">
-      <div class="no">03</div>
-      <div><h3>政府：准入审查与年度考核</h3>
-        <p>121 条五级政策检索、RACI 责任矩阵、审查结论书生成；推广所需明白纸与公示模板齐备。</p></div>
-      <div class="num">121<i> 条政策</i></div>
-      <a href="gov.html">政府工作台 →</a>
-    </div>
-    <div class="org-row rv">
-      <div class="no">04</div>
-      <div><h3>企业：投资强度与回收周期</h3>
-        <p>单瓦 3.5 元投资强度，简化口径回收期 7—8 年；10 项投前尽调，运维与限发风险条款逐项列明。</p></div>
-      <div class="num">3.5<i> 元/W</i></div>
-      <a href="ent.html">企业工作台 →</a>
-    </div>
-  </div>
-</section>
-
-<!-- 实证 -->
-<section class="proof-sec">
-  <div class="container">
-    <div class="brow" style="color:#E8CF9A"><i>第四章</i>东高垣实证</div>
-    <h2>驻村实拍</h2>
-    <p class="lead">全部照片为项目组驻村期间实拍，图注编号与台账交叉引用。</p>
-  </div>
-  <div class="bleed rv">
-    <img src="assets/img/case-1.jpg" alt="整村一字坡支架阵列">
-    <div class="cap"><i>图 01</i> ｜ 整村一字坡支架阵列 ｜ 东高垣村 · 2026 年 2 月驻村实拍</div>
-  </div>
-  <div class="frames">
-    <figure class="fr rv"><img src="assets/img/case-4.jpg" alt="光伏车棚"><figcaption><i>图 04</i> ｜ 村史馆广场光伏车棚 ｜ 东高垣村 · 2026-02</figcaption></figure>
-    <figure class="fr rv"><img src="assets/img/case-5.jpg" alt="巷道屋顶连片"><figcaption><i>图 05</i> ｜ 巷道屋顶连片 ｜ 东高垣村 · 2026-02</figcaption></figure>
-    <figure class="fr rv"><img src="assets/img/case-6.jpg" alt="并网设备"><figcaption><i>图 06</i> ｜ 台区并网设备 ｜ 段家镇 · 2026-02</figcaption></figure>
-  </div>
-</section>
-
-<!-- 收尾 -->
-<section class="tail">
-  <div class="container">
-    <div class="brow" style="color:#E8CF9A"><i>附录</i>沿革</div>
-    <div class="trace-list">
-      <div class="trace-item"><div class="d">2025-07</div><div class="dot"></div><div><h4>首次驻村调研</h4><p>暑期实践团队进驻东高垣村，跟进入户动员与签约现场。</p></div></div>
-      <div class="trace-item"><div class="d">2025-08</div><div class="dot"></div><div><h4>整理建设手册</h4><p>《整村分布式光伏建设手册》成稿，23 张工作表同步编制。</p></div></div>
-      <div class="trace-item"><div class="d">2025-11</div><div class="dot"></div><div><h4>部分村民对 25 年租期存疑</h4><p>增补答疑与二次公示，疑问逐条书面答复后签约恢复。</p></div></div>
-      <div class="trace-item"><div class="d">2026-02</div><div class="dot"></div><div><h4>二次驻点核实</h4><p>逐户核对租金到账，与企业核对发电与收益台账。</p></div></div>
-      <div class="trace-item"><div class="d">2026-04</div><div class="dot"></div><div><h4>村两委回函认可</h4><p>4 月 22 日，村党支部、村民委员会联合出具使用回函。</p></div></div>
-      <div class="trace-item"><div class="d">2026-09</div><div class="dot"></div><div><h4>本站上线运行</h4><p>四方工作台、工作表引擎、测算工具开放。<i>最近更新：2026 年 9 月</i></p></div></div>
-    </div>
-  </div>
-  <div class="tail-cta">
-    <div class="container">
-      <div class="brow" style="color:#E8CF9A"><i>服务</i>驻村调研</div>
-      <h2 class="big">想把这套方案带到您的村？</h2>
-      <a class="btn btn-gold" href="booking.html" style="padding:0 44px;height:44px;line-height:42px">预约驻村调研</a>
-      <div class="note">服务范围：全国 · 需提前 15—30 天预约 · 联系方式见页尾</div>
-    </div>
-  </div>
-</section>
-
-<script src="assets/js/main.js"></script>
-<script>
-/* 租金测算器（真功能） */
-(function(){
-  var rate = 30, roofType = "flat";
-  var seg = document.getElementById("roofSeg");
-  var input = document.getElementById("blockInput");
-  function fmt(n){ return n.toLocaleString("zh-CN"); }
-  function calc(){
-    var blocks = Math.max(10, Math.min(120, parseInt(input.value) || 0));
-    var year = blocks * rate;
-    document.getElementById("outYear").innerHTML = fmt(year) + '<i> 元/年</i>';
-    document.getElementById("outTotal").innerHTML = fmt(year * 25) + '<i> 元</i>';
-    document.getElementById("outMonth").innerHTML = fmt(Math.round(year / 12)) + '<i> 元/月</i>';
-  }
-  seg.addEventListener("click", function(e){
-    var b = e.target.closest("button"); if(!b) return;
-    seg.querySelectorAll("button").forEach(function(x){ x.classList.toggle("cur", x === b); });
-    rate = +b.dataset.rate; roofType = b.dataset.t;
-    calc();
-  });
-  input.addEventListener("input", calc);
-  calc();
-  document.getElementById("viewInModel").addEventListener("click", function(){
-    if (window.__village) {
-      window.__village.setRoofType(roofType);
-      window.__gotoShot(1);
-    }
-    document.getElementById("modelSec").scrollIntoView({ behavior: "smooth" });
-  });
-})();
-</script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/faq.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/chat.js"></script>
 <script type="module">
 import { createVillage } from "./assets/js/scene3d.js";
 
-/* 镜头 5 位：阳光 → 板 → 表 → 网 → 账（选项卡驱动） */
 const SHOTS = [
-  { no: "第一程 · 阳光", t: "渭北旱塬，年日照约 1350 小时", d: "东高垣村年日照时数约 <b>1350 小时</b>。收益从这里开始，农户投入为 <b>0 元</b>。", kpi: [["1350", " h/年", "年日照时数"], ["0", " 元", "农户出资"]], pos: [-46, 34, 66], look: [-30, 24, -20] },
-  { no: "第二程 · 板", t: "一字坡支架立在平屋顶上", d: "前后两排钢立柱高差成坡，<b>50 块</b> 635 W 组件贴坡满铺；两坡瓦顶顺瓦面铺板。", kpi: [["≈50", " 块", "户均装机"], ["635", " W", "单块功率"]], pos: [-7, 6.2, 14], look: [0, 4.6, -1] },
-  { no: "第三程 · 表", t: "每一度电都过表", d: "发电经双向电表计量，户均年发电约 <b>4.3 万度</b>；表箱读数就是电网结算的依据。", kpi: [["4.3", " 万度/年", "户均年发电"], ["0.3545", " 元/度", "全额上网电价"]], pos: [6.4, 2.2, 3.4], look: [2.6, 1.7, -0.72] },
-  { no: "第四程 · 网", t: "台区容量决定一个村能装多少", d: "电流进入巷口台区变压器并入电网。整村推进的顺序是<b>先批容量、后签屋顶</b>。", kpi: [["805", " 万度/年", "整村年发电"], ["286", " 万元/年", "整村年收益"]], pos: [4, 7.5, 20], look: [14.4, 7.2, 13] },
-  { no: "第五程 · 账", t: "租金每年打到户主卡上", d: "企业按屋顶块数付租金：一字坡 <b>30 元/块/年</b>，人字坡 <b>15 元/块/年</b>。租期 25 年，到期企业复原屋顶。", kpi: [["1500—2000", " 元/年", "户均租金"], ["25", " 年", "租期"]], pos: [1.5, 3.2, 8.5], look: [-1.2, 2.2, -1] },
+  { label: "阳光", txt: "渭北旱塬，年日照约 <b>1350 小时</b>。收益从这里开始。", pos: [40, 26, 56], look: [0, 4, 0] },
+  { label: "板", txt: "一字坡支架立上平屋顶，人字坡顺瓦面满铺；单块 <b>635 W</b>。", pos: [-6, 6.4, 10], look: [0, 5, -0.4] },
+  { label: "表", txt: "每一度电经双向电表计量，户均年发电约 <b>4.3 万度</b>。", pos: [6.4, 2.2, 3.4], look: [2.6, 1.7, -0.72] },
+  { label: "网", txt: "电流进台区变压器并入电网——先批容量，后签屋顶。", pos: [8, 6.4, 20], look: [14.4, 7.2, 13] },
+  { label: "账", txt: "按块付租：一字坡 <b>30</b>、人字坡 <b>15</b> 元/块·年；25 年租期，到期复原。", pos: [-16, 8, 16], look: [0, 3.5, 2] },
 ];
+const PART_TXT = {
+  panels: "一字坡支架 · <b>30 元/块/年</b> · 户均约 <b>50 块</b> 635 W",
+  panels2: "人字坡 · 顺瓦面满铺 · <b>15 元/块/年</b>",
+  inverter: "组串式逆变器 · 把直流变成可上网的交流",
+  meter: "双向电表 · 全额上网 <b>0.3545 元/度</b>",
+  transformer: "台区变压器 · 容量决定一个村能装多少",
+  carport: "光伏车棚 · 停车发电两不误",
+};
 const village = createVillage(document.getElementById("gl"), {
   wires: document.getElementById("wires"),
-  cardEl: document.getElementById("shotCard"),
-  onHover() {}, onFrame() {}
+  cardEl: document.getElementById("ui"),
+  onHover(key) {
+    document.getElementById("note").innerHTML = (key && PART_TXT[key]) ? PART_TXT[key] : SHOTS[cur].txt;
+  },
+  onFrame() {}
 });
-window.__village = village;
 const camera = village.camera, controls = village.controls;
-camera.position.set(...SHOTS[0].pos);
-controls.target.set(...SHOTS[0].look);
+camera.position.set(...SHOTS[0].pos); controls.target.set(...SHOTS[0].look);
+village.setTime(0.35);
+document.getElementById("loading").style.display = "none";
 
-const tabsEl = document.getElementById("shotTabs");
-const seen = new Set([0]);
+const shotsEl = document.getElementById("shots");
 let cur = 0;
 SHOTS.forEach((s, i) => {
   const b = document.createElement("button");
-  b.innerHTML = '<span class="st-no">0' + (i + 1) + '</span>' + s.no.split(" · ")[1];
+  b.textContent = s.label;
   b.addEventListener("click", () => gotoShot(i));
-  tabsEl.appendChild(b);
+  shotsEl.appendChild(b);
 });
-function renderTabs() {
-  Array.from(tabsEl.children).forEach((b, i) => {
-    b.classList.toggle("cur", i === cur);
-    b.classList.toggle("done", seen.has(i) && i !== cur);
-  });
-}
-function renderCard(i) {
-  const s = SHOTS[i];
-  document.getElementById("scNo").textContent = s.no;
-  document.getElementById("scT").textContent = s.t;
-  document.getElementById("scD").innerHTML = s.d;
-  document.getElementById("scKpi").innerHTML = s.kpi.map(k =>
-    '<div><div class="v">' + k[0] + "<i>" + k[1] + '</i></div><div class="l">' + k[2] + "</div></div>").join("");
-}
 const tgt = { pos: SHOTS[0].pos.slice(), look: SHOTS[0].look.slice() };
 function gotoShot(i) {
-  cur = i; seen.add(i);
+  cur = i;
   tgt.pos = SHOTS[i].pos.slice(); tgt.look = SHOTS[i].look.slice();
-  renderTabs(); renderCard(i);
+  Array.from(shotsEl.children).forEach((b, j) => b.classList.toggle("cur", j === cur));
+  document.getElementById("note").innerHTML = SHOTS[i].txt;
 }
-window.__gotoShot = gotoShot;
-renderTabs(); renderCard(0);
+Array.from(shotsEl.children)[0].classList.add("cur");
 
 let userHoldUntil = 0;
 controls.addEventListener("start", () => { userHoldUntil = Infinity; });
 controls.addEventListener("end", () => { userHoldUntil = performance.now() + 2500; });
-
 (function drive() {
   requestAnimationFrame(drive);
   if (performance.now() > userHoldUntil) {
@@ -460,13 +159,29 @@ controls.addEventListener("end", () => { userHoldUntil = performance.now() + 250
   }
 })();
 
-const slider = document.getElementById("timeSlider");
-slider.addEventListener("input", function () {
+document.getElementById("rf1").addEventListener("click", e => setRoof(e.target));
+document.getElementById("rf2").addEventListener("click", e => setRoof(e.target));
+function setRoof(btn) {
+  [document.getElementById("rf1"), document.getElementById("rf2")].forEach(b => b.classList.toggle("cur", b === btn));
+  village.setRoofType(btn.dataset.t);
+}
+document.getElementById("timeSlider").addEventListener("input", function () {
   village.setTime(this.value / 100);
   const mins = Math.round(12 * 60 + (this.value / 100) * 6.5 * 60);
   document.getElementById("timeLabel").textContent =
     String(Math.floor(mins / 60)).padStart(2, "0") + ":" + String(mins % 60).padStart(2, "0");
 });
+
+let idleTimer;
+function poke() {
+  document.body.classList.remove("idle");
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => document.body.classList.add("idle"), 4000);
+}
+["mousemove", "pointerdown", "wheel", "keydown"].forEach(ev => addEventListener(ev, poke, { passive: true }));
+poke();
+setTimeout(() => document.getElementById("hint").classList.add("off"), 8000);
+addEventListener("pointerdown", () => document.getElementById("hint").classList.add("off"), { once: true });
 </script>
 </body>
 </html>
