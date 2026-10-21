@@ -10,14 +10,14 @@
 <link rel="stylesheet" href="assets/css/govdoc.css">
 <link rel="stylesheet" href="assets/css/gov-print.css">
 <style>
-.vstep{display:grid; grid-template-columns:110px 1fr; gap:24px; padding:30px 0; border-bottom:1px solid #e2e0d6}
+.vstep{display:grid; grid-template-columns:110px 1fr; gap:24px; padding:30px 0; border-bottom:1px solid var(--panel-bd)}
 .vstep .big{font-family:var(--mono); font-size:72px; font-weight:700; line-height:1;
-  background:linear-gradient(135deg,#8a6a2a,#D4A84B 40%,#F0D78C 55%,#D4A84B); -webkit-background-clip:text; background-clip:text; color:transparent}
+  color:var(--gold-soft)}
 @media(max-width:700px){.vstep{grid-template-columns:1fr} .vstep .big{font-size:52px}}
 .vstep .cols{display:grid; grid-template-columns:1fr 1fr; gap:6px 26px; margin-top:12px}
 @media(max-width:760px){.vstep .cols{grid-template-columns:1fr}}
-.vstep .blk{font-size:14.5px; color:#5a6b7c}
-.vstep .blk b{color:#22303f}
+.vstep .blk{font-size:14.5px; color:var(--sub)}
+.vstep .blk b{color:var(--fg)}
 #mzPreview{background:#fff; color:#22303f; border:1px solid #c8b98a; padding:34px; font-size:15px; line-height:2}
 #mzPreview h3{text-align:center; font-size:20px}
 #mzPreview .sig{text-align:right; margin-top:20px}
@@ -26,9 +26,9 @@
 .dsp-btn{display:block; width:100%; text-align:left; background:var(--ink); border:1px solid var(--mist); color:var(--paper); border-radius:12px; padding:13px 18px; margin-bottom:9px; font-size:15px; transition:.25s}
 .dsp-btn:hover{border-color:var(--gold)} .dsp-btn.sel{border-color:var(--gold); background:rgba(212,168,75,.1)}
 #agendaOut,#capOut,#queueOut{margin-top:18px}
-.forms-banner{display:flex; align-items:center; gap:30px; flex-wrap:wrap; background:linear-gradient(135deg,#0d1d33,#132a46); border:1px solid var(--gold); border-radius:var(--r-card); padding:36px 40px; margin-top:30px}
+.forms-banner{display:flex; align-items:center; gap:30px; flex-wrap:wrap; background:var(--panel-bg); border:1px solid var(--panel-bd); border-radius:6px; padding:36px 40px; margin-top:30px}
 .forms-banner .fb-badge{font-family:var(--mono); font-size:52px; font-weight:700; line-height:1;
-  background:linear-gradient(135deg,#8a6a2a,#D4A84B 40%,#F0D78C 55%,#D4A84B); -webkit-background-clip:text; background-clip:text; color:transparent}
+  color:var(--gold-soft)}
 .forms-banner .fb-body{flex:1; min-width:280px}
 .forms-banner h3{font-size:24px; margin:0 0 10px; color:#F0F2F5}
 .forms-banner p{font-size:15px; color:#c4cfda; line-height:1.9; margin:0 0 20px}
@@ -142,7 +142,7 @@
       </div>
       <div class="card rv">
         <h3>候补农户登记</h3>
-        <p style="font-size:14px; color:#5a6b7c; margin:6px 0 10px">登记 3 项要素（户主、屋顶条件、登记时间），自动生成排序公示表；数据仅存本机。</p>
+        <p style="font-size:14px; color:var(--sub); margin:6px 0 10px">登记 3 项要素（户主、屋顶条件、登记时间），自动生成排序公示表；数据仅存本机。</p>
         <label>户主称谓（建议化名，如「张××」）</label><input type="text" id="qName" placeholder="张××">
         <label>屋顶条件</label>
         <select id="qRoof"><option>一字坡 · 朝南</option><option>一字坡 · 朝东西</option><option>人字坡</option><option>平顶</option></select>
@@ -211,10 +211,10 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
     document.getElementById("steps7").innerHTML = S7.map(function (s, i) {
       return '<div class="vstep rv"><div class="big">0' + (i + 1) + '</div><div>' +
-        '<div style="display:flex; align-items:center; gap:14px"><h3>' + s.nm + '</h3><label style="margin:0; font-size:13px"><input type="checkbox" class="s7c" style="width:auto; accent-color:#a5832f"> 标记完成</label></div>' +
+        '<div style="display:flex; align-items:center; gap:14px"><h3>' + s.nm + '</h3><label style="margin:0; font-size:13px"><input type="checkbox" class="s7c" style="width:auto; accent-color:var(--gold-deep)"> 标记完成</label></div>' +
         '<div class="cols">' +
         '<div class="blk"><b>目标：</b>' + s.goal + '</div><div class="blk"><b>动作清单：</b>' + s.acts + '</div>' +
-        '<div class="blk" style="color:#8a5a50"><b>常见坑：</b>' + s.pit + '</div><div class="blk" style="color:#7a6420"><b>东高垣实例：</b>' + s.ex + '</div>' +
+        '<div class="blk" style="color:#8a5a50"><b>常见坑：</b>' + s.pit + '</div><div class="blk" style="color:var(--gold-soft)"><b>东高垣实例：</b>' + s.ex + '</div>' +
         '</div><details class="acc" style="margin-top:12px"><summary>6 段式实施细则</summary><div class="acc-body">' + s.six + "</div></details></div></div>";
     }).join("");
     document.getElementById("s7Btn").addEventListener("click", function () {
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "<p><b>五、防骗提醒：</b>不是本村统一项目的，催签字、要身份证、吹高收益的，一律不信，先找村两委核实。</p>" +
         "<p><b>六、自愿原则：</b>装不装、什么时候签，自家商量定，任何人不得强迫。</p>" +
         '<p class="sig">××镇人民政府、' + esc(v) + "村民委员会（盖章）　　年　月　日</p>" +
-        '<p class="caption" style="color:#8a95a1">明白纸限 1 页不超过 600 字；填写内容经镇政府审核后印制；与合同条款摘要不一致时以合同为准。（手册第 108 条）</p>';
+        '<p class="caption" style="color:var(--sub)">明白纸限 1 页不超过 600 字；填写内容经镇政府审核后印制；与合同条款摘要不一致时以合同为准。（手册第 108 条）</p>';
     });
   }
 

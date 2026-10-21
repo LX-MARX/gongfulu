@@ -12,12 +12,12 @@
 .ac-box{max-width:920px; margin:0 auto}
 .ac-tabs{display:flex; gap:10px; margin-bottom:26px}
 .ac-tabs button{flex:1; padding:13px 10px; border-radius:var(--r-tag); border:1px solid rgba(212,168,75,.4); background:transparent; color:var(--paper); font-size:16px; letter-spacing:.08em; transition:all .25s}
-.ac-tabs button.on{background:linear-gradient(135deg,#8a6a2a,var(--gold) 45%,var(--gold2)); color:var(--ink); font-weight:700; border-color:transparent}
+.ac-tabs button.on{background:var(--gold-soft); color:#23180A; font-weight:700; border-color:transparent}
 .ac-panel{padding:36px 34px}
 .ac-panel label{display:block; margin-top:16px; font-size:14px; color:#b8c4d0}
-.ac-panel input[type=text],.ac-panel input[type=email],.ac-panel input[type=password]{width:100%; margin-top:6px; background:rgba(18,35,58,.6); border:1px solid var(--mist); border-radius:var(--r-input); color:var(--paper); padding:12px 16px; font-size:16px; font-family:inherit; outline:none}
+.ac-panel input[type=text],.ac-panel input[type=email],.ac-panel input[type=password]{width:100%; margin-top:6px; background:var(--panel-bd); border:1px solid var(--mist); border-radius:var(--r-input); color:var(--paper); padding:12px 16px; font-size:16px; font-family:inherit; outline:none}
 .ac-panel input:focus{border-color:var(--gold)}
-.ac-panel textarea{width:100%; margin-top:6px; background:rgba(18,35,58,.6); border:1px solid var(--mist); border-radius:var(--r-input); color:var(--paper); padding:12px 16px; font-size:16px; font-family:inherit; outline:none; resize:vertical}
+.ac-panel textarea{width:100%; margin-top:6px; background:var(--panel-bd); border:1px solid var(--mist); border-radius:var(--r-input); color:var(--paper); padding:12px 16px; font-size:16px; font-family:inherit; outline:none; resize:vertical}
 .ac-panel textarea:focus{border-color:var(--gold)}
 .ac-err{display:none; margin-top:14px; padding:11px 16px; border-radius:10px; background:rgba(200,75,63,.14); border:1px solid rgba(200,75,63,.5); color:#e8a49c; font-size:14.5px}
 .role-opts{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px}
@@ -29,15 +29,15 @@
 .role-opt.sel{border-color:var(--gold); background:rgba(212,168,75,.1); box-shadow:0 0 0 1px var(--gold) inset}
 .agree{display:flex; gap:10px; align-items:flex-start; margin-top:18px; font-size:13.5px; color:#9fb0c0}
 .agree input{margin-top:5px; accent-color:var(--gold)}
-.avatar{width:74px; height:74px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:32px; font-weight:900; color:var(--ink); background:linear-gradient(135deg,#8a6a2a,var(--gold) 45%,var(--gold2)); flex:none}
+.avatar{width:74px; height:74px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:32px; font-weight:900; color:var(--fg); background:var(--gold-soft); flex:none}
 .badge{display:inline-block; padding:4px 14px; border-radius:var(--r-tag); font-size:13px; letter-spacing:.06em}
-.badge-admin{background:linear-gradient(135deg,#8a6a2a,var(--gold) 45%,var(--gold2)); color:var(--ink); font-weight:700}
+.badge-admin{background:var(--gold-soft); color:#23180A; font-weight:700}
 .badge-user{background:rgba(240,242,245,.12); color:#cfd8e0; border:1px solid rgba(240,242,245,.25)}
 .arch-row{display:flex; align-items:center; gap:14px; padding:14px 4px; border-bottom:1px solid rgba(240,242,245,.08); flex-wrap:wrap}
 .arch-row:last-child{border-bottom:none}
 .arch-row .no{font-family:var(--mono); color:var(--gold2); font-size:14px; background:rgba(212,168,75,.12); border:1px solid rgba(212,168,75,.35); border-radius:8px; padding:2px 10px}
 .arch-row .tt{flex:1; min-width:200px; font-size:15.5px}
-.arch-row .tm{font-size:13px; color:#8a95a1}
+.arch-row .tm{font-size:13px; color:var(--sub)}
 .toast{position:fixed; top:86px; left:50%; transform:translateX(-50%); z-index:1000; max-width:min(560px,90vw); padding:12px 24px; border-radius:12px; font-size:15px; display:none; backdrop-filter:blur(8px); box-shadow:0 10px 34px rgba(0,0,0,.4)}
 .toast.ok{display:block; background:rgba(22,101,52,.92); color:#d1fae5; border:1px solid rgba(110,231,183,.5)}
 .toast.err{display:block; background:rgba(90,32,27,.94); color:#f3c2bb; border:1px solid rgba(200,75,63,.6)}
@@ -101,7 +101,7 @@
           <div style="font-size:14.5px; color:#9fb0c0; margin-top:2px" id="uEmail">—</div>
           <div style="margin-top:8px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
             <span class="badge badge-user" id="uRole">普通用户</span>
-            <span style="font-size:13px; color:#8a95a1" id="uSince"></span>
+            <span style="font-size:13px; color:var(--sub)" id="uSince"></span>
           </div>
         </div>
         <button class="btn btn-line mini-btn" id="btnOut">退出登录</button>

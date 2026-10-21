@@ -39,7 +39,7 @@
 .life-item .dot{position:absolute; left:-35px; top:2px; width:18px; height:18px; border-radius:50%; background:var(--ink2); border:3px solid var(--gold)}
 
 /* ---------- 现金流曲线 ---------- */
-.cf-wrap{background:rgba(18,35,58,.55);border:1px solid rgba(212,168,75,.3);border-radius:12px;padding:18px 18px 12px}
+.cf-wrap{background:var(--panel-bd);border:1px solid rgba(212,168,75,.3);border-radius:12px;padding:18px 18px 12px}
 #cfChart{width:100%;display:block}
 .cf-ctl{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;justify-content:space-between;margin-top:10px;font-size:13px;color:#9FB4C8}
 .cf-read{font-size:13.5px}
@@ -218,11 +218,11 @@
     <h2 class="rv">25 年，5 个阶段</h2>
     <p class="lead rv">时间轴随滚动向下「生长」。每阶段标注重点工作、考核指标与关键节点。</p>
     <div class="life" id="life" style="margin-top:36px">
-      <div class="life-item rv"><span class="dot"></span><h3>第 0 年 · 建设期</h3><p style="color:#5a6b7c; font-size:15.5px">签约—安装—并网：逐户建档、排期施工、并网验收，同步完成保险投保。考核：签约率、防水验收户户必验。</p></div>
-      <div class="life-item rv"><span class="dot"></span><h3>第 1—5 年 · 磨合期</h3><p style="color:#5a6b7c; font-size:15.5px">发电爬坡与信任巩固：发电量对标设计值，客诉高发期重点盯漏水与施工遗留。考核：发电完成率、客诉办结率。</p></div>
-      <div class="life-item rv"><span class="dot"></span><h3>第 6—15 年 · 稳定期</h3><p style="color:#5a6b7c; font-size:15.5px">投资回收关键窗口：控制运维成本，跟踪电价政策，确保发电完成率稳定；组件衰减监测、逆变器中期更换。考核：回收进度、运维成本率。</p></div>
-      <div class="life-item rv"><span class="dot"></span><h3>第 16—25 年 · 后期</h3><p style="color:#5a6b7c; font-size:15.5px">净收益与技改：探索绿电交易等增值通道；设备健康度分级管理，防止亚健康演变为停机。考核：净收益兑现、技改完成率。</p></div>
-      <div class="life-item rv"><span class="dot"></span><h3>约满 · 退役期</h3><p style="color:#5a6b7c; font-size:15.5px">到期处置预案：提前 2 年启动续约或拆除安置方案征询，避免到期纠纷；拆除与屋顶恢复由企业负责（以签约书面约定为准）。</p></div>
+      <div class="life-item rv"><span class="dot"></span><h3>第 0 年 · 建设期</h3><p style="color:var(--sub); font-size:15.5px">签约—安装—并网：逐户建档、排期施工、并网验收，同步完成保险投保。考核：签约率、防水验收户户必验。</p></div>
+      <div class="life-item rv"><span class="dot"></span><h3>第 1—5 年 · 磨合期</h3><p style="color:var(--sub); font-size:15.5px">发电爬坡与信任巩固：发电量对标设计值，客诉高发期重点盯漏水与施工遗留。考核：发电完成率、客诉办结率。</p></div>
+      <div class="life-item rv"><span class="dot"></span><h3>第 6—15 年 · 稳定期</h3><p style="color:var(--sub); font-size:15.5px">投资回收关键窗口：控制运维成本，跟踪电价政策，确保发电完成率稳定；组件衰减监测、逆变器中期更换。考核：回收进度、运维成本率。</p></div>
+      <div class="life-item rv"><span class="dot"></span><h3>第 16—25 年 · 后期</h3><p style="color:var(--sub); font-size:15.5px">净收益与技改：探索绿电交易等增值通道；设备健康度分级管理，防止亚健康演变为停机。考核：净收益兑现、技改完成率。</p></div>
+      <div class="life-item rv"><span class="dot"></span><h3>约满 · 退役期</h3><p style="color:var(--sub); font-size:15.5px">到期处置预案：提前 2 年启动续约或拆除安置方案征询，避免到期纠纷；拆除与屋顶恢复由企业负责（以签约书面约定为准）。</p></div>
     </div>
     <p class="caption">时间轴为项目组依据 25 年租约与回收期测算整理的管理建议框架（手册第十四章）。</p>
   </div>
@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var cur = +v("cPrice");
     svg.innerHTML =
       '<line x1="40" y1="200" x2="540" y2="200" stroke="#c8cdd4"/><line x1="40" y1="200" x2="40" y2="16" stroke="#c8cdd4"/>' +
-      '<path d="' + d + '" fill="none" stroke="#a5832f" stroke-width="2.6"/>' +
+      '<path d="' + d + '" fill="none" stroke="var(--gold-deep)" stroke-width="2.6"/>' +
       '<line x1="' + X(cur) + '" y1="16" x2="' + X(cur) + '" y2="200" stroke="#C84B3F" stroke-dasharray="4 4"/>' +
       '<text x="' + (X(cur) + 6) + '" y="30" fill="#C84B3F" font-size="12">当前 ' + cur + " 元</text>" +
       '<text x="44" y="24" fill="#8a95a1" font-size="11">回收期（年，封顶 30）</text>' +
@@ -458,10 +458,10 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
   document.getElementById("flow8").innerHTML = steps.map(function (s, i) {
     return '<div class="fstep" style="position:relative; padding-bottom:22px"><span class="step-dot">' + (i + 1) + '</span>' +
-      '<div style="display:flex; align-items:center; gap:12px"><h3 style="color:#22303f">' + s[0] + '</h3><label style="margin:0; font-size:13px"><input type="checkbox" style="width:auto; accent-color:#a5832f"> 标记完成</label></div>' +
-      '<p style="color:#5a6b7c; font-size:15px; margin-top:6px"><b>目标／动作：</b>' + s[1] + "</p>" +
+      '<div style="display:flex; align-items:center; gap:12px"><h3 style="color:var(--fg)">' + s[0] + '</h3><label style="margin:0; font-size:13px"><input type="checkbox" style="width:auto; accent-color:var(--gold-deep)"> 标记完成</label></div>' +
+      '<p style="color:var(--sub); font-size:15px; margin-top:6px"><b>目标／动作：</b>' + s[1] + "</p>" +
       '<p style="color:#8a5a50; font-size:14.5px"><b>常见坑：</b>' + s[2] + "</p>" +
-      (s[3] ? '<p style="color:#7a6420; font-size:14.5px"><b>东高垣实例：</b>' + s[3] + "</p>" : "") + "</div>";
+      (s[3] ? '<p style="color:var(--gold-soft); font-size:14.5px"><b>东高垣实例：</b>' + s[3] + "</p>" : "") + "</div>";
   }).join("");
 
   /* 运维模拟器 */

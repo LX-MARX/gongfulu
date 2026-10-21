@@ -57,7 +57,7 @@
         <h3 style="margin-top:12px">金鸡下蛋：屋顶就是那只不下地也下蛋的鸡</h3>
         <svg viewBox="0 0 460 180" style="width:100%; margin:14px 0">
           <path d="M40 60 L150 12 L260 60" fill="none" stroke="#D4A84B" stroke-width="3.4" stroke-linecap="round"/>
-          <rect x="62" y="60" width="176" height="52" fill="rgba(18,35,58,.85)" stroke="#3D5A75"/>
+          <rect x="62" y="60" width="176" height="52" fill="var(--panel-bd)" stroke="#3D5A75"/>
           <ellipse cx="150" cy="46" rx="34" ry="20" fill="rgba(212,168,75,.3)" stroke="#F0D78C" stroke-width="2"/>
           <circle cx="182" cy="34" r="10" fill="rgba(212,168,75,.45)" stroke="#F0D78C" stroke-width="2"/>
           <path d="M190 32 l12 3 -12 4z" fill="#F0D78C"/>
@@ -65,7 +65,7 @@
           <ellipse cx="365" cy="112" rx="13" ry="17" fill="#D4A84B"/>
           <path d="M280 70 C 310 90, 300 100, 330 92" fill="none" stroke="#F0D78C" stroke-width="2" stroke-dasharray="5 5">
             <animate attributeName="stroke-dashoffset" values="40;0" dur="1.2s" repeatCount="indefinite"/></path>
-          <path d="M310 150 q45 -26 100 0 l-8 16 q-42 -20 -84 0z" fill="rgba(18,35,58,.9)" stroke="#D4A84B" stroke-width="2"/>
+          <path d="M310 150 q45 -26 100 0 l-8 16 q-42 -20 -84 0z" fill="var(--panel-bd)" stroke="#D4A84B" stroke-width="2"/>
           <ellipse cx="352" cy="146" rx="11" ry="14" fill="#F0D78C"/>
           <ellipse cx="378" cy="148" rx="11" ry="14" fill="#D4A84B"/>
           <text x="150" y="140" text-anchor="middle" fill="#a9bccf" font-size="12.5">屋顶金鸡</text>
@@ -132,22 +132,22 @@
     <h2>农户账本可视化</h2>
     <div class="ledger3">
       <div class="card rv">
-        <h3 style="color:#a5832f">收入</h3>
+        <h3 style="color:var(--gold-deep)">收入</h3>
         <label>年租金（元）：<b id="lbInV">3000</b></label>
         <input type="range" id="lbIn" min="0" max="6000" step="100" value="3000">
         <p class="caption">租金为金色高亮的财产性收入，年年准时到账</p>
       </div>
       <div class="card rv">
-        <h3 style="color:#5a6b7c">支出</h3>
+        <h3 style="color:var(--sub)">支出</h3>
         <label>全年电费（元）：<b id="lbOutV">500</b></label>
         <input type="range" id="lbOut" min="0" max="3000" step="50" value="500">
-        <label style="margin-top:10px"><input type="checkbox" id="lbCover" checked style="width:auto; accent-color:#a5832f"> 用租金覆盖电费</label>
+        <label style="margin-top:10px"><input type="checkbox" id="lbCover" checked style="width:auto; accent-color:var(--gold-deep)"> 用租金覆盖电费</label>
       </div>
       <div class="card rv" style="text-align:center">
-        <h3 style="color:#a5832f">结余</h3>
-        <div class="din" id="lbLeft" style="font-size:52px; color:#a5832f; text-shadow:0 0 16px rgba(212,168,75,.4)">—</div>
+        <h3 style="color:var(--gold-deep)">结余</h3>
+        <div class="din" id="lbLeft" style="font-size:52px; color:var(--gold-deep); text-shadow:0 0 16px rgba(212,168,75,.4)">—</div>
         <div class="caption">元/年 · 自动计算</div>
-        <p style="font-size:14px; color:#5a6b7c; margin-top:10px" id="lbNote"></p>
+        <p style="font-size:14px; color:var(--sub); margin-top:10px" id="lbNote"></p>
       </div>
     </div>
   </div>
