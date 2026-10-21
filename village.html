@@ -297,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var add = nw * 30, usable = total * 0.8, over = now + add - usable;
       var o = document.getElementById("capOut"), tpl;
       if (over <= 0) {
-        tpl = '<div class="note-box" style="margin-top:16px"><b style="color:#2e7d4f">未超载。</b>可用容量约 ' + usable.toFixed(0) + ' kW，新增 ' + add + ' kW 后仍有裕度 ' + (-over).toFixed(0) + " kW。仍须以电网企业书面容量核算意见为准（超过 6 个月未启用的应复核）。</div>";
+        tpl = '<div class="note-box" style="margin-top:16px"><b style="color:#7FBF8E">未超载。</b>可用容量约 ' + usable.toFixed(0) + ' kW，新增 ' + add + ' kW 后仍有裕度 ' + (-over).toFixed(0) + " kW。仍须以电网企业书面容量核算意见为准（超过 6 个月未启用的应复核）。</div>";
       } else {
         var batches = Math.ceil((now + add - usable) / (total * 0.8)) + 1;
         tpl = '<div class="warn-box" style="margin-top:16px"><b>超载预警：</b>超出 ' + over.toFixed(0) + " kW，超载比例约 " + (over / usable * 100).toFixed(0) + '%。建议：①暂停超容量部分签约，登记候补排队；②函请电网企业出具改造方案、投资测算与时序；③改造落实前签约规模不得超出可开放容量；④分 ' + batches + ' 批释放名额，排序规则公开。</div>' +

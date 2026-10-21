@@ -170,7 +170,7 @@
       <button class="scam-opt">说得高：承诺的收益高得离谱，明显高于村里统一项目标准（30 元/块/年）</button>
       <button class="scam-opt">查无据：说不出中标单位、拿不出政府备案，镇政府、村两委都表示不知情</button>
       <button class="scam-opt scam-none" id="scamNone" style="border-style:dashed">以上 4 种情况都没有</button>
-      <div id="scamOk" class="note-box" style="display:none; margin-top:14px"><b style="color:#2e7d4f">4 个信号均未命中。</b>仍建议签约前打一个电话给村两委或镇政府核实备案信息，并索要备案合同范本比对。</div>
+      <div id="scamOk" class="note-box" style="display:none; margin-top:14px"><b style="color:#7FBF8E">4 个信号均未命中。</b>仍建议签约前打一个电话给村两委或镇政府核实备案信息，并索要备案合同范本比对。</div>
     </div>
   </div>
 </section>
@@ -276,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var nOk = r.items.filter(function (x) { return x[1] === "ok"; }).length,
         nNo = r.items.filter(function (x) { return x[1] === "no"; }).length;
     var verdict = nNo > 0 ? "暂不具备" : nOk === 5 ? "具备基本条件" : "部分条件需复核";
-    var badge = { ok: '<b style="color:#2e7d4f">✓ 通过</b>', mid: '<b style="color:#b8860b">△ 需复核</b>', no: '<b style="color:#c0392b">✗ 不通过</b>' };
+    var badge = { ok: '<b style="color:#7FBF8E">✓ 通过</b>', mid: '<b style="color:#b8860b">△ 需复核</b>', no: '<b style="color:#c0392b">✗ 不通过</b>' };
     var o = document.getElementById("zcOut");
     o.style.display = "block";
     document.getElementById("zcPrint").style.display = "inline-flex";
@@ -346,7 +346,7 @@ document.addEventListener("DOMContentLoaded", function () {
     all.forEach(function (c) { c.closest(".clause").classList.toggle("miss", !c.checked); if (!c.checked) miss++; });
     var o = document.getElementById("clauseOut");
     if (miss > 0) { o.style.display = "block"; o.innerHTML = "<b>还有 " + miss + " 条未确认。</b>红色条款务必在合同中找到对应文字再签字；找不到的当场问，问不清的「回家商量 3 天」——正规企业不会催。"; }
-    else { o.style.display = "block"; o.className = "note-box rv"; o.innerHTML = "<b style='color:#2e7d4f'>5 大条款全部确认。</b>可以签约。记得合同原件留 1 份、拍照存 1 份。"; }
+    else { o.style.display = "block"; o.className = "note-box rv"; o.innerHTML = "<b style='color:#7FBF8E'>5 大条款全部确认。</b>可以签约。记得合同原件留 1 份、拍照存 1 份。"; }
   });
 
   /* 骗局识别（命中弹红警示；全部不沾给出绿色安全出口） */

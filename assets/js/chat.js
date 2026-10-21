@@ -236,4 +236,10 @@
 
   /* 语料提前预热：首次提问时不用等网络往返 */
   ensureFaq(function () { });
+
+  /* 供页面内「问这条政策」等入口调用的编程接口 */
+  window.PVC = {
+    open: function () { if (!panel.classList.contains("open")) { panel.classList.add("open"); welcome(); } input.focus(); },
+    ask: function (text) { window.PVC.open(); send(text); }
+  };
 })();

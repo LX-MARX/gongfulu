@@ -48,6 +48,7 @@
 .pdrawer .pdh b{font-size:14px;letter-spacing:.1em}
 .pdrawer .pdc{background:none;border:1px solid rgba(212,168,75,.4);color:inherit;width:34px;height:34px;border-radius:6px;font-size:16px;cursor:pointer}
 .pdrawer .pdb{flex:1;overflow-y:auto;padding:22px 24px;font-size:14.5px;line-height:1.9}
+.pol-item mark,.pdrawer mark{background:rgba(232,201,138,.28);color:var(--gold-soft);border-radius:2px;padding:0 1px}
 .pdrawer .pdb h3{font-size:19px;line-height:1.6;margin-bottom:14px}
 .pdrawer .pd-meta{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13px;opacity:.75;margin-bottom:16px}
 .pdrawer .pd-sec{border-top:1px dashed rgba(212,168,75,.25);padding-top:12px;margin-top:12px}
@@ -246,6 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
       applyPoint: p.applyPoint !== undefined ? p.applyPoint : p.apply_point,
       requirement: p.requirement, deadline: p.deadline, subsidy: p.subsidy };
   }
+  var POL_PAGE = 20, polShown = POL_PAGE, polSig = "";
   function renderPol() {
     var esc = window.mgEsc; /* 云端/缓存数据一律转义后再进 innerHTML */
     var rows = polRows.filter(function (p) {
@@ -253,13 +255,25 @@ document.addEventListener("DOMContentLoaded", function () {
       var okKw = !kw || (p.title + p.org + p.topics.join(" ") + p.docNo).toLowerCase().indexOf(kw) >= 0;
       return okLv && okKw;
     });
-    cnt.textContent = "共 " + rows.length + " 条（展示前 30 条）" + (window.MG && MG.state.online ? "丨数据来源：云端政策库（实时）" : "丨数据来源：本地缓存");
-    list.innerHTML = rows.slice(0, 30).map(function (p) {
+    var sig = lv + "|" + kw + "|" + polRows.length;
+    if (sig !== polSig) { polSig = sig; polShown = POL_PAGE; }
+    function hl(t) {
+      var s = esc(t || ""); if (!kw) return s;
+      var re = new RegExp(kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+      return s.replace(re, function (m) { return "<mark>" + m + "</mark>"; });
+    }
+    cnt.textContent = "共 " + rows.length + " 条，已显示 " + Math.min(polShown, rows.length) + " 条" + (window.MG && MG.state.online ? "丨数据来源：云端政策库（实时）" : "丨数据来源：本地缓存");
+    list.innerHTML = rows.slice(0, polShown).map(function (p) {
       var pidx = polRows.indexOf(p);
-      return '<div class="pol-item" data-idx="' + pidx + '"><div class="tt">' + esc(p.title) + '</div>' +
+      return '<div class="pol-item" data-idx="' + pidx + '"><div class="tt">' + hl(p.title) + '</div>' +
         '<div class="meta">' + esc(p.level) + " 丨 " + esc(p.org) + " 丨 " + esc(p.docNo || "文号见原文") + " 丨 " + esc(p.date) + "</div>" +
-        '<div class="ap"><b style="color:var(--gold2)">基层落实要点：</b>' + esc(p.applyPoint || p.requirement || "—") + "</div></div>";
+        '<div class="ap"><b style="color:var(--gold2)">基层落实要点：</b>' + hl(p.applyPoint || p.requirement || "—") + "</div></div>";
     }).join("") || '<p class="caption">无匹配结果。</p>';
+    if (rows.length > polShown) {
+      list.innerHTML += '<div style="text-align:center;padding:18px 0 6px"><button class="btn btn-line" id="polMore">加载更多（还有 ' + (rows.length - polShown) + " 条）</button></div>";
+      var mb = document.getElementById("polMore");
+      if (mb) mb.addEventListener("click", function (e) { e.stopPropagation(); polShown += POL_PAGE; renderPol(); });
+    }
   }
   function loadPol() {
     var cloudLv = lv === "镇村" ? "镇村级" : lv; /* 云端 level 取值为「镇村级」 */
@@ -293,9 +307,16 @@ document.addEventListener("DOMContentLoaded", function () {
       (p.subsidy ? '<div class="pd-sec"><h6>资金与补贴</h6><p>' + esc(p.subsidy) + "</p></div>" : "") +
       (p.deadline ? '<div class="pd-sec"><h6>申报时限</h6><p>' + esc(p.deadline) + "</p></div>" : "") +
       (p.summary ? '<div class="pd-sec"><h6>内容摘要</h6><p>' + esc(p.summary) + "</p></div>" : "") +
-      (p.fulltext ? '<div class="pd-sec"><h6>原文</h6><p style="white-space:pre-wrap">' + esc(p.fulltext) + "</p></div>" : "");
+      (p.fulltext ? '<div class="pd-sec"><h6>原文</h6><p style="white-space:pre-wrap">' + esc(p.fulltext) + "</p></div>" : "") +
+      '<div class="pd-sec"><button class="btn btn-gold" id="pdAsk" style="min-height:36px;font-size:13px">问这条政策</button></div>';
     document.getElementById("pDrawer").classList.add("on");
     document.getElementById("pdMask").classList.add("on");
+    var askBtn = document.getElementById("pdAsk");
+    if (askBtn) askBtn.addEventListener("click", function () {
+      closePolDrawer();
+      var qq = "请解读政策《" + p.title + "》（" + (p.docNo || "文号见原文") + "，" + (p.org || "") + "）在基层落实中的要点。" + (p.applyPoint ? "材料所载要点：" + p.applyPoint : "");
+      if (window.PVC && PVC.ask) PVC.ask(qq);
+    });
   }
   function closePolDrawer() {
     document.getElementById("pDrawer").classList.remove("on");
@@ -483,10 +504,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var headHtml = vetoes.length ?
       '<b style="color:var(--red)">审查结论：一票否决。</b>命中一票否决情形：' + vetoes.join("；") + "。否决结论应书面作出并载明依据条款；被否决企业享有陈述申辩权，但申辩期间不得入村签约；否决信息在县域内通报，防止改换名头异地再进。（手册第 58 条）" :
       fails.length ? '<b style="color:var(--red)">审查结论：不通过。</b>未通过项：' + fails.join("、") + "。逐项留痕后退回补正，补正前不得进入签约环节。" :
-      '<b style="color:#2e7d4f">审查结论：通过。</b>6 项审查全部通过且无一票否决情形，可进入签约备案环节。审查底稿归档，保存期不短于合同期限。';
+      '<b style="color:#7FBF8E">审查结论：通过。</b>6 项审查全部通过且无一票否决情形，可进入签约备案环节。审查底稿归档，保存期不短于合同期限。';
     r.innerHTML = items.map(function (x, i) {
       return '<div style="display:flex; gap:10px; padding:7px 0; border-bottom:1px dashed rgba(90,107,124,.3); font-size:15px"><b style="min-width:88px">' + (i + 1) + ". " + x.name + "</b>" +
-        (x.pass ? '<b style="color:#2e7d4f; flex:none">✓ 通过</b>' : '<b style="color:#c0392b; flex:none">✗ 不通过</b>') +
+        (x.pass ? '<b style="color:#7FBF8E; flex:none">✓ 通过</b>' : '<b style="color:#c0392b; flex:none">✗ 不通过</b>') +
         '<span style="color:var(--sub)">' + x.why + "</span></div>";
     }).join("") + '<p style="margin-top:12px; font-size:16px">' + headHtml + "</p>";
 
