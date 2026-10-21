@@ -42,7 +42,9 @@ a{color:var(--gold)}
 #ui .note{font-size:15px;line-height:1.8;color:var(--panel-fg);min-height:24px}
 #ui .note b{color:var(--gold);font-weight:600}
 #ui .shots{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
-#ui button{min-height:44px;margin:0;cursor:pointer;background:var(--btn-bg);color:var(--btn-fg);border:0;padding:0 20px;font-size:15px;letter-spacing:.06em;border-radius:3px;font-family:inherit}
+#ui button{min-height:44px;margin:0;cursor:pointer;background:rgba(232,201,138,.08);color:var(--gold);border:1px solid var(--gold-deep);padding:0 20px;font-size:15px;letter-spacing:.06em;border-radius:3px;font-family:inherit;transition:background .2s,color .2s,border-color .2s}
+#ui button:hover{background:rgba(232,201,138,.18)}
+#ui button.cur{background:var(--gold);color:#23180a;border-color:var(--gold);font-weight:700}
 #ui button.cur{background:var(--gold);color:#23180a}
 #ui label{display:block;margin-top:14px;color:#7d8692;font-size:13px;letter-spacing:.05em}
 #ui label button{margin-left:6px}
@@ -144,6 +146,7 @@ footer .base{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);f
     <label>日照 <input type="range" id="timeSlider" min="0" max="100" value="35"> <span class="tl" id="timeLabel">14:18</span></label>
     <div class="links">
       <a href="tools.html">算一算我家屋顶 →</a><a href="forms.html">23 张工作表 →</a><a href="farmer.html">农户指南 →</a><a href="cases.html">东高垣实证 →</a>
+      <button id="pinBtn" style="margin-left:2px">钉住面板</button>
     </div>
   </div>
 
@@ -292,11 +295,20 @@ function poke() {
   stage.classList.remove("idle");
   clearTimeout(idleTimer);
   idleTimer = setTimeout(() => stage.classList.add("idle"), 4000);
+    if (document.body.classList.contains("pinui")) stage.classList.remove("idle");
 }
 ["mousemove", "pointerdown", "wheel", "keydown"].forEach(ev => addEventListener(ev, poke, { passive: true }));
 poke();
 setTimeout(() => document.getElementById("hint").classList.add("off"), 9000);
 addEventListener("pointerdown", () => document.getElementById("hint").classList.add("off"), { once: true });
+
+document.getElementById("pinBtn").addEventListener("click", function () {
+  document.body.classList.toggle("pinui");
+  const on = document.body.classList.contains("pinui");
+  this.textContent = on ? "取消钉住" : "钉住面板";
+  this.classList.toggle("cur", on);
+  if (on) stage.classList.remove("idle");
+});
 </script>
 </body>
 </html>

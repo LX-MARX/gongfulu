@@ -11,7 +11,7 @@ export function createVillage(canvas, opts) {
   const NS = "http://www.w3.org/2000/svg";
 
   /* ---------- 渲染器 ---------- */
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
   renderer.setPixelRatio(1);  /* 流畅层硬预算：DPR=1，分辨率换帧率 */
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -88,7 +88,7 @@ export function createVillage(canvas, opts) {
   scene.add(new THREE.HemisphereLight(0x9DB8D8, 0x4A3A24, 0.7));
   const sun = new THREE.DirectionalLight(0xFFC98A, 2.5);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.mapSize.set(768, 768);
   sun.shadow.camera.left = -34; sun.shadow.camera.right = 34;
   sun.shadow.camera.top = 34; sun.shadow.camera.bottom = -34;   /* 阴影限主角院 */
   sun.shadow.bias = -0.0004;
@@ -408,6 +408,10 @@ export function createVillage(canvas, opts) {
   const needle = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.13, 0.012), new THREE.MeshBasicMaterial({ color: 0xE8CF9A }));
   needle.scale.set(1.6, 1.8, 1); needle.position.set(0.03, 0.29, 0.22); needle.rotation.z = -0.7; meterBox.add(needle);
   dial.position.set(0, 0.24, 0.21);
+  /* 脉冲指示灯：用电时红 LED 节律闪烁（发电反送时同理） */
+  const ledMat = new THREE.MeshStandardMaterial({ color: 0x2A0E0C, emissive: 0xFF3B30, emissiveIntensity: 1 });
+  const meterLed = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, 0.03), ledMat);
+  meterLed.position.set(-0.32, -0.42, 0.21); meterBox.add(meterLed);
   meterBox.position.set(2.6, 1.55, 3.28); hero.add(meterBox);
 
   /* 院墙 + 门楼 + 生活痕迹 */
@@ -945,6 +949,7 @@ export function createVillage(canvas, opts) {
       d.position.copy(flowCurves[seg].getPoint(u));
     });
     dust.rotation.y = t * 0.00004;
+    ledMat.emissiveIntensity = (Math.sin(t * 0.004) > 0.55) ? 1.6 : 0.12;  /* 脉冲式闪烁 */
     renderer.render(scene, camera);
   }
   requestAnimationFrame(tick);
