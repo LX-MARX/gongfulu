@@ -25,34 +25,34 @@ a{color:var(--gold)}
 #gl{position:absolute;inset:0;width:100%;height:100%;cursor:grab}
 #gl:active{cursor:grabbing}
 #wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
-#title{position:absolute;left:28px;top:24px;color:var(--fg);pointer-events:none;z-index:5}
-#title .kicker{font-size:12px;letter-spacing:.28em;color:var(--kick);text-transform:uppercase}
+#title{position:absolute;left:28px;top:156px;color:var(--fg);pointer-events:none;z-index:5;
+  text-shadow:0 1px 3px rgba(6,12,22,.95),0 2px 20px rgba(6,12,22,.85)}
+#title .kicker{font-size:12px;letter-spacing:.28em;color:#C9D2DC;text-transform:uppercase}
 #title h1{margin:6px 0 8px;font-family:var(--serif);font-weight:600;font-size:clamp(28px,3.4vw,40px);letter-spacing:.01em}
-#title .sub{font-size:13px;color:var(--sub);letter-spacing:.06em}
+#title .sub{font-size:14px;color:#E4E9EF;letter-spacing:.06em}
 #title .rule{width:210px;border-top:1px solid var(--fg);margin-top:12px}
-#spec{position:absolute;right:28px;top:26px;text-align:right;color:var(--fg);pointer-events:none;z-index:5}
-#spec .brand{font-size:11px;letter-spacing:.24em;text-transform:uppercase}
-#spec .lines{margin-top:6px;font-size:12px;line-height:1.8;color:var(--sub);letter-spacing:.06em}
-#spec .lines b{color:var(--fg);font-weight:600}
-#ui{position:absolute;left:28px;bottom:22px;color:var(--panel-fg);font-size:15px;z-index:6;
-  background:var(--panel-bg);border:1px solid var(--panel-bd);padding:14px 18px;border-radius:6px;
-  backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .9s;max-width:600px}
-.stage:hover #ui, body.pinui #ui{opacity:1;pointer-events:auto}
-.stage.idle #ui{opacity:0;pointer-events:none}
-#ui .note{font-size:15px;line-height:1.8;color:var(--panel-fg);min-height:24px}
+#spec{position:absolute;right:28px;top:156px;text-align:right;color:var(--fg);pointer-events:none;z-index:5;
+  text-shadow:0 1px 3px rgba(6,12,22,.95),0 2px 20px rgba(6,12,22,.85)}
+#spec .brand{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#C9D2DC}
+#spec .lines{margin-top:6px;font-size:12.5px;line-height:1.9;color:#D8DEE6;letter-spacing:.06em}
+#spec .lines b{color:#fff;font-weight:600}
+#ui{position:absolute;top:0;left:0;right:0;bottom:auto;width:100%;max-width:none;color:var(--panel-fg);font-size:15px;z-index:6;
+  background:var(--panel-bg);border:0;border-bottom:1px solid var(--panel-bd);border-radius:0;padding:12px 26px;
+  backdrop-filter:blur(8px);display:flex;align-items:center;flex-wrap:wrap;gap:12px 24px}
+#ui .note{flex:1 1 100%;font-size:15px;line-height:1.6;color:var(--panel-fg)}
 #ui .note b{color:var(--gold);font-weight:600}
-#ui .shots{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+#ui .shots{margin-top:0;display:flex;flex-wrap:wrap;gap:10px}
 #ui button{min-height:52px;margin:0;cursor:pointer;background:rgba(232,201,138,.12);color:var(--gold);border:1.5px solid var(--gold-deep);padding:0 26px;font-size:17px;font-weight:600;letter-spacing:.08em;border-radius:4px;font-family:inherit;transition:background .2s,color .2s,border-color .2s}
 #ui button:hover{background:rgba(232,201,138,.24);box-shadow:0 0 18px rgba(232,201,138,.28)}
 #ui button.cur{background:var(--gold);color:#23180a;border-color:var(--gold);font-weight:700;box-shadow:0 0 22px rgba(232,201,138,.4)}
 #ui button.cur{background:var(--gold);color:#23180a}
-#ui label{display:block;margin-top:14px;color:#7d8692;font-size:13px;letter-spacing:.05em}
-#ui label button{margin-left:6px}
-#ui input[type=range]{width:180px;accent-color:var(--gold);vertical-align:middle}
-#ui .tl{display:inline-block;min-width:48px;color:var(--sub);font-size:14px}
-#ui .links{margin-top:14px;padding-top:12px;border-top:1px solid var(--panel-bd);font-size:14px}
-#ui .links a{color:var(--sub);text-decoration:none;margin-right:16px;letter-spacing:.03em}
-#ui .links a:hover{color:var(--fg)}
+#ui label{display:flex;align-items:center;gap:10px;margin-top:0;color:#8A93A3;font-size:14px;letter-spacing:.05em}
+#ui input[type=range]{width:170px;accent-color:var(--gold);vertical-align:middle}
+#ui .tl{display:inline-block;min-width:50px;color:var(--panel-fg);font-size:15px}
+#ui .links{margin-top:0;margin-left:auto;padding-top:0;border-top:0;display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+#ui .links a{color:var(--gold);text-decoration:none;letter-spacing:.03em;border:1.5px solid var(--gold-deep);
+  background:rgba(232,201,138,.12);border-radius:4px;padding:12px 20px;font-size:16px;font-weight:600;transition:background .2s,box-shadow .2s}
+#ui .links a:hover{background:rgba(232,201,138,.24);box-shadow:0 0 18px rgba(232,201,138,.28);color:var(--gold)}
 #cc{position:absolute;right:28px;bottom:20px;color:var(--cc);font-size:11px;letter-spacing:.04em;text-align:right;pointer-events:none;line-height:1.7;z-index:5}
 #loading{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);color:var(--kick);font-size:13px;letter-spacing:.2em;z-index:9}
 #hint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:7;color:var(--sub);
@@ -67,7 +67,8 @@ a{color:var(--gold)}
 @media(max-width:760px){
   #title h1{font-size:24px}
   #spec{display:none}
-  #ui{left:12px;right:12px;bottom:56px;max-width:none}
+  #ui{padding:10px 14px;gap:8px 12px;max-height:52vh;overflow:auto}
+  #title{top:auto;bottom:120px}
   .scrollcue{display:none}
 }
 
@@ -79,15 +80,15 @@ main{position:relative;z-index:3;background:var(--bg)}
 .sec .sub{color:var(--sub);font-size:15px;margin-top:10px;max-width:44em;line-height:1.9}
 
 .gates{margin-top:40px;border-top:1px solid var(--line)}
-.gate{display:grid;grid-template-columns:110px 1fr auto;gap:8px 28px;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--fg)}
+.gate{display:grid;grid-template-columns:110px 1fr auto;gap:10px 30px;align-items:baseline;padding:32px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--fg)}
 .gate:hover{background:rgba(212,168,75,.05)}
-.gate .no{font-size:13px;color:var(--gold-deep);letter-spacing:.12em}
-.gate .t{font-size:22px;font-weight:700;font-family:var(--serif)}
-.gate .d{font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.8}
-.gate .arr{font-size:20px;color:var(--gold)}
+.gate .no{font-size:15px;color:var(--gold-deep);letter-spacing:.12em;font-weight:700}
+.gate .t{font-size:clamp(24px,2.6vw,30px);font-weight:700;font-family:var(--serif)}
+.gate .d{font-size:16px;color:#C3CAD2;margin-top:8px;line-height:1.9}
+.gate .arr{font-size:26px;color:var(--gold)}
 @media(max-width:700px){.gate{grid-template-columns:1fr auto}.gate .no{display:none}}
 
-.proof-grid{margin-top:44px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:16px}
+.proof-grid{margin-top:44px;display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
 .proof-grid figure{margin:0}
 .proof-grid img{width:100%;height:100%;object-fit:cover;border-radius:6px;border:1px solid var(--panel-bd)}
 .proof-grid figcaption{margin-top:10px;font-size:12.5px;color:var(--sub);line-height:1.7}
@@ -146,7 +147,6 @@ footer .base{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);f
     <label>日照 <input type="range" id="timeSlider" min="0" max="100" value="35"> <span class="tl" id="timeLabel">14:18</span></label>
     <div class="links">
       <a href="tools.html">算一算我家屋顶 →</a><a href="forms.html">23 张工作表 →</a><a href="farmer.html">农户指南 →</a><a href="cases.html">东高垣实证 →</a>
-      <button id="pinBtn" style="margin-left:2px">钉住面板</button>
     </div>
   </div>
 
@@ -171,7 +171,7 @@ footer .base{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);f
 
   <section class="sec"><div class="wrap">
     <h2>实证</h2>
-    <p class="sub">东高垣村的屋顶与座谈，驻村实拍呈现。</p>
+    <p class="sub">东高垣村的屋顶与光伏阵列，驻村实拍呈现。</p>
     <div class="proof-grid">
       <figure><img src="assets/img/case-4.jpg" alt="村史馆广场光伏车棚"><figcaption>村史馆广场光伏车棚 · 驻村实拍 · 2026 年 2 月</figcaption></figure>
       <figure><img src="assets/img/talk-company.png" alt="课题组在企业调研座谈"><figcaption>课题组在运维企业调研座谈 · 2026 年 2 月</figcaption></figure>
@@ -207,12 +207,12 @@ footer .base{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);f
   <div class="base" style="grid-column:1/-1;width:100%"><span>© 2026 屋顶上的共富路</span><span><a href="account.html">管理入口</a></span></div>
 </div></footer>
 
-<script src="assets/js/config.js?v=20261021c"></script>
-<script src="assets/js/faq.js?v=20261021c"></script>
-<script src="assets/js/api.js?v=20261021c"></script>
-<script src="assets/js/chat.js?v=20261021c"></script>
+<script src="assets/js/config.js?v=20261021d"></script>
+<script src="assets/js/faq.js?v=20261021d"></script>
+<script src="assets/js/api.js?v=20261021d"></script>
+<script src="assets/js/chat.js?v=20261021d"></script>
 <script type="module">
-import { createVillage } from "./assets/js/scene3d.js?v=20261021c";
+import { createVillage } from "./assets/js/scene3d.js?v=20261021d";
 
 const SHOTS = [
   { label: "阳光", txt: "渭北旱塬，年日照约 <b>1350 小时</b>。收益从这里开始。", pos: [40, 26, 56], look: [0, 4, 0] },
@@ -298,13 +298,6 @@ poke();
 setTimeout(() => document.getElementById("hint").classList.add("off"), 9000);
 addEventListener("pointerdown", () => document.getElementById("hint").classList.add("off"), { once: true });
 
-document.getElementById("pinBtn").addEventListener("click", function () {
-  document.body.classList.toggle("pinui");
-  const on = document.body.classList.contains("pinui");
-  this.textContent = on ? "取消钉住" : "钉住面板";
-  this.classList.toggle("cur", on);
-  if (on) stage.classList.remove("idle");
-});
 </script>
 </body>
 </html>
