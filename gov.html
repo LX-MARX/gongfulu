@@ -16,10 +16,12 @@
 .pol-item{padding:18px 0; border-bottom:1px dashed rgba(61,90,117,.4)}
 .pol-item .tt{font-weight:600; font-size:16.5px; color:var(--paper)}
 .pol-item .meta{font-size:12.5px; color:var(--mist); margin:4px 0 6px}
-.pol-item .ap{font-size:14.5px; color:#b8c4d0}
+.pol-item .ap{font-size:14.5px; color:var(--sub)}
 .gantt{display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin-top:30px}
 .g-cell{background:var(--panel-bg); border:1px solid var(--panel-bd); border-radius:12px; padding:18px 16px; cursor:pointer; transition:.3s; position:relative}
-.g-cell:hover{border-color:var(--gold); transform:translateY(-4px)}
+.g-cell:hover{border-color:var(--gold)}
+.pt531{transition:r .2s}
+.pt531:hover{r:9}
 .g-cell .no{font-family:var(--mono); font-size:26px; color:var(--gold-deep); font-weight:700}
 .g-cell .nm{font-weight:700; margin:4px 0 2px}
 .g-cell .tm{font-size:12.5px; color:var(--sub)}
@@ -201,17 +203,18 @@
       </div>
       <div class="card rv">
         <h3>落地影响</h3>
-        <svg class="mini-line" viewBox="0 0 320 170" style="margin-top:10px">
-          <line x1="40" y1="140" x2="300" y2="140" stroke="#c8cdd4"/>
-          <line x1="40" y1="140" x2="40" y2="14" stroke="#c8cdd4"/>
+        <svg class="mini-line" viewBox="0 0 320 170" style="margin-top:10px" id="p531Chart">
+          <line x1="40" y1="140" x2="300" y2="140" stroke="#26303D"/>
+          <line x1="40" y1="140" x2="40" y2="14" stroke="#26303D"/>
           <polyline points="70,74 170,22 270,126" fill="none" stroke="#C84B3F" stroke-width="3"/>
-          <g fill="#22303f" font-size="13" font-family="monospace">
-            <circle cx="70" cy="74" r="4" fill="var(--gold-deep)"/><text x="58" y="62">620</text>
-            <circle cx="170" cy="22" r="4" fill="var(--gold-deep)"/><text x="158" y="14">1183</text>
-            <circle cx="270" cy="126" r="4" fill="#C84B3F"/><text x="258" y="118">116</text>
+          <g fill="#F2F4F7" font-size="13" font-family="monospace">
+            <circle class="pt531" cx="70" cy="74" r="6" fill="var(--gold-deep)" style="cursor:pointer"><title>2023 年新增并网 620 户</title></circle><text x="58" y="62">620 户</text>
+            <circle class="pt531" cx="170" cy="22" r="6" fill="var(--gold-deep)" style="cursor:pointer"><title>2024 年新增并网 1183 户（峰值）</title></circle><text x="152" y="14">1183 户</text>
+            <circle class="pt531" cx="270" cy="126" r="6" fill="#C84B3F" style="cursor:pointer"><title>2025 年 1—8 月新增并网仅 116 户（531 新政后断崖）</title></circle><text x="252" y="118">116 户</text>
           </g>
-          <g fill="#8a95a1" font-size="12" text-anchor="middle"><text x="70" y="158">2023 年</text><text x="170" y="158">2024 年</text><text x="270" y="158">2025 年</text></g>
+          <g fill="#9AA3AD" font-size="12" text-anchor="middle"><text x="70" y="158">2023 年</text><text x="170" y="158">2024 年</text><text x="270" y="158">2025 年</text></g>
         </svg>
+        <p id="p531Read" style="color:var(--gold-soft); font-size:13.5px; min-height:22px; margin-top:6px">悬停数据点查看当年并网户数</p>
         <p style="color:var(--sub); font-size:14px">大荔县全县（含东高垣村）新增并网户数断崖式放缓，截至 2025 年 7—8 月企业台账。</p>
       </div>
       <div class="card rv">
@@ -289,6 +292,14 @@ document.addEventListener("DOMContentLoaded", function () {
     b.classList.add("on"); lv = b.dataset.lv; loadPol();
   });
   loadPol();
+
+  /* 531 折线：悬停数据点读数 */
+  document.querySelectorAll(".pt531").forEach(function (c) {
+    c.addEventListener("mouseenter", function () {
+      var r = document.getElementById("p531Read");
+      if (r) r.textContent = c.querySelector("title").textContent;
+    });
+  });
 
   /* ---------- 政策详情抽屉 ---------- */
   function openPolDrawer(i) {

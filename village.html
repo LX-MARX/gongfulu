@@ -101,15 +101,15 @@
     <div class="card rv" style="margin-top:26px">
       <h3>三大顾虑标准应答（配样板户 W 某案例）</h3>
       <div class="grid3" style="margin-top:16px">
-        <div><b style="color:var(--gold2)">怕承重压坏房子</b><p style="font-size:14.5px; color:#b8c4d0; margin-top:6px">安装前企业逐户做结构与承载评估，不合格不装；支架按当地风雪荷载标准核算；因电站致损由企业修复赔偿，写进合同。</p></div>
-        <div><b style="color:var(--gold2)">怕辐射影响健康</b><p style="font-size:14.5px; color:#b8c4d0; margin-top:6px">组件发电是直流低压过程，经逆变器转换后电磁水平与家用电器相当，不存在超标准辐射；可请专业人员现场检测答疑。</p></div>
-        <div><b style="color:var(--gold2)">怕合同有坑</b><p style="font-size:14.5px; color:#b8c4d0; margin-top:6px">合同经县级部门审查备案；农户不出资、不贷款、不担保；凡要身份证办贷款的一律拒绝并举报。</p></div>
+        <div><b style="color:var(--gold2)">怕承重压坏房子</b><p style="font-size:14.5px; color:var(--sub); margin-top:6px">安装前企业逐户做结构与承载评估，不合格不装；支架按当地风雪荷载标准核算；因电站致损由企业修复赔偿，写进合同。</p></div>
+        <div><b style="color:var(--gold2)">怕辐射影响健康</b><p style="font-size:14.5px; color:var(--sub); margin-top:6px">组件发电是直流低压过程，经逆变器转换后电磁水平与家用电器相当，不存在超标准辐射；可请专业人员现场检测答疑。</p></div>
+        <div><b style="color:var(--gold2)">怕合同有坑</b><p style="font-size:14.5px; color:var(--sub); margin-top:6px">合同经县级部门审查备案；农户不出资、不贷款、不担保；凡要身份证办贷款的一律拒绝并举报。</p></div>
       </div>
       <p class="caption" style="margin-top:12px">源自村民 W 某 2026 年 2 月入户访谈；W 某年租金约 1800 元：「不用自己掏一分钱，也不用干任何活，就能稳定拿到这笔钱。」（手册第 107 条）</p>
     </div>
     <div class="card rv" style="margin-top:26px; border-color:var(--gold)">
       <h3>★ 政策明白纸生成器</h3>
-      <p style="font-size:14.5px; color:#b8c4d0; margin-top:6px">输入 5 项信息，一键生成 1 页 A4《××村屋顶光伏明白纸》（限 600 字、6 段式），可直接打印发放。</p>
+      <p style="font-size:14.5px; color:var(--sub); margin-top:6px">输入 5 项信息，一键生成 1 页 A4《××村屋顶光伏明白纸》（限 600 字、6 段式），可直接打印发放。</p>
       <div class="grid2" style="margin-top:14px">
         <div><label>村庄名称</label><input type="text" id="mzV" placeholder="如：东高垣村"></div>
         <div><label>平屋顶租金（元/块/年）</label><input type="number" id="mzR" value="30" min="0"></div>
@@ -161,7 +161,7 @@
     <p class="lead rv">调解纪律 3 条：不代替任何一方作承诺；全程留痕；涉企业责任的以书面工单移交，不做口头了断。</p>
     <div class="dispute-grid rv">
       <div id="dspList"></div>
-      <div class="card" id="dspDetail"><p style="color:#b8c4d0">点击左侧纠纷类型，查看首选路径、升级路径与典型情景处置示例。</p></div>
+      <div class="card" id="dspDetail"><p style="color:var(--sub)">点击左侧纠纷类型，查看首选路径、升级路径与典型情景处置示例。</p></div>
     </div>
   </div>
 </section>
@@ -361,7 +361,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll(".dsp-btn").forEach(function (x) { x.classList.remove("sel"); });
       b.classList.add("sel");
       var d = dsp[+b.dataset.i];
-      document.getElementById("dspDetail").innerHTML = "<h3>" + d[0] + "</h3><p style='color:#c4cfda; font-size:15px; margin-top:10px'>" + d[1] + "</p><p style='color:#b8c4d0; font-size:14.5px; margin-top:12px'><b style='color:var(--gold2)'>典型情景：</b>" + d[2] + "</p>";
+      document.getElementById("dspDetail").innerHTML = "<h3>" + d[0] + "</h3><p style='color:#c4cfda; font-size:15px; margin-top:10px'>" + d[1] + "</p><p style='color:var(--sub); font-size:14.5px; margin-top:12px'><b style='color:var(--gold2)'>典型情景：</b>" + d[2] + "</p>";
     });
   }
 

@@ -21,7 +21,7 @@
     "transition:width .3s cubic-bezier(.16,1,.3,1)}" +
     "#sideNav:hover,#sideNav:focus-within{width:172px}" +
     "#sideNav a{display:flex;align-items:center;gap:12px;padding:7px 14px 7px 17px;" +
-    "white-space:nowrap;text-decoration:none;color:#b8c4d0;font-size:13px;line-height:1.4;" +
+    "white-space:nowrap;text-decoration:none;color:var(--sub);font-size:13px;line-height:1.4;" +
     "transition:color .25s,background .25s}" +
     "#sideNav a i{flex:none;width:8px;height:8px;border-radius:50%;" +
     "background:#7A93AA;transition:background .25s,box-shadow .25s,transform .25s}" +

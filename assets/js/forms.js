@@ -132,7 +132,7 @@
     return "<tr>" + cur.columns.map(function (cd) {
       return "<td>" + colControl(cd, row ? row[cd.key] : "") + "</td>";
     }).join("") +
-      '<td style="white-space:nowrap"><button type="button" class="btn btn-line rowDel" style="padding:6px 14px; font-size:13px; border-color:#c8cdd4; color:#8a5a50">删除</button></td></tr>';
+      '<td style="white-space:nowrap"><button type="button" class="btn btn-line rowDel" style="padding:6px 14px; font-size:13px; border-color:var(--panel-bd); color:#8a5a50">删除</button></td></tr>';
   }
 
   function renderFill(data) {
@@ -352,7 +352,7 @@
     }
     msg.classList.remove("miss-pulse");
     var f = cur, date = todayCN();
-    var html = ('<div class="gov-doc"><div class="gd-org" style="font-family:SimSun,serif;font-weight:900;color:#D40000;font-size:30px;text-align:center;letter-spacing:.1em">东高垣村整村光伏项目组</div><hr style="border:0;border-top:2.5pt solid #D40000;margin:10px 0 20px">'">' +
+    var html = '<div class="gov-doc"><div class="gd-org" style="font-family:SimSun,serif;font-weight:900;color:#D40000;font-size:30px;text-align:center;letter-spacing:.1em">东高垣村整村光伏项目组</div><hr style="border:0;border-top:2.5pt solid #D40000;margin:10px 0 20px">' +
       '<h1 class="gov-title">表 ' + esc(f.no) + "　" + esc(f.name) + "</h1>" +
       '<p class="gov-meta"><span>村庄名称：' + esc(data.meta.village || "＿＿＿＿＿＿") + "</span>" +
       "<span>填表人：" + esc(data.meta.person || "＿＿＿＿") + "</span>" +

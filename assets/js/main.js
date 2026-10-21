@@ -354,8 +354,8 @@
       svg.innerHTML = items.map(function (it, i) {
         var h = it.v / max * (floor - 30), cx = W * (i + .5) / n;
         return '<rect x="' + (cx - barW / 2) + '" y="' + (floor - h) + '" width="' + barW + '" height="' + h + '" rx="6" fill="' + (it.color || "#D4A84B") + '"/>' +
-          '<text x="' + cx + '" y="' + (floor - h - 8) + '" text-anchor="middle" fill="#22303f" font-size="' + vFont + '" font-weight="700">' + (it.text != null ? it.text : Math.round(it.v)) + "</text>" +
-          '<text x="' + cx + '" y="' + (floor + 16) + '" text-anchor="middle" fill="#5a6b7c" font-size="' + nFont + '">' + it.name + "</text>";
+          '<text x="' + cx + '" y="' + (floor - h - 8) + '" text-anchor="middle" fill="#F2F4F7" font-size="' + vFont + '" font-weight="700">' + (it.text != null ? it.text : Math.round(it.v)) + "</text>" +
+          '<text x="' + cx + '" y="' + (floor + 16) + '" text-anchor="middle" fill="#9AA3AD" font-size="' + nFont + '">' + it.name + "</text>";
       }).join("");
     },
     csv: function (name, rows) {
