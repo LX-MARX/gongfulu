@@ -36,15 +36,15 @@ a{color:var(--gold)}
 #spec .lines b{color:var(--fg);font-weight:600}
 #ui{position:absolute;left:28px;bottom:22px;color:var(--panel-fg);font-size:15px;z-index:6;
   background:var(--panel-bg);border:1px solid var(--panel-bd);padding:14px 18px;border-radius:6px;
-  backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .9s;max-width:400px}
+  backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .9s;max-width:600px}
 .stage:hover #ui, body.pinui #ui{opacity:1;pointer-events:auto}
 .stage.idle #ui{opacity:0;pointer-events:none}
 #ui .note{font-size:15px;line-height:1.8;color:var(--panel-fg);min-height:24px}
 #ui .note b{color:var(--gold);font-weight:600}
 #ui .shots{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
-#ui button{min-height:44px;margin:0;cursor:pointer;background:rgba(232,201,138,.08);color:var(--gold);border:1px solid var(--gold-deep);padding:0 20px;font-size:15px;letter-spacing:.06em;border-radius:3px;font-family:inherit;transition:background .2s,color .2s,border-color .2s}
-#ui button:hover{background:rgba(232,201,138,.18)}
-#ui button.cur{background:var(--gold);color:#23180a;border-color:var(--gold);font-weight:700}
+#ui button{min-height:52px;margin:0;cursor:pointer;background:rgba(232,201,138,.12);color:var(--gold);border:1.5px solid var(--gold-deep);padding:0 26px;font-size:17px;font-weight:600;letter-spacing:.08em;border-radius:4px;font-family:inherit;transition:background .2s,color .2s,border-color .2s}
+#ui button:hover{background:rgba(232,201,138,.24);box-shadow:0 0 18px rgba(232,201,138,.28)}
+#ui button.cur{background:var(--gold);color:#23180a;border-color:var(--gold);font-weight:700;box-shadow:0 0 22px rgba(232,201,138,.4)}
 #ui button.cur{background:var(--gold);color:#23180a}
 #ui label{display:block;margin-top:14px;color:#7d8692;font-size:13px;letter-spacing:.05em}
 #ui label button{margin-left:6px}
@@ -63,7 +63,7 @@ a{color:var(--gold)}
   font-size:12.5px;letter-spacing:.2em;text-decoration:none;background:var(--bg);border:1px solid var(--panel-bd);
   border-bottom:0;padding:10px 26px 12px;border-radius:12px 12px 0 0}
 .scrollcue:hover{color:var(--gold)}
-.mgc-fab,.pvc-fab{right:26px !important;bottom:70px !important}
+.mgc-fab,.pvc-fab{left:auto !important;right:26px !important;bottom:26px !important}
 @media(max-width:760px){
   #title h1{font-size:24px}
   #spec{display:none}
@@ -171,15 +171,11 @@ footer .base{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);f
 
   <section class="sec"><div class="wrap">
     <h2>实证</h2>
-    <p class="sub">东高垣村的屋顶、座谈与村两委回函，原件呈现。</p>
+    <p class="sub">东高垣村的屋顶与座谈，驻村实拍呈现。</p>
     <div class="proof-grid">
       <figure><img src="assets/img/case-4.jpg" alt="村史馆广场光伏车棚"><figcaption>村史馆广场光伏车棚 · 驻村实拍 · 2026 年 2 月</figcaption></figure>
       <figure><img src="assets/img/talk-company.png" alt="课题组在企业调研座谈"><figcaption>课题组在运维企业调研座谈 · 2026 年 2 月</figcaption></figure>
       <figure><img src="assets/img/case-1.jpg" alt="一字坡支架阵列"><figcaption>一字坡支架阵列 · 驻村实拍 · 2026 年 2 月</figcaption></figure>
-    </div>
-    <div class="letters">
-      <figure><img src="assets/img/huifu-1.png" alt="村两委回函第一页"><figcaption>《关于对四川大学课题组研究建议的回函》· 第一页</figcaption></figure>
-      <figure><img src="assets/img/huifu-2.png" alt="村两委回函第二页"><figcaption>回函第二页 · 村党支部、村委会盖章 · 2026 年 4 月</figcaption></figure>
     </div>
   </div></section>
 
@@ -211,12 +207,12 @@ footer .base{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);f
   <div class="base" style="grid-column:1/-1;width:100%"><span>© 2026 屋顶上的共富路</span><span><a href="account.html">管理入口</a></span></div>
 </div></footer>
 
-<script src="assets/js/config.js?v=20261021b"></script>
-<script src="assets/js/faq.js?v=20261021b"></script>
-<script src="assets/js/api.js?v=20261021b"></script>
-<script src="assets/js/chat.js?v=20261021b"></script>
+<script src="assets/js/config.js?v=20261021c"></script>
+<script src="assets/js/faq.js?v=20261021c"></script>
+<script src="assets/js/api.js?v=20261021c"></script>
+<script src="assets/js/chat.js?v=20261021c"></script>
 <script type="module">
-import { createVillage } from "./assets/js/scene3d.js?v=20261021b";
+import { createVillage } from "./assets/js/scene3d.js?v=20261021c";
 
 const SHOTS = [
   { label: "阳光", txt: "渭北旱塬，年日照约 <b>1350 小时</b>。收益从这里开始。", pos: [40, 26, 56], look: [0, 4, 0] },
