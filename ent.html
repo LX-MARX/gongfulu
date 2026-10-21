@@ -7,6 +7,7 @@
 <meta name="description" content="企业工作台：投资测算、投前尽调、建设向导、运维模拟与 25 年生命周期。">
 <link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/govdoc.css">
 <link rel="stylesheet" href="assets/css/gov-print.css">
 <style>
 .calc-grid{display:grid; grid-template-columns:2fr 3fr; gap:30px; margin-top:34px}
@@ -36,6 +37,12 @@
 .life::after{content:""; position:absolute; left:12px; top:0; bottom:0; width:3px; background:rgba(61,90,117,.35); z-index:-1}
 .life-item{position:relative; padding:0 0 36px 0}
 .life-item .dot{position:absolute; left:-35px; top:2px; width:18px; height:18px; border-radius:50%; background:var(--ink2); border:3px solid var(--gold)}
+
+/* ---------- 现金流曲线 ---------- */
+.cf-wrap{background:rgba(18,35,58,.55);border:1px solid rgba(212,168,75,.3);border-radius:12px;padding:18px 18px 12px}
+#cfChart{width:100%;display:block}
+.cf-ctl{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;justify-content:space-between;margin-top:10px;font-size:13px;color:#9FB4C8}
+.cf-read{font-size:13.5px}
 </style>
 </head>
 <body>
@@ -126,12 +133,18 @@
 <section class="section grain" id="ring" data-nav="回收期样本">
   <div class="wrap ring-wrap">
     <div>
-      <div class="kicker rv">东高垣样本 · 静态面板</div>
-      <h2 class="rv">7—8 年：回收期进度环</h2>
+      <div class="kicker rv">东高垣样本 · 可交互测算</div>
+      <h2 class="rv">7—8 年回本：现金流曲线</h2>
       <p class="lead rv" style="margin-top:12px">东高垣村样本总投资约 2100 万元、年发电收益约 286 万元，简化口径回收期约 7—8 年；25 年租期内含约 17 年以上净收益窗口。补齐运维、租金、保险、税费与限发损失后，回收期将相应延长（手册第 72—74 条）。</p>
       <p class="caption" style="margin-top:12px">东高垣村口径，2026 年 2 月企业访谈。</p>
     </div>
-    <div class="ring3d-stage" id="ringStage"></div>
+    <div class="cf-wrap">
+      <canvas id="cfChart" height="300"></canvas>
+      <div class="cf-ctl">
+        <label>测算年限 <input type="range" id="cfYears" min="5" max="25" value="25" style="width:180px;accent-color:#D4A84B;vertical-align:middle"> <b id="cfY">25</b> 年</label>
+        <span id="cfRead" class="cf-read"></span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -337,12 +350,62 @@ document.addEventListener("DOMContentLoaded", function () {
       "</tbody></table>" +
       '<p class="gov-note">本报告全部计算在前端完成，参数默认值取东高垣村样本口径，输出为项目组测算参考值，不构成投资结论。「531 新政」后新增项目须按市场化电价重算。敏感性提示：发电量每下浮 5%，年收益约减 14 万元；电价每下浮 0.01 元/kWh，年收益约减 8 万元（以 805 万 kWh 为基准）。</p>' +
       '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
-    PV.printZone("#invDoc", "投资可行性测算报告");
+    GovDoc.print({org:"东高垣村整村光伏项目组",title:"投资可行性测算报告",el:"#invDoc"});
   });
 
   /* 3D 回收期环 */
-  FX.ring(document.getElementById("ringStage"), 7.5 / 25,
-    '<div class="din num-glow">7—8</div><div class="label" style="color:#a9bccf">年 · 简化口径回收期</div><div class="caption">25 年租期 · 净收益窗口约 17 年+</div>');
+  /* 现金流曲线：总投资 vs 累计净现金流，年限滑杆实时重算 */
+  (function () {
+    var cv = document.getElementById("cfChart");
+    var INV = 2100, REV = 286;                    /* 东高垣口径：总投资 2100 万、年收益 286 万 */
+    function draw() {
+      var Y = +document.getElementById("cfYears").value;
+      document.getElementById("cfY").textContent = Y;
+      var dpr = Math.min(devicePixelRatio || 1, 2);
+      var W = cv.clientWidth, H = 300;
+      cv.width = W * dpr; cv.height = H * dpr;
+      var c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      c.clearRect(0, 0, W, H);
+      var pad = { l: 56, r: 16, t: 18, b: 34 };
+      var maxV = Math.max(INV, REV * Y) * 1.08;
+      function X(i) { return pad.l + (W - pad.l - pad.r) * i / Y; }
+      function Yv(v) { return H - pad.b - (H - pad.t - pad.b) * v / maxV; }
+      /* 网格与轴 */
+      c.strokeStyle = "rgba(143,168,191,.18)"; c.fillStyle = "#8FA8BF"; c.font = "11px sans-serif";
+      for (var g = 0; g <= 4; g++) {
+        var gv = maxV * g / 4, gy = Yv(gv);
+        c.beginPath(); c.moveTo(pad.l, gy); c.lineTo(W - pad.r, gy); c.stroke();
+        c.fillText(Math.round(gv) + " 万", 6, gy + 4);
+      }
+      for (var i = 0; i <= Y; i += 5) { c.fillText("第" + i + "年", X(i) - 14, H - 12); }
+      /* 投资线（平直） */
+      c.strokeStyle = "#C84B3F"; c.lineWidth = 2;
+      c.beginPath(); c.moveTo(pad.l, Yv(INV)); c.lineTo(W - pad.r, Yv(INV)); c.stroke();
+      c.fillStyle = "#C84B3F"; c.fillText("总投资 2100 万", W - pad.r - 104, Yv(INV) - 8);
+      /* 累计净现金流 */
+      c.strokeStyle = "#D4A84B"; c.lineWidth = 2.5; c.beginPath();
+      var cross = -1;
+      for (var y = 0; y <= Y; y++) {
+        var v = REV * y;
+        if (y === 0) c.moveTo(X(y), Yv(v)); else c.lineTo(X(y), Yv(v));
+        if (cross < 0 && v >= INV) cross = y;
+      }
+      c.stroke();
+      /* 回收点 */
+      if (cross > 0) {
+        c.fillStyle = "#F0D78C";
+        c.beginPath(); c.arc(X(cross), Yv(REV * cross), 5, 0, 7); c.fill();
+        c.fillText("第 " + cross + " 年回本", X(cross) + 10, Yv(REV * cross) - 10);
+      }
+      /* 终点读数 */
+      var net = REV * Y - INV;
+      document.getElementById("cfRead").innerHTML =
+        "第 " + Y + " 年累计发电收益 <b style='color:#F0D78C'>" + (REV * Y) + " 万</b>，扣除总投资后净收益 <b style='color:" + (net >= 0 ? "#7FBF8E" : "#C84B3F") + "'>" + net + " 万</b>";
+    }
+    document.getElementById("cfYears").addEventListener("input", draw);
+    addEventListener("resize", draw);
+    draw();
+  })();
 
   /* 尽调 10 项 */
   var dd = ["政策合规：县试点方案、并网与补贴政策口径、土地与规划约束", "电网容量：台区容量核算、改造计划与投资主体、限发历史", "屋顶资源：合格屋顶台账、产权清晰度、危房排除情况", "资源评估：当地光照资源、等效利用小时数测算", "村庄治理：村两委动员能力、历史矛盾、既有光伏负面事件", "农户意愿：抽样意愿调查、可接受租金水平", "合同安排：合同范本合规性、租金支付周期、到期处置条款", "成本测算：单瓦造价、施工组织、并网配套成本", "保险安排：财产综合险、公众责任险询价与承保条件", "退出与极端情形：征收拆迁、房屋翻建、企业退出时的处置预案"];
@@ -379,7 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "尚有 " + (10 - done) + " 项未完成取证，暂不召开尽调评审会；电网容量与村庄治理为权重最高的 2 项，应优先补齐。") + "</p>" +
       '<p class="gov-note">依据《整村分布式光伏建设手册》第 75—76 条逐项取证并留存底稿；底稿归档，保存期不短于合同期限。</p>' +
       '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
-    PV.printZone("#ddDoc", "投前尽调报告");
+    GovDoc.print({org:"东高垣村整村光伏项目组",title:"投前尽调报告",el:"#ddDoc"});
   });
 
   /* 8 步向导 */
@@ -434,7 +497,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "</tbody></table>" +
       '<p class="gov-note">处置完成后复测发电量并在台账销号；本记录单为 25 年履约期证据链环节之一，归档保存。分级处置标准见手册第 83—84 条。</p>' +
       '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
-    PV.printZone("#simDoc", "运维工单处置记录单");
+    GovDoc.print({org:"东高垣村整村光伏项目组",title:"运维工单处置记录单",el:"#simDoc"});
   });
 
   /* 生命周期滚动生长 */
@@ -446,5 +509,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }, { passive: true });
 });
 </script>
+<script src="assets/js/govdoc.js"></script>
 </body>
 </html>

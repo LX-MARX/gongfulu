@@ -7,6 +7,7 @@
 <meta name="description" content="通用范式：政府引导、企业投资、村集体组织、农户参与的四方协同机制。">
 <link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/govdoc.css">
 <style>
 .masthead{min-height:60vh; display:grid; grid-template-columns:1.1fr .9fr; gap:48px; align-items:center;
   background-image:linear-gradient(rgba(61,90,117,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(61,90,117,.14) 1px,transparent 1px);
@@ -48,6 +49,32 @@
 #theoryModal .tx{position:absolute; top:14px; right:16px; background:none; border:1px solid rgba(212,168,75,.5); color:#F0D78C; width:34px; height:34px; border-radius:50%; font-size:17px; cursor:pointer}
 #theoryModal h3{color:var(--gold2)}
 #theoryModal .tnote{color:#c4cfda; font-size:14.5px; line-height:1.9; margin-top:14px}
+
+/* ---------- 四方协同台 ---------- */
+.quad{position:relative;height:340px;margin-top:20px}
+.quad-links{position:absolute;inset:0;width:100%;height:100%}
+.quad-links line{stroke:rgba(212,168,75,.4);stroke-width:1.5;stroke-dasharray:7 7;animation:qdash 1.6s linear infinite}
+@keyframes qdash{to{stroke-dashoffset:-14}}
+.quad-node{position:absolute;transform:translate(-50%,-50%);width:132px;height:132px;border-radius:50%;
+  background:rgba(18,35,58,.92);border:2px solid rgba(212,168,75,.55);color:var(--moon,#F0F2F5);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;
+  transition:border-color .3s, box-shadow .3s, transform .3s;font-family:inherit}
+.quad-node b{font-size:22px;font-weight:800;letter-spacing:.06em}
+.quad-node span{font-size:12px;color:#9FB4C8}
+.quad-node:hover{border-color:var(--gold,#D4A84B);box-shadow:0 0 30px rgba(212,168,75,.25)}
+.quad-node.cur{border-color:var(--gold,#D4A84B);box-shadow:0 0 40px rgba(212,168,75,.4);transform:translate(-50%,-50%) scale(1.06)}
+.quad-node.cur span{color:var(--gold2,#F0D78C)}
+.quad-detail{margin-top:24px}
+.quad-detail .qd-h{font-size:14px;color:#8FA8BF;padding:18px 0}
+.qd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.qd-col{background:rgba(18,35,58,.6);border:1px solid rgba(212,168,75,.25);border-radius:10px;padding:20px 22px}
+.qd-col h5{font-size:14px;letter-spacing:.14em;color:var(--gold,#D4A84B);margin-bottom:10px}
+.qd-col p{font-size:13.5px;line-height:1.9;color:#C6D3E0}
+@media(max-width:820px){.qd-grid{grid-template-columns:1fr}.quad-node{width:104px;height:104px}.quad-node b{font-size:17px}}
+/* ---------- 价值运动流光 ---------- */
+.vflow-svg path{stroke:rgba(212,168,75,.5);stroke-width:2;stroke-dasharray:10 8;animation:qdash 1.2s linear infinite;fill:none}
+.vflow-node .ball{transition:transform .3s, box-shadow .3s;cursor:pointer}
+.vflow-node.cur .ball{transform:scale(1.15);box-shadow:0 0 34px rgba(212,168,75,.5)}
 </style>
 </head>
 <body>
@@ -77,19 +104,27 @@
   </div>
 </section>
 
-<!-- 3D 四方协同星系 -->
+<!-- 四方协同台 -->
 <section class="section grain" style="padding-top:40px" id="cosmosSec" data-nav="四方协同">
   <div class="wrap">
-    <div class="kicker rv">3D 交互模型</div>
-    <h2 class="rv">四方协同星系</h2>
-    <p class="lead rv">拖拽 360° 旋转；点击某一方，该方前移、其余虚化，下方展开该角色学理阐释。</p>
+    <div class="kicker rv">协同机制</div>
+    <h2 class="rv">四方协同台</h2>
+    <p class="lead rv">四方各居其位、六条关系线为真实业务流。点击任一方，展开它的权责、作用与缺位后果。</p>
   </div>
-  <div class="wrap"><div id="cosmos" class="cosmos"></div></div>
   <div class="wrap">
-    <div id="faceDetail" class="glass rv" style="padding:28px 34px; margin-top:10px; display:none">
-      <h3 id="fdTitle" style="color:var(--gold2)"></h3>
-      <p id="fdBody" style="color:#c4cfda; font-size:16px; margin-top:10px"></p>
-      <p class="caption" style="margin-top:12px">内容来源：《整村分布式光伏建设手册》（200 页版）第二章 2.5—2.8 节</p>
+    <div class="quad rv" id="quad">
+      <svg class="quad-links" viewBox="0 0 1000 260" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="200" y1="40" x2="800" y2="40"/><line x1="200" y1="40" x2="200" y2="220"/>
+        <line x1="800" y1="40" x2="800" y2="220"/><line x1="200" y1="220" x2="800" y2="220"/>
+        <line x1="200" y1="40" x2="800" y2="220"/><line x1="800" y1="40" x2="200" y2="220"/>
+      </svg>
+      <button class="quad-node" data-q="0" style="left:20%;top:8%"><b>政府</b><span>制度供给</span></button>
+      <button class="quad-node" data-q="1" style="left:80%;top:8%"><b>企业</b><span>投资运营</span></button>
+      <button class="quad-node" data-q="2" style="left:20%;top:78%"><b>村集体</b><span>组织中介</span></button>
+      <button class="quad-node" data-q="3" style="left:80%;top:78%"><b>农户</b><span>屋顶主人</span></button>
+    </div>
+    <div id="quadDetail" class="quad-detail">
+      <div class="qd-h">点击四角任一方——权责、作用、缺位后果三栏展开</div>
     </div>
   </div>
 </section>
@@ -237,12 +272,32 @@ document.addEventListener("DOMContentLoaded", function () {
     { name: "农户", brief: "屋顶出租 · 零成本 · 稳定收租 25 年", more: "农户只出租屋顶、不掏一分钱、不贷款、不担保，按 30 元/块/年（人字坡 15 元/块/年）收取 25 年固定租金，户均年租金约 1500—2000 元。" }
   ];
   var det = document.getElementById("faceDetail");
-  FX.cosmos(document.getElementById("cosmos"), faces, function (i) {
-    if (i < 0) { det.style.display = "none"; return; }
-    det.style.display = "block";
-    document.getElementById("fdTitle").textContent = faces[i].name + " · " + faces[i].brief;
-    document.getElementById("fdBody").textContent = faces[i].more;
-  });
+  /* 四方协同台 */
+  (function(){
+    var QD = [
+      { n: "政府", duty: "供给制度：准入审查、合同规范、年度考核、争议兜底。不越位干预经营。", role: "把分散的屋顶变成可投资、可预期的资产；把市场风险挡在制度外面。", lack: "缺了它：企业不敢来、农户不敢签，模式停在口头。" },
+      { n: "企业", duty: "全额投资、负责建设运维，承担拉闸限发与市场波动损失，按合同付租金。", role: "把资本变成电站、把电站变成年年到卡的租金。", lack: "缺了它：屋顶只是屋顶，变不了资产。" },
+      { n: "村集体", duty: "组织动员、程序公开、名单公示、收益分发、纠纷调解。", role: "把 185 户的分散意愿变成一次集体行动。", lack: "缺了它：一家一户谈不拢，整村推进无从谈起。" },
+      { n: "农户", duty: "出租屋顶、配合施工、监督收益到账。不出资、不贷款、不担保。", role: "以闲置资源入股，是模式存在的理由本身。", lack: "缺了它：一切免谈。" }
+    ];
+    var det = document.getElementById("quadDetail");
+    document.getElementById("quad").addEventListener("click", function (e) {
+      var b = e.target.closest(".quad-node"); if (!b) return;
+      document.querySelectorAll(".quad-node").forEach(function (n) { n.classList.toggle("cur", n === b); });
+      var q = QD[+b.dataset.q];
+      det.innerHTML = '<div class="qd-grid">' +
+        '<div class="qd-col"><h5>权责</h5><p>' + q.duty + '</p></div>' +
+        '<div class="qd-col"><h5>作用</h5><p>' + q.role + '</p></div>' +
+        '<div class="qd-col"><h5>缺位后果</h5><p>' + q.lack + '</p></div></div>';
+    });
+    /* 价值运动节点激活态 */
+    document.querySelectorAll(".vflow-node").forEach(function (n) {
+      n.addEventListener("click", function () {
+        document.querySelectorAll(".vflow-node").forEach(function (x) { x.classList.toggle("cur", x === n); });
+      });
+    });
+  })();
+
 
   var vdata = [
     "约 2100 万元由 H 光伏公司（省属国有企业）投入，以全民利益为最终归属、以保值增值为受托责任。",
@@ -337,7 +392,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } catch (e) { /* 静默 */ }
   });
   document.getElementById("fitPrint").addEventListener("click", function () {
-    PV.printZone("#fitReport", "村庄适配判定报告");
+    GovDoc.print({org:"东高垣村整村光伏项目组",docNo:"共富路光伏〔2026〕1 号",title:"村庄适配判定报告",el:"#fitReport"});
   });
 
   /* 4 套机理图解：点击「详细图解」弹出真图解（inline SVG） */
@@ -429,5 +484,6 @@ document.addEventListener("DOMContentLoaded", function () {
   tm.addEventListener("click", function (e) { if (e.target === tm) tm.classList.remove("open"); });
 });
 </script>
+<script src="assets/js/govdoc.js"></script>
 </body>
 </html>

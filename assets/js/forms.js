@@ -352,7 +352,7 @@
     }
     msg.classList.remove("miss-pulse");
     var f = cur, date = todayCN();
-    var html = '<div class="gov-doc">' +
+    var html = ('<div class="gov-doc"><div class="gd-org" style="font-family:SimSun,serif;font-weight:900;color:#D40000;font-size:30px;text-align:center;letter-spacing:.1em">东高垣村整村光伏项目组</div><hr style="border:0;border-top:2.5pt solid #D40000;margin:10px 0 20px">'">' +
       '<h1 class="gov-title">表 ' + esc(f.no) + "　" + esc(f.name) + "</h1>" +
       '<p class="gov-meta"><span>村庄名称：' + esc(data.meta.village || "＿＿＿＿＿＿") + "</span>" +
       "<span>填表人：" + esc(data.meta.person || "＿＿＿＿") + "</span>" +
@@ -388,7 +388,7 @@
     }
 
     html += '<p class="gov-note">' + esc(f.note || "") + "</p>" +
-      '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
+      '<div class="gov-sign"><p>东高垣村整村光伏项目组</p><p>' + GovDoc.cnDate() + "</p></div></div>";
 
     $("printZone").innerHTML = html;
     toast(msg, "<b>公文打印版已生成（A4 · 三线表 · 公文格式），正在调起打印对话框。</b>如需留存电子档，可在打印对话框中选择「另存为 PDF」。", false);

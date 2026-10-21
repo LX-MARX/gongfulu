@@ -276,7 +276,13 @@ document.addEventListener("DOMContentLoaded", function () {
           var seq = (res[0] && res[0].id) || (100 + Math.floor(Math.random() * 800));
           msg.textContent = "已提交存档，回执编号：PG-" + ymd + "-" + seq + "。";
         } else {
-          msg.textContent = "提交失败，请稍后重试。";
+          /* 离线兜底：存入本机待传队列，网络恢复后提示重发 */
+          try {
+            var q = JSON.parse(localStorage.getItem("gf_eval_pending") || "[]");
+            q.push({ type: "five_dim", village: village, contact: contact, inputs: lastEval.inputs, scores: scores, grade: lastEval.grade, at: new Date().toISOString() });
+            localStorage.setItem("gf_eval_pending", JSON.stringify(q));
+            msg.textContent = "网络离线：评估已存入本机待传队列（共 " + q.length + " 条），联网后回到本页可补交。";
+          } catch (e) { msg.textContent = "提交失败，请稍后重试。"; }
         }
         evBusy = false;
         btn.disabled = false;

@@ -7,6 +7,7 @@
 <meta name="description" content="数智工具箱：收益测算、项目匹配、合同条款生成、健康评级、租金公示、明白纸、骗局识别、办事指引。">
 <link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/govdoc.css">
 <style>
 .tool-nav{position:sticky; top:64px; z-index:50; padding:14px 0; background:#0A1628; box-shadow:0 10px 28px rgba(0,0,0,.4)}
 .tool-nav .grid{display:grid; grid-template-columns:repeat(9,1fr); gap:10px}
@@ -135,7 +136,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
       </div>
       <div>
         <div id="contractText" style="display:none"></div>
-        <div id="ctActions" style="display:none; margin-top:14px"><button class="btn btn-line" onclick="PV.printZone('#contractText')">打印条款文本</button></div>
+        <div id="ctActions" style="display:none; margin-top:14px"><button class="btn btn-line" onclick="GovDoc.print({org:'东高垣村整村光伏项目组',docNo:'共富路光伏〔2026〕2 号',title:'屋顶租赁合同参考条款',el:'#contractText'})">打印条款文本</button></div>
       </div>
     </div>
     <div class="card" style="margin-top:24px">
@@ -175,6 +176,7 @@ mark{background:rgba(200,75,63,.3); color:#8a2320; padding:0 3px; border-radius:
       <div style="margin-top:16px; display:flex; gap:14px; flex-wrap:wrap">
         <button class="btn btn-gold" id="rpAdd">加入公示表</button>
         <button class="btn btn-line" id="rpCsv">导出公示表（CSV）</button>
+        <button class="btn btn-line" id="rpPrint">打印公示表（公文 A4）</button>
       </div>
       <div id="rpOut" style="margin-top:16px"></div>
     </div>
@@ -509,6 +511,14 @@ document.addEventListener("DOMContentLoaded", function () {
       rpRows.map(function (r) { return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td><td>" + r[2] + "</td><td>" + r[3] + "</td></tr>"; }).join("") +
       '</table><p class="caption" style="margin-top:8px">公示到户时隐去全名，保护隐私；按季度公示发放汇总。（手册第 104 条第 7 步、表 M-14）</p>';
   });
+  document.getElementById("rpPrint").addEventListener("click", function () {
+    if (!rpRows.length) { alert("公示表为空，请先「加入公示表」。"); return; }
+    var rows = rpRows.map(function (r, i) {
+      return "<tr><td>" + (i + 1) + "</td><td>" + esc(r[0]) + "</td><td>" + r[1] + "</td><td>" + r[3] + " 元</td></tr>";
+    }).join("");
+    GovDoc.print({ org: "东高垣村整村光伏项目组", docNo: "共富路光伏〔2026〕9 号", title: "光伏租金到户公示表",
+      body: "<table><tr><th>序号</th><th>户主</th><th>装机块数</th><th>年租金</th></tr>" + rows + "</table><p>公示期 7 天，异议请向村两委书面提出。</p>" });
+  });
   document.getElementById("rpCsv").addEventListener("click", function () {
     if (!rpRows.length) { alert("请先加入公示行。"); return; }
     PV.csv("租金公示表", [["户主", "板块数", "单价", "年租金"]].concat(rpRows));
@@ -533,7 +543,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<p class="caption" style="color:#8a95a1">明白纸限 1 页不超过 600 字；填写内容经镇政府审核后印制；与合同条款摘要不一致时以合同为准。（手册第 108 条）</p>';
   });
   document.getElementById("tmzPrint").addEventListener("click", function () {
-    PV.printZone("#tmzPreview");
+    GovDoc.print({org:"东高垣村整村光伏项目组",title:"光伏整村建设明白纸",el:"#tmzPreview"});
   });
 
   document.querySelectorAll(".scam2:not(.none)").forEach(function (b) {
@@ -661,5 +671,6 @@ document.addEventListener("DOMContentLoaded", function () {
   Gen.init();
 });
 </script>
+<script src="assets/js/govdoc.js"></script>
 </body>
 </html>

@@ -7,6 +7,7 @@
 <meta name="description" content="农户工作台：大白话讲清装不装、拿多少、怕什么——自查、租金速查、合同审查、骗局识别。">
 <link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/govdoc.css">
 <link rel="stylesheet" href="assets/css/gov-print.css">
 <style>
 .big-font{font-size:19px}
@@ -298,7 +299,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } catch (e) { /* 静默 */ }
   });
   document.getElementById("zcPrint").addEventListener("click", function () {
-    PV.printZone("#zcOut", "屋顶光伏条件自查结论");
+    GovDoc.print({org:"东高垣村整村光伏项目组",title:"屋顶光伏条件自查结论",el:"#zcOut"});
   });
 
   /* 6 环节时间轴 */
@@ -398,7 +399,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }).join("") + "</tbody></table>" +
       '<p class="gov-note">8 步全部确认，可以签约。本确认单建议与合同一并保存；合同原件自家留 1 份，拍照再存 1 份。</p>' +
       '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
-    PV.printZone("#signDoc", "签约确认单");
+    GovDoc.print({org:"东高垣村整村光伏项目组",docNo:"共富路光伏〔2026〕7 号",title:"签约确认单",el:"#signDoc"});
   });
 
   /* 办事指引 */
@@ -421,5 +422,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
+<script src="assets/js/govdoc.js"></script>
 </body>
 </html>

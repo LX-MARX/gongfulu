@@ -8,91 +8,205 @@
 <link rel="icon" href="assets/img/logo.png">
 <style>
 :root{
-  --bg:#0A1628; --fg:#f2f4f7; --kick:#8a93a3; --sub:#9aa3ad;
-  --panel-bg:rgba(14,20,30,.72); --panel-bd:#26303d; --panel-fg:#dfe3e8;
-  --btn-bg:#f2f4f7; --btn-fg:#0A1628; --cc:#5d6570; --gold:#e8c98a;
+  --bg:#0A1628; --bg2:#0D1B30; --fg:#f2f4f7; --kick:#8a93a3; --sub:#9aa3ad;
+  --panel-bg:rgba(14,20,30,.78); --panel-bd:#26303d; --panel-fg:#dfe3e8;
+  --btn-bg:#f2f4f7; --btn-fg:#0A1628; --cc:#5d6570; --gold:#e8c98a; --gold-deep:#D4A84B;
+  --line:rgba(212,168,75,.16);
+  --serif:"Noto Serif SC","Source Han Serif SC",Georgia,"STSong",serif;
+  --sans:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{margin:0;overflow:hidden;background:var(--bg);font-family:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
-#gl{position:fixed;inset:0;width:100%;height:100%;cursor:grab}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:var(--gold)}
+
+/* ---------- 舞台区（100vh） ---------- */
+.stage{position:relative;height:100vh;min-height:620px;overflow:hidden}
+#gl{position:absolute;inset:0;width:100%;height:100%;cursor:grab}
 #gl:active{cursor:grabbing}
-#wires{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
-#title{position:fixed;left:28px;top:24px;color:var(--fg);pointer-events:none;z-index:5}
-#title .kicker{font-size:11px;letter-spacing:.28em;color:var(--kick);text-transform:uppercase}
-#title h1{margin:4px 0 6px;font-family:"Noto Serif SC","Source Han Serif SC",Georgia,"STSong",serif;font-weight:600;font-size:34px;letter-spacing:.01em}
-#title .sub{font-size:11.5px;color:var(--sub);letter-spacing:.06em}
-#title .rule{width:210px;border-top:1px solid var(--fg);margin-top:10px}
-#spec{position:fixed;right:28px;top:26px;text-align:right;color:var(--fg);pointer-events:none;z-index:5}
+#wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+#title{position:absolute;left:28px;top:24px;color:var(--fg);pointer-events:none;z-index:5}
+#title .kicker{font-size:12px;letter-spacing:.28em;color:var(--kick);text-transform:uppercase}
+#title h1{margin:6px 0 8px;font-family:var(--serif);font-weight:600;font-size:clamp(28px,3.4vw,40px);letter-spacing:.01em}
+#title .sub{font-size:13px;color:var(--sub);letter-spacing:.06em}
+#title .rule{width:210px;border-top:1px solid var(--fg);margin-top:12px}
+#spec{position:absolute;right:28px;top:26px;text-align:right;color:var(--fg);pointer-events:none;z-index:5}
 #spec .brand{font-size:11px;letter-spacing:.24em;text-transform:uppercase}
-#spec .lines{margin-top:6px;font-size:10.5px;line-height:1.7;color:var(--sub);letter-spacing:.08em}
+#spec .lines{margin-top:6px;font-size:12px;line-height:1.8;color:var(--sub);letter-spacing:.06em}
 #spec .lines b{color:var(--fg);font-weight:600}
-#ui{position:fixed;left:28px;bottom:22px;color:var(--panel-fg);font-size:12px;z-index:6;
-  background:var(--panel-bg);border:1px solid var(--panel-bd);padding:12px 16px;border-radius:4px;
-  backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .9s;max-width:330px}
-body:hover #ui, body.pinui #ui{opacity:1;pointer-events:auto}
-body.idle #ui{opacity:0;pointer-events:none}
-#ui .note{font-size:12px;line-height:1.7;color:var(--panel-fg);min-height:20px}
+#ui{position:absolute;left:28px;bottom:22px;color:var(--panel-fg);font-size:13.5px;z-index:6;
+  background:var(--panel-bg);border:1px solid var(--panel-bd);padding:14px 18px;border-radius:6px;
+  backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .9s;max-width:400px}
+.stage:hover #ui, body.pinui #ui{opacity:1;pointer-events:auto}
+.stage.idle #ui{opacity:0;pointer-events:none}
+#ui .note{font-size:13.5px;line-height:1.8;color:var(--panel-fg);min-height:22px}
 #ui .note b{color:var(--gold);font-weight:600}
-#ui .shots{margin-top:10px}
-#ui button{margin:0 6px 0 0;cursor:pointer;background:var(--btn-bg);color:var(--btn-fg);border:0;padding:4px 10px;font-size:11px;letter-spacing:.08em;border-radius:2px}
+#ui .shots{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+#ui button{min-height:36px;margin:0;cursor:pointer;background:var(--btn-bg);color:var(--btn-fg);border:0;padding:0 16px;font-size:13px;letter-spacing:.06em;border-radius:3px;font-family:inherit}
 #ui button.cur{background:var(--gold);color:#23180a}
-#ui label{display:block;margin-top:10px;color:#7d8692;font-size:10px;letter-spacing:.05em}
+#ui label{display:block;margin-top:12px;color:#7d8692;font-size:12px;letter-spacing:.05em}
+#ui label button{margin-left:6px}
 #ui input[type=range]{width:180px;accent-color:var(--gold);vertical-align:middle}
-#ui .tl{display:inline-block;min-width:38px;color:var(--sub);font-size:11px}
-#ui .links{margin-top:10px;padding-top:8px;border-top:1px solid var(--panel-bd);font-size:11px}
-#ui .links a{color:var(--sub);text-decoration:none;margin-right:14px;letter-spacing:.04em}
+#ui .tl{display:inline-block;min-width:42px;color:var(--sub);font-size:12.5px}
+#ui .links{margin-top:12px;padding-top:10px;border-top:1px solid var(--panel-bd);font-size:13px}
+#ui .links a{color:var(--sub);text-decoration:none;margin-right:16px;letter-spacing:.03em}
 #ui .links a:hover{color:var(--fg)}
-#cc{position:fixed;right:28px;bottom:20px;color:var(--cc);font-size:10px;letter-spacing:.04em;text-align:right;pointer-events:none;line-height:1.6;z-index:5}
-#loading{position:fixed;left:50%;top:46%;transform:translate(-50%,-50%);color:var(--kick);font-size:12px;letter-spacing:.2em;z-index:9}
-#hint{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:7;color:var(--sub);
-  font-size:11.5px;letter-spacing:.1em;background:var(--panel-bg);border:1px solid var(--panel-bd);
-  padding:8px 18px;border-radius:99px;transition:opacity 1.2s;pointer-events:none}
+#cc{position:absolute;right:28px;bottom:20px;color:var(--cc);font-size:11px;letter-spacing:.04em;text-align:right;pointer-events:none;line-height:1.7;z-index:5}
+#loading{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);color:var(--kick);font-size:13px;letter-spacing:.2em;z-index:9}
+#hint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:7;color:var(--sub);
+  font-size:12.5px;letter-spacing:.08em;background:var(--panel-bg);border:1px solid var(--panel-bd);
+  padding:9px 20px;border-radius:99px;transition:opacity 1.2s;pointer-events:none}
 #hint.off{opacity:0}
+.scrollcue{position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);z-index:8;color:var(--sub);
+  font-size:12.5px;letter-spacing:.2em;text-decoration:none;background:var(--bg);border:1px solid var(--panel-bd);
+  border-bottom:0;padding:10px 26px 12px;border-radius:12px 12px 0 0}
+.scrollcue:hover{color:var(--gold)}
 .mgc-fab,.pvc-fab{right:26px !important;bottom:70px !important}
 @media(max-width:760px){
   #title h1{font-size:24px}
   #spec{display:none}
-  #ui{left:12px;right:12px;bottom:12px;max-width:none}
+  #ui{left:12px;right:12px;bottom:56px;max-width:none}
+  .scrollcue{display:none}
 }
+
+/* ---------- 舞台下内容区 ---------- */
+main{position:relative;z-index:3;background:var(--bg)}
+.sec{border-top:1px solid var(--line);padding:88px 0}
+.wrap{width:min(1120px,90vw);margin:0 auto}
+.sec h2{font-family:var(--serif);font-weight:700;font-size:clamp(26px,3vw,38px);letter-spacing:.01em}
+.sec .sub{color:var(--sub);font-size:15px;margin-top:10px;max-width:44em;line-height:1.9}
+
+.gates{margin-top:40px;border-top:1px solid var(--line)}
+.gate{display:grid;grid-template-columns:110px 1fr auto;gap:8px 28px;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--fg)}
+.gate:hover{background:rgba(212,168,75,.05)}
+.gate .no{font-size:13px;color:var(--gold-deep);letter-spacing:.12em}
+.gate .t{font-size:22px;font-weight:700;font-family:var(--serif)}
+.gate .d{font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.8}
+.gate .arr{font-size:20px;color:var(--gold)}
+@media(max-width:700px){.gate{grid-template-columns:1fr auto}.gate .no{display:none}}
+
+.proof-grid{margin-top:44px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:16px}
+.proof-grid figure{margin:0}
+.proof-grid img{width:100%;height:100%;object-fit:cover;border-radius:6px;border:1px solid var(--panel-bd)}
+.proof-grid figcaption{margin-top:10px;font-size:12.5px;color:var(--sub);line-height:1.7}
+.letters{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.letters figure{margin:0;background:#101B2C;border:1px solid var(--panel-bd);border-radius:6px;padding:18px}
+.letters img{border-radius:4px}
+.letters figcaption{margin-top:12px;font-size:12.5px;color:var(--sub)}
+@media(max-width:700px){.proof-grid,.letters{grid-template-columns:1fr}}
+
+.steps{margin-top:36px;border-top:1px solid var(--line)}
+.step{display:grid;grid-template-columns:110px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid var(--line)}
+.step .d{font-size:13.5px;color:var(--gold-deep)}
+.step h4{font-size:16px;font-weight:700}
+.step p{margin-top:3px;font-size:13.5px;color:var(--sub);line-height:1.8}
+
+footer{border-top:1px solid var(--line);padding:56px 0 64px;font-size:13px;color:var(--sub)}
+footer .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:36px}
+footer h5{font-size:13px;color:var(--fg);font-weight:700;margin-bottom:10px}
+footer a{color:var(--sub);text-decoration:none}
+footer a:hover{color:var(--gold)}
+footer .base{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--cc);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:700px){footer .wrap{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<canvas id="gl"></canvas>
-<svg id="wires"></svg>
 
-<div id="title">
-  <div class="kicker">Whole-Village PV · Donggaoyuan</div>
-  <h1>屋顶上的共富路</h1>
-  <div class="sub">企业全额投资，农户不出一分钱——一度电的旅程</div>
-  <div class="rule"></div>
-</div>
+<!-- ===================== 舞台：全屏 3D 村落实景 ===================== -->
+<section class="stage" id="stage">
+  <canvas id="gl"></canvas>
+  <svg id="wires"></svg>
 
-<div id="spec">
-  <div class="brand">Rooftop Lease · 25-Year</div>
-  <div class="lines">
-    租金 一字坡 <b>30</b> 元/块·年<br>
-    租金 人字坡 <b>15</b> 元/块·年<br>
-    户均约 <b>50</b> 块 · 635 W<br>
-    年到账 <b>1500—2000</b> 元/户<br>
-    电价 <b>0.3545</b> 元/度
+  <div id="title">
+    <div class="kicker">Whole-Village PV · Donggaoyuan</div>
+    <h1>屋顶上的共富路</h1>
+    <div class="sub">企业全额投资，农户不出一分钱——一度电的旅程</div>
+    <div class="rule"></div>
   </div>
-</div>
 
-<div id="ui">
-  <div class="note" id="note">渭北旱塬，年日照约 <b>1350 小时</b>。收益从这里开始。</div>
-  <div class="shots" id="shots"></div>
-  <label>屋顶装法
-    <button data-t="flat" class="cur" id="rf1" style="margin-left:8px">一字坡</button><button data-t="gable" id="rf2">人字坡</button>
-  </label>
-  <label>日照 <input type="range" id="timeSlider" min="0" max="100" value="35"> <span class="tl" id="timeLabel">14:18</span></label>
-  <div class="links">
-    <a href="tools.html">算一算我家屋顶 →</a><a href="forms.html">23 张工作表 →</a><a href="farmer.html">农户指南 →</a><a href="cases.html">东高垣实证 →</a>
+  <div id="spec">
+    <div class="brand">Rooftop Lease · 25-Year</div>
+    <div class="lines">
+      一字坡 <b>30</b> 元/块·年<br>
+      人字坡 <b>15</b> 元/块·年<br>
+      户均约 <b>50</b> 块 · 635 W<br>
+      年到账 <b>1500—2000</b> 元/户<br>
+      电价 <b>0.3545</b> 元/度
+    </div>
   </div>
-</div>
 
-<div id="cc">© 2026 四川大学课题组 · 屋顶上的共富路<br>租金口径：企业合同与 2024 年到账台账</div>
-<div id="loading">载入村落实景…</div>
-<div id="hint">拖动旋转 · 滚轮缩放 · 指向屋顶与设备查看注记</div>
+  <div id="ui">
+    <div class="note" id="note">年日照约 <b>1350 小时</b>，收益从阳光开始。点击任一院落查看该户台账。</div>
+    <div class="shots" id="shots"></div>
+    <label>屋顶装法
+      <button data-t="flat" class="cur" id="rf1">一字坡</button><button data-t="gable" id="rf2">人字坡</button>
+    </label>
+    <label>日照 <input type="range" id="timeSlider" min="0" max="100" value="35"> <span class="tl" id="timeLabel">14:18</span></label>
+    <div class="links">
+      <a href="tools.html">算一算我家屋顶 →</a><a href="forms.html">23 张工作表 →</a><a href="farmer.html">农户指南 →</a><a href="cases.html">东高垣实证 →</a>
+    </div>
+  </div>
+
+  <div id="cc">© 2026 四川大学课题组 · 屋顶上的共富路<br>租金口径：企业合同与 2024 年到账台账</div>
+  <div id="loading">载入村落实景…</div>
+  <div id="hint">拖动旋转 · 滚轮缩放 · 指向屋顶与设备查看注记 · 点击院落看该户台账</div>
+  <a class="scrollcue" href="#gates">进入方案 ↓</a>
+</section>
+
+<!-- ===================== 舞台下：内容区 ===================== -->
+<main>
+  <section class="sec" id="gates"><div class="wrap">
+    <h2>先算自家的账</h2>
+    <p class="sub">屋顶多大、什么坡型、能装多少块、一年拿多少——输入即得，对照东高垣样本户的真实台账。</p>
+    <div class="gates">
+      <a class="gate" href="tools.html"><span class="no">01</span><span><span class="t">租金测算</span><div class="d">面积与坡型换块数，按一字坡 30 元、人字坡 15 元出年租金与 25 年累计。</div></span><span class="arr">→</span></a>
+      <a class="gate" href="farmer.html"><span class="no">02</span><span><span class="t">农户指南</span><div class="d">装不装、怕什么、合同看什么——自查、速查、审查、防骗，一路到底。</div></span><span class="arr">→</span></a>
+      <a class="gate" href="forms.html"><span class="no">03</span><span><span class="t">23 张工作表</span><div class="d">从入户摸底到并网验收全程留痕，在线填写，公文版式打印。</div></span><span class="arr">→</span></a>
+      <a class="gate" href="model.html"><span class="no">04</span><span><span class="t">四方协同机制</span><div class="d">政府、企业、村集体、农户各自的权责、作用与约束，一图看清。</div></span><span class="arr">→</span></a>
+    </div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <h2>实证</h2>
+    <p class="sub">东高垣村的屋顶、座谈与村两委回函，原件呈现。</p>
+    <div class="proof-grid">
+      <figure><img src="assets/img/case-4.jpg" alt="村史馆广场光伏车棚"><figcaption>村史馆广场光伏车棚 · 驻村实拍 · 2026 年 2 月</figcaption></figure>
+      <figure><img src="assets/img/talk-company.png" alt="课题组在企业调研座谈"><figcaption>课题组在运维企业调研座谈 · 2026 年 2 月</figcaption></figure>
+      <figure><img src="assets/img/case-1.jpg" alt="一字坡支架阵列"><figcaption>一字坡支架阵列 · 驻村实拍 · 2026 年 2 月</figcaption></figure>
+    </div>
+    <div class="letters">
+      <figure><img src="assets/img/huifu-1.png" alt="村两委回函第一页"><figcaption>《关于对四川大学课题组研究建议的回函》· 第一页</figcaption></figure>
+      <figure><img src="assets/img/huifu-2.png" alt="村两委回函第二页"><figcaption>回函第二页 · 村党支部、村委会盖章 · 2026 年 4 月</figcaption></figure>
+    </div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <h2>过程</h2>
+    <div class="steps">
+      <div class="step"><div class="d">2025-07</div><div><h4>首次驻村调研</h4><p>团队进驻东高垣村，入户走访 185 户签约样本。</p></div></div>
+      <div class="step"><div class="d">2025-08</div><div><h4>政策库与工作表成型</h4><p>五级政策 119 条入库；23 张工作表覆盖建设全流程。</p></div></div>
+      <div class="step"><div class="d">2026-02</div><div><h4>二次驻点核实</h4><p>逐户核对租金到账台账，样本户 DGY-017 年到账 1440 元。</p></div></div>
+      <div class="step"><div class="d">2026-04</div><div><h4>村两委回函</h4><p>村党支部、村民委员会联合出具使用回函。</p></div></div>
+      <div class="step"><div class="d">2026-09</div><div><h4>本站上线</h4><p>测算、指南、工作表、机制图全模块开放。</p></div></div>
+    </div>
+  </div></section>
+</main>
+
+<footer><div class="wrap">
+  <div>
+    <h5>屋顶上的共富路</h5>
+    <p>四川大学课题组 · 驻村实践成果<br>预约驻村调研（全国，提前 15—30 天）</p>
+  </div>
+  <div>
+    <h5>模块</h5>
+    <p><a href="tools.html">数智工具箱</a><br><a href="forms.html">工作表</a><br><a href="model.html">四方协同</a></p>
+  </div>
+  <div>
+    <h5>联系</h5>
+    <p>1491569974@qq.com<br><a href="booking.html">在线预约 →</a></p>
+  </div>
+  <div class="base" style="grid-column:1/-1;width:100%"><span>© 2026 屋顶上的共富路</span><span><a href="account.html">管理入口</a></span></div>
+</div></footer>
 
 <script src="assets/js/config.js"></script>
 <script src="assets/js/faq.js"></script>
@@ -116,12 +230,12 @@ const PART_TXT = {
   transformer: "台区变压器 · 容量决定一个村能装多少",
   carport: "光伏车棚 · 停车发电两不误",
 };
+const noteEl = document.getElementById("note");
 const village = createVillage(document.getElementById("gl"), {
   wires: document.getElementById("wires"),
   cardEl: document.getElementById("ui"),
-  onHover(key) {
-    document.getElementById("note").innerHTML = (key && PART_TXT[key]) ? PART_TXT[key] : SHOTS[cur].txt;
-  },
+  onHover(key) { noteEl.innerHTML = (key && PART_TXT[key]) ? PART_TXT[key] : SHOTS[cur].txt; },
+  onHousehold(html) { noteEl.innerHTML = html; },
   onFrame() {}
 });
 const camera = village.camera, controls = village.controls;
@@ -142,7 +256,7 @@ function gotoShot(i) {
   cur = i;
   tgt.pos = SHOTS[i].pos.slice(); tgt.look = SHOTS[i].look.slice();
   Array.from(shotsEl.children).forEach((b, j) => b.classList.toggle("cur", j === cur));
-  document.getElementById("note").innerHTML = SHOTS[i].txt;
+  noteEl.innerHTML = SHOTS[i].txt;
 }
 Array.from(shotsEl.children)[0].classList.add("cur");
 
@@ -172,15 +286,16 @@ document.getElementById("timeSlider").addEventListener("input", function () {
     String(Math.floor(mins / 60)).padStart(2, "0") + ":" + String(mins % 60).padStart(2, "0");
 });
 
+const stage = document.getElementById("stage");
 let idleTimer;
 function poke() {
-  document.body.classList.remove("idle");
+  stage.classList.remove("idle");
   clearTimeout(idleTimer);
-  idleTimer = setTimeout(() => document.body.classList.add("idle"), 4000);
+  idleTimer = setTimeout(() => stage.classList.add("idle"), 4000);
 }
 ["mousemove", "pointerdown", "wheel", "keydown"].forEach(ev => addEventListener(ev, poke, { passive: true }));
 poke();
-setTimeout(() => document.getElementById("hint").classList.add("off"), 8000);
+setTimeout(() => document.getElementById("hint").classList.add("off"), 9000);
 addEventListener("pointerdown", () => document.getElementById("hint").classList.add("off"), { once: true });
 </script>
 </body>

@@ -7,6 +7,7 @@
 <meta name="description" content="预约驻村调研：在线问卷、电话、邮箱三种方式，服务范围全国。">
 <link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/govdoc.css">
 <style>
 .bk-head{text-align:center; padding:140px 0 60px}
 .bk-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:20px}
@@ -166,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
   document.getElementById("qVoucherBtn").addEventListener("click", function () {
-    PV.printZone("#qVoucher", "预约登记凭证");
+    GovDoc.print({org:"东高垣村整村光伏项目组",title:"预约登记凭证",el:"#qVoucher"});
   });
   document.getElementById("telCopy").addEventListener("click", function () {
     var t = this;
@@ -175,5 +176,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
+<script src="assets/js/govdoc.js"></script>
 </body>
 </html>

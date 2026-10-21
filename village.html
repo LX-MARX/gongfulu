@@ -7,6 +7,7 @@
 <meta name="description" content="村干部工作台：7 步建设法、宣传动员工具包、容量检测、纠纷调解与工作表模板。">
 <link rel="icon" href="assets/img/logo.png">
 <link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/govdoc.css">
 <link rel="stylesheet" href="assets/css/gov-print.css">
 <style>
 .vstep{display:grid; grid-template-columns:110px 1fr; gap:24px; padding:30px 0; border-bottom:1px solid #e2e0d6}
@@ -118,7 +119,7 @@
       </div>
       <div style="margin-top:16px; display:flex; gap:14px; flex-wrap:wrap">
         <button class="btn btn-gold" id="mzBtn">生成明白纸</button>
-        <button class="btn btn-line" id="mzPrint" style="display:none" onclick="PV.printZone('#mzPreview')">打印（A4）</button>
+        <button class="btn btn-line" id="mzPrint" style="display:none" onclick="GovDoc.print({org:'东高垣村整村光伏项目组',title:'光伏整村建设明白纸',el:'#mzPreview'})">打印（A4）</button>
       </div>
       <div id="mzOut" style="margin-top:20px; display:none"><div id="mzPreview"></div></div>
     </div>
@@ -240,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "当前应聚焦第 " + (n + 1) + " 步「" + S7[n].nm + "」：" + window.mgEsc(S7[n].goal)) + "</p>" +
         '<p class="gov-note">依据《整村分布式光伏建设手册》7 步建设法逐项核对；每步实施细则见手册 6 段式细则。</p>' +
         '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + date + "</p></div></div>";
-      PV.printZone("#s7Doc", "整村光伏建设工作进度报告");
+      GovDoc.print({org:"东高垣村整村光伏项目组",docNo:"共富路光伏〔2026〕3 号",title:"整村光伏建设工作进度报告",el:"#s7Doc"});
     });
   }
 
@@ -264,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
         '<div class="gov-sign"><p>屋顶上的共富路项目组</p><p>' + vgDateCN() + "</p></div></div>";
     });
     document.getElementById("agPrint").addEventListener("click", function () {
-      PV.printZone("#agendaDoc", "村民大会议程");
+      GovDoc.print({org:"东高垣村整村光伏项目组",docNo:"共富路光伏〔2026〕4 号",title:"村民大会议程",el:"#agendaDoc"});
     });
   }
 
@@ -306,16 +307,41 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  /* ---------- 候补农户登记 ---------- */
+  /* ---------- 候补农户登记（本机持久化 + 云端存档） ---------- */
   function initQueue() {
     var queue = [];
+    try { queue = JSON.parse(localStorage.getItem("gf_queue") || "[]"); } catch (e) { queue = []; }
+    function renderQ() {
+      document.getElementById("queueOut").innerHTML = queue.length
+        ? '<table class="tbl" style="margin-top:14px"><tr><th>排序</th><th>户主</th><th>屋顶条件</th><th>登记时间</th><th></th></tr>' +
+          queue.map(function (q, i) { return "<tr><td>" + (i + 1) + "</td><td>" + esc(q.n) + "</td><td>" + esc(q.r) + "</td><td>" + q.t + "</td><td><button class=\"btn btn-line q-del\" data-i=\"" + i + "\" style=\"padding:2px 10px;font-size:12px\">移除</button></td></tr>"; }).join("") +
+          '</table><p class="caption" style="margin-top:8px">张榜公示用表；容量释放后按登记顺序优先安排，杜绝「找关系插队」。（手册第 117 条，在线填写见表 M-3）</p>' +
+          '<div style="margin-top:10px"><button class="btn btn-line" id="qPrint">打印候补公示表</button></div>'
+        : "";
+    }
     document.getElementById("qAdd").addEventListener("click", function () {
       var n = document.getElementById("qName").value.trim() || "（未填）";
-      queue.push({ n: n, r: document.getElementById("qRoof").value, t: new Date().toLocaleDateString("zh-CN") });
-      document.getElementById("queueOut").innerHTML = '<table class="tbl" style="margin-top:14px"><tr><th>排序</th><th>户主</th><th>屋顶条件</th><th>登记时间</th></tr>' +
-        queue.map(function (q, i) { return "<tr><td>" + (i + 1) + "</td><td>" + esc(q.n) + "</td><td>" + esc(q.r) + "</td><td>" + q.t + "</td></tr>"; }).join("") +
-        '</table><p class="caption" style="margin-top:8px">张榜公示用表；容量释放后按登记顺序优先安排，杜绝「找关系插队」。（手册第 117 条，在线填写见表 M-3）</p>';
+      var item = { n: n, r: document.getElementById("qRoof").value, t: new Date().toLocaleDateString("zh-CN") };
+      queue.push(item);
+      try { localStorage.setItem("gf_queue", JSON.stringify(queue)); } catch (e) {}
+      /* 云端存档（失败静默，本机名单不丢） */
+      if (window.MG && MG.evalSubmit) { try { MG.evalSubmit("gongfulu", "queue", item); } catch (e) {} }
+      renderQ();
     });
+    document.getElementById("queueOut").addEventListener("click", function (e) {
+      var del = e.target.closest(".q-del");
+      if (del) {
+        queue.splice(+del.dataset.i, 1);
+        try { localStorage.setItem("gf_queue", JSON.stringify(queue)); } catch (err) {}
+        renderQ(); return;
+      }
+      if (e.target.closest("#qPrint")) {
+        var rows = queue.map(function (q, i) { return "<tr><td>" + (i + 1) + "</td><td>" + esc(q.n) + "</td><td>" + esc(q.r) + "</td><td>" + q.t + "</td></tr>"; }).join("");
+        GovDoc.print({ org: "东高垣村整村光伏项目组", docNo: "共富路光伏〔2026〕8 号", title: "光伏候补农户公示表",
+          body: '<table><tr><th>排序</th><th>户主</th><th>屋顶条件</th><th>登记时间</th></tr>' + rows + "</table><p>公示期 7 天，异议请向村两委书面提出。</p>" });
+      }
+    });
+    renderQ();
   }
 
   /* ---------- 纠纷调解路径指引 ---------- */
@@ -348,5 +374,6 @@ document.addEventListener("DOMContentLoaded", function () {
   initDispute();
 });
 </script>
+<script src="assets/js/govdoc.js"></script>
 </body>
 </html>

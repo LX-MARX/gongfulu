@@ -1,0 +1,42 @@
+/* ============================================================
+   公文打印引擎（GB/T 9704 版式）· 两站共用
+   红头 + 发文字号 + 小标宋标题 + 仿宋三号正文 + 汉字数字成文日期
+   ============================================================ */
+
+/* 屏幕预览：公文纸感 */
+.gdoc{
+  background:#FDFDFB;color:#000;max-width:720px;margin:0 auto;
+  padding:48px 56px 56px;font-family:"FangSong","FangSong_GB2312","仿宋",serif;
+  font-size:16px;line-height:29pt;border:1px solid #D8D2C4;
+  box-shadow:0 2px 14px rgba(0,0,0,.18);text-align:justify;
+}
+.gdoc .gd-org{
+  font-family:"SimSun","STSong",serif;font-weight:900;color:#D40000;
+  font-size:34px;text-align:center;letter-spacing:.14em;line-height:1.4;
+}
+.gdoc .gd-no{
+  text-align:center;font-size:14px;color:#000;margin:10px 0 0;
+  font-family:"FangSong","FangSong_GB2312","仿宋",serif;
+}
+.gdoc .gd-redline{border:0;border-top:2.5pt solid #D40000;margin:14px 0 26px}
+.gdoc .gd-title{
+  font-family:"SimSun","STSong",serif;font-weight:900;font-size:22px;
+  text-align:center;line-height:1.5;margin:0 0 20px;
+}
+.gdoc .gd-body p{margin:0 0 4px;text-indent:2em}
+.gdoc .gd-body table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;line-height:26pt}
+.gdoc .gd-body td,.gdoc .gd-body th{border:1px solid #000;padding:4px 8px;text-align:left;font-weight:400}
+.gdoc .gd-body th{font-family:"SimHei","黑体",sans-serif}
+.gdoc .gd-sign{margin-top:34px;text-align:right;line-height:2}
+.gdoc .gd-sign .o{font-size:16px}
+.gdoc .gd-sign .d{font-size:16px}
+
+/* 打印：标准公文版心 */
+@media print{
+  @page{size:A4;margin:37mm 26mm 35mm 28mm}
+  .gdoc{border:0;box-shadow:none;max-width:none;padding:0;font-size:16pt;line-height:29pt}
+  .gdoc .gd-org{font-size:32pt}
+  .gdoc .gd-title{font-size:22pt}
+  .gdoc .gd-body{font-size:16pt}
+  .gdoc .gd-body table{font-size:14pt}
+}
